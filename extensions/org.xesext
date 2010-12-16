@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xesextension name="Organizational" prefix="org" uri="http://www.xes-standard.org/org.xesext">
+	<event>
+		<string key="resource">
+			<alias mapping="EN" name="Resource"/>
+			<alias mapping="DE" name="Akteur"/>
+			<alias mapping="FR" name="Agent"/>
+			<alias mapping="ES" name="Recurso"/>
+			<alias mapping="PT" name="Recurso"/>
+		</string>
+		<string key="role">
+			<alias mapping="EN" name="Role"/>
+			<alias mapping="DE" name="Rolle"/>
+			<alias mapping="FR" name="Rôle"/>
+			<alias mapping="ES" name="Papel"/>
+			<alias mapping="PT" name="Papel"/>
+		</string>
+		<string key="group">
+			<alias mapping="EN" name="Group"/>
+			<alias mapping="DE" name="Gruppe"/>
+			<alias mapping="FR" name="Groupe"/>
+			<alias mapping="ES" name="Grupo"/>
+			<alias mapping="PT" name="Grupo"/>
+		</string>
+	</event>
+</xesextension>

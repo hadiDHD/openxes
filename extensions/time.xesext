@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xesextension name="Time" prefix="time" uri="http://www.xes-standard.org/time.xesext">
+	<event>
+		<date key="timestamp">
+			<alias mapping="EN" name="Timestamp"/>
+			<alias mapping="DE" name="Zeitstempel"/>
+			<alias mapping="FR" name="Horodateur"/>
+			<alias mapping="ES" name="Timestamp"/>
+			<alias mapping="PT" name="Timestamp"/>
+		</date>
+	</event>
+</xesextension>

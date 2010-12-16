@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xesextension name="Concept" prefix="concept" uri="http://www.xes-standard.org/concept.xesext">
+	<log>
+		<string key="name">
+			<alias mapping="EN" name="Name"/>
+			<alias mapping="DE" name="Name"/>
+			<alias mapping="FR" name="Appellation"/>
+			<alias mapping="ES" name="Nombre"/>
+			<alias mapping="PT" name="Nome"/>
+		</string>
+	</log>
+	<trace>
+		<string key="name">
+			<alias mapping="EN" name="Name"/>
+			<alias mapping="DE" name="Name"/>
+			<alias mapping="FR" name="Appellation"/>
+			<alias mapping="ES" name="Nombre"/>
+			<alias mapping="PT" name="Nome"/>
+		</string>
+	</trace>
+	<event>
+		<string key="name">
+			<alias mapping="EN" name="Name"/>
+			<alias mapping="DE" name="Name"/>
+			<alias mapping="FR" name="Appellation"/>
+			<alias mapping="ES" name="Nombre"/>
+			<alias mapping="PT" name="Nome"/>
+		</string>
+		<string key="instance">
+			<alias mapping="EN" name="Instance"/>
+			<alias mapping="DE" name="Instanz"/>
+			<alias mapping="FR" name="Entité"/>
+			<alias mapping="ES" name="Instancia"/>
+			<alias mapping="PT" name="Instância"/>
+		</string>
+	</event>
+</xesextension>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xesextension name="Lifecycle" prefix="lifecycle" uri="http://www.xes-standard.org/lifecycle.xesext">
+	<log>
+		<string key="model">
+			<alias mapping="EN" name="Lifecycle Model"/>
+			<alias mapping="DE" name="Lebenszyklus-Modell"/>
+			<alias mapping="FR" name="Modèle du Cycle Vital"/>
+			<alias mapping="ES" name="Modelo de Ciclo de Vida"/>
+			<alias mapping="PT" name="Modelo do Ciclo de Vida"/>
+		</string>
+	</log>
+	<event>
+		<string key="transition">
+			<alias mapping="EN" name="Lifecycle Transition"/>
+			<alias mapping="DE" name="Lebenszyklus-Transition"/>
+			<alias mapping="FR" name="Transition en Cycle Vital"/>
+			<alias mapping="ES" name="Transición en Ciclo de Vida"/>
+			<alias mapping="PT" name="Transição do Ciclo de Vida"/>
+		</string>
+	</event>
+</xesextension>
