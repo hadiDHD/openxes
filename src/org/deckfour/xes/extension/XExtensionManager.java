@@ -123,8 +123,13 @@ public class XExtensionManager {
 	 */
 	public void register(XExtension extension) {
 		extensionMap.put(extension.getUri(), extension);
-		if (extensionList.contains(extension) == false) {
+		// replace the registered index in the list with the new extension.
+		int i = extensionList.indexOf(extension);
+		if (i < 0) {
 			extensionList.add(extension);
+		} else {
+			extensionList.remove(i);
+			extensionList.add(i, extension);
 		}
 	}
 
@@ -148,7 +153,7 @@ public class XExtensionManager {
 						+ "' from remote source", XLogging.Importance.DEBUG);
 			} catch (IOException e) {
 				// Now do something if the Internet is down...
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -259,8 +264,7 @@ public class XExtensionManager {
 			fileName += ".xesext";
 		}
 		File cacheFile = new File(XRuntimeUtils.getExtensionCacheFolder()
-				.getAbsolutePath()
-				+ File.separator + fileName);
+				.getAbsolutePath() + File.separator + fileName);
 		// download extension file to cache directory
 		try {
 			byte[] buffer = new byte[1024];
@@ -297,10 +301,9 @@ public class XExtensionManager {
 		if (extFiles == null) {
 			// Extension folder may be non-existant for virtual users with no
 			// home directory
-			XLogging
-					.log(
-							"Extension caching disabled (Could not access cache directory)!",
-							XLogging.Importance.WARNING);
+			XLogging.log(
+					"Extension caching disabled (Could not access cache directory)!",
+					XLogging.Importance.WARNING);
 			return;
 		}
 		for (File extFile : extFiles) {
@@ -320,8 +323,9 @@ public class XExtensionManager {
 					if (extensionMap.containsKey((extension).getUri()) == false) {
 						extensionMap.put(extension.getUri(), extension);
 						extensionList.add(extension);
-						XLogging.log("Loaded XES extension '"
-								+ extension.getUri() + "' from cache",
+						XLogging.log(
+								"Loaded XES extension '" + extension.getUri()
+										+ "' from cache",
 								XLogging.Importance.DEBUG);
 					} else {
 						XLogging.log("Skipping cached XES extension '"
