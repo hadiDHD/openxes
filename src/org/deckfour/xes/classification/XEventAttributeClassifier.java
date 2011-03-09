@@ -95,7 +95,7 @@ public class XEventAttributeClassifier implements XEventClassifier,
 				sb.append(attribute.toString().trim());
 			}
 			if (i < (keys.length - 1)) {
-				sb.append("+");
+				sb.append("+ ");
 			}
 		}
 		return sb.toString();
