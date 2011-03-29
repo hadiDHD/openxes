@@ -138,25 +138,21 @@ public class XMxmlSerializer implements XSerializer {
 	 * java.io.OutputStream)
 	 */
 	public void serialize(XLog log, OutputStream out) throws IOException {
-		XLogging
-				.log("start serializing log to MXML", XLogging.Importance.DEBUG);
+		XLogging.log("start serializing log to MXML", XLogging.Importance.DEBUG);
 		long start = System.currentTimeMillis();
 		SXDocument doc = new SXDocument(out);
-		doc
-				.addComment("This file has been generated with the OpenXES library. It conforms");
-		doc
-				.addComment("to the legacy MXML standard for log storage and management.");
+		doc.addComment("This file has been generated with the OpenXES library. It conforms");
+		doc.addComment("to the legacy MXML standard for log storage and management.");
 		doc.addComment("OpenXES library version: "
 				+ XRuntimeUtils.OPENXES_VERSION);
-		doc
-				.addComment("OpenXES is available from http://code.deckfour.org/xes/");
+		doc.addComment("OpenXES is available from http://code.deckfour.org/xes/");
 		SXTag root = doc.addNode("WorkflowLog");
 		SXTag source = root.addChildNode("Source");
 		source.addAttribute("program", "XES MXML serialization");
 		source.addAttribute("openxes.version", XRuntimeUtils.OPENXES_VERSION);
 		SXTag process = root.addChildNode("Process");
-		process.addAttribute("id", XConceptExtension.instance()
-				.extractName(log));
+		String id = XConceptExtension.instance().extractName(log);
+		process.addAttribute("id", (id == null ? "none" : id));
 		process.addAttribute("description", "process with id "
 				+ XConceptExtension.instance().extractName(log));
 		addModelReference(log, process);
@@ -195,6 +191,14 @@ public class XMxmlSerializer implements XSerializer {
 				XAttributeLiteral originatorAttr = (XAttributeLiteral) event
 						.getAttributes().get(
 								XOrganizationalExtension.KEY_RESOURCE);
+				if (originatorAttr == null) {
+					originatorAttr = (XAttributeLiteral) event.getAttributes()
+							.get(XOrganizationalExtension.KEY_ROLE);
+				}
+				if (originatorAttr == null) {
+					originatorAttr = (XAttributeLiteral) event.getAttributes()
+							.get(XOrganizationalExtension.KEY_GROUP);
+				}
 				if (originatorAttr != null) {
 					SXTag originator = ate.addChildNode("originator");
 					addModelReference(originatorAttr, originator);
@@ -246,21 +250,22 @@ public class XMxmlSerializer implements XSerializer {
 		for (XAttribute attribute : attributes) {
 			// skip attributes defined by standard extensions
 			// to ensure parity with MXML input files.
-			if (attribute.getKey().equals(XConceptExtension.KEY_NAME)
-					|| attribute.getKey()
-							.equals(XConceptExtension.KEY_INSTANCE)
-					|| attribute.getKey().equals(XLifecycleExtension.KEY_MODEL)
-					|| attribute.getKey().equals(
-							XLifecycleExtension.KEY_TRANSITION)
-					|| attribute.getKey().equals(
-							XOrganizationalExtension.KEY_GROUP)
-					|| attribute.getKey().equals(
-							XOrganizationalExtension.KEY_RESOURCE)
-					|| attribute.getKey().equals(
-							XOrganizationalExtension.KEY_ROLE)
-					|| attribute.getKey().equals(
-							XSemanticExtension.KEY_MODELREFERENCE)
-					|| attribute.getKey().equals(XTimeExtension.KEY_TIMESTAMP)) {
+			if (// BVD: KEEP ALL Attributes
+				// attribute.getKey().equals(XConceptExtension.KEY_NAME)
+				// || attribute.getKey()
+				// .equals(XConceptExtension.KEY_INSTANCE)
+				// || attribute.getKey().equals(XLifecycleExtension.KEY_MODEL)
+				// || attribute.getKey().equals(
+				// XLifecycleExtension.KEY_TRANSITION)
+				// || attribute.getKey().equals(
+				// XOrganizationalExtension.KEY_GROUP)
+				// || attribute.getKey().equals(
+				// XOrganizationalExtension.KEY_RESOURCE)
+				// || attribute.getKey().equals(
+				// XOrganizationalExtension.KEY_ROLE)||
+			attribute.getKey().equals(XSemanticExtension.KEY_MODELREFERENCE)
+			// || attribute.getKey().equals(XTimeExtension.KEY_TIMESTAMP)
+			) {
 				continue;
 			}
 			SXTag attributeTag = dataNode.addChildNode("attribute");
