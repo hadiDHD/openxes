@@ -56,7 +56,7 @@ public class NikeFS2FileAccessMonitor {
 	
 	public synchronized static NikeFS2FileAccessMonitor instance() {
 		if(singleton == null) {
-			singleton = new NikeFS2FileAccessMonitor(2);
+			singleton = new NikeFS2FileAccessMonitor(4);
 		}
 		return singleton;
 	}
