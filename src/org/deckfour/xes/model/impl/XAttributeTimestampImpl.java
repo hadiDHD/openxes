@@ -167,4 +167,14 @@ public class XAttributeTimestampImpl extends XAttributeImpl implements
 		return clone;
 	}
 
+	public boolean equals(Object obj) {
+		if (obj instanceof XAttributeTimestamp) { // compares types
+			XAttributeTimestamp other = (XAttributeTimestamp) obj;
+			return super.equals(other) // compares keys
+					&& value.equals(other.getValue()); // compares values
+		} else {
+			return false;
+		}
+	}
+
 }

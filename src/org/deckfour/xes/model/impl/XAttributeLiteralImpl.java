@@ -48,65 +48,85 @@ import org.deckfour.xes.model.XAttributeLiteral;
  */
 public class XAttributeLiteralImpl extends XAttributeImpl implements
 		XAttributeLiteral {
-	
+
 	/**
 	 * Value of the attribute.
 	 */
 	private String value;
-	
+
 	/**
 	 * Creates a new instance.
 	 * 
-	 * @param key The key of the attribute.
-	 * @param value Value of the attribute.
+	 * @param key
+	 *            The key of the attribute.
+	 * @param value
+	 *            Value of the attribute.
 	 */
 	public XAttributeLiteralImpl(String key, String value) {
 		this(key, value, null);
 	}
-	
+
 	/**
 	 * Creates a new instance.
 	 * 
-	 * @param key The key of the attribute.
-	 * @param value Value of the attribute.
-	 * @param extension The extension of the attribute.
+	 * @param key
+	 *            The key of the attribute.
+	 * @param value
+	 *            Value of the attribute.
+	 * @param extension
+	 *            The extension of the attribute.
 	 */
 	public XAttributeLiteralImpl(String key, String value, XExtension extension) {
 		super(key, extension);
 		setValue(value);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.deckfour.xes.model.XAttributeLiteral#getValue()
 	 */
 	public String getValue() {
 		return this.value;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.deckfour.xes.model.XAttributeLiteral#setValue(java.lang.String)
 	 */
 	public void setValue(String value) {
-		if(value == null || value.trim().length() == 0) {
-			throw new NullPointerException("No null value allowed in literal attribute!");
+		if (value == null || value.trim().length() == 0) {
+			throw new NullPointerException(
+					"No null value allowed in literal attribute!");
 		}
 		this.value = value;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return this.value;
 	}
-	
+
 	public Object clone() {
-		XAttributeLiteralImpl clone = (XAttributeLiteralImpl)super.clone();
+		XAttributeLiteralImpl clone = (XAttributeLiteralImpl) super.clone();
 		clone.value = new String(this.value);
 		return clone;
 	}
-	
-	
+
+	public boolean equals(Object obj) {
+		if (obj instanceof XAttributeLiteral) { // compares types
+			XAttributeLiteral other = (XAttributeLiteral) obj;
+			return super.equals(other) // compares keys
+					&& value.equals(other.getValue()); // compares values
+		} else {
+			return false;
+		}
+	}
 
 }

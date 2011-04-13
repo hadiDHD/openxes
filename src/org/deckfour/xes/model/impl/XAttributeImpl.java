@@ -45,131 +45,151 @@ import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.util.XAttributeUtils;
 
-
 /**
- * This class implements the abstract base class for
- * strongly-typed attributes.
+ * This class implements the abstract base class for strongly-typed attributes.
  * 
  * @author Christian W. Guenther (christian@deckfour.org)
- *
+ * 
  */
 public abstract class XAttributeImpl implements XAttribute {
-	
+
 	/**
-	 * Key, i.e. unique name, of this attribute. If the attribute is
-	 * defined in an extension, its key will be prepended with the
-	 * extension's defined prefix string.
+	 * Key, i.e. unique name, of this attribute. If the attribute is defined in
+	 * an extension, its key will be prepended with the extension's defined
+	 * prefix string.
 	 */
 	private final String key;
 	/**
-	 * The extension defining this attribute. May be <code>null</code>,
-	 * if this attribute is not defined by an extension.
+	 * The extension defining this attribute. May be <code>null</code>, if this
+	 * attribute is not defined by an extension.
 	 */
 	private final XExtension extension;
 	/**
 	 * Map of meta-attributes, i.e. attributes of this attribute.
 	 */
 	private XAttributeMap attributes;
-	
-	
+
 	/**
 	 * Creates a new, empty attribute.
 	 * 
-	 * @param key The key, i.e. unique name identifier, of this attribute.
+	 * @param key
+	 *            The key, i.e. unique name identifier, of this attribute.
 	 */
 	protected XAttributeImpl(String key) {
 		this(key, null);
 	}
-	
+
 	/**
 	 * Creates a new attribute.
 	 * 
-	 * @param key The key, i.e. unique name identifier, of this attribute.
-	 * @param extension The extension used for defining this attribute.
+	 * @param key
+	 *            The key, i.e. unique name identifier, of this attribute.
+	 * @param extension
+	 *            The extension used for defining this attribute.
 	 */
 	protected XAttributeImpl(String key, XExtension extension) {
 		this.key = key;
 		this.extension = extension;
-		this.attributes = new XAttributeMapLazyImpl<XAttributeMapImpl>(XAttributeMapImpl.class);	// uses lazy implementation by default
+		this.attributes = new XAttributeMapLazyImpl<XAttributeMapImpl>(
+				XAttributeMapImpl.class); // uses lazy implementation by default
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.deckfour.xes.model.impl.XAttribute#getKey()
 	 */
 	public String getKey() {
 		return key;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.deckfour.xes.model.impl.XAttribute#getExtension()
 	 */
 	public XExtension getExtension() {
 		return extension;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.deckfour.xes.model.impl.XAttribute#getAttributes()
 	 */
 	public XAttributeMap getAttributes() {
 		return attributes;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.deckfour.xes.model.impl.XAttribute#setAttributes(org.deckfour.xes.model.XAttributeMap)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.deckfour.xes.model.impl.XAttribute#setAttributes(org.deckfour.xes
+	 * .model.XAttributeMap)
 	 */
 	public void setAttributes(XAttributeMap attributes) {
 		this.attributes = attributes;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.deckfour.xes.model.impl.XAttribute#getExtensions()
 	 */
 	public Set<XExtension> getExtensions() {
 		return XAttributeUtils.extractExtensions(attributes);
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.deckfour.xes.model.impl.XAttribute#clone()
 	 */
 	public Object clone() {
 		XAttributeImpl clone = null;
 		try {
-			clone = (XAttributeImpl)super.clone();
+			clone = (XAttributeImpl) super.clone();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 			return null;
 		}
-		clone.attributes = (XAttributeMap)attributes.clone();
+		clone.attributes = (XAttributeMap) attributes.clone();
 		return clone;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof XAttribute) {
-			XAttribute other = (XAttribute)obj;
+		if (obj instanceof XAttribute) {
+			XAttribute other = (XAttribute) obj;
 			return other.getKey().equals(key);
 		} else {
 			return false;
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public int hashCode() {
 		return key.hashCode();
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(XAttribute o) {
 		return key.compareTo(o.getKey());
 	}
-	
 
 }

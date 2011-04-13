@@ -48,63 +48,84 @@ import org.deckfour.xes.model.XAttributeBoolean;
  */
 public class XAttributeBooleanImpl extends XAttributeImpl implements
 		XAttributeBoolean {
-	
+
 	/**
 	 * Value of the attribute.
 	 */
 	private boolean value;
-	
+
 	/**
 	 * Creates a new instance.
 	 * 
-	 * @param key The key of the attribute.
-	 * @param value Value of the attribute.
+	 * @param key
+	 *            The key of the attribute.
+	 * @param value
+	 *            Value of the attribute.
 	 */
 	public XAttributeBooleanImpl(String key, boolean value) {
 		this(key, value, null);
 	}
-	
+
 	/**
 	 * Creates a new instance.
 	 * 
-	 * @param key The key of the attribute.
-	 * @param value Value of the attribute.
-	 * @param extension The extension of the attribute.
+	 * @param key
+	 *            The key of the attribute.
+	 * @param value
+	 *            Value of the attribute.
+	 * @param extension
+	 *            The extension of the attribute.
 	 */
 	public XAttributeBooleanImpl(String key, boolean value, XExtension extension) {
 		super(key, extension);
 		this.value = value;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.deckfour.xes.model.XAttributeBoolean#getValue()
 	 */
 	public boolean getValue() {
 		return value;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.deckfour.xes.model.XAttributeBoolean#setValue(boolean)
 	 */
 	public void setValue(boolean value) {
 		this.value = value;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return this.value ? "true" : "false";
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.deckfour.xes.model.impl.XAttribute#clone()
 	 */
 	public Object clone() {
 		return super.clone();
 	}
-	
-	
+
+	public boolean equals(Object obj) {
+		if (obj instanceof XAttributeBoolean) { // compares types
+			XAttributeBoolean other = (XAttributeBoolean) obj;
+			return super.equals(other) // compares keys
+					&& (value == other.getValue()); // compares values
+		} else {
+			return false;
+		}
+	}
 
 }

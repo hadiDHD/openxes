@@ -39,6 +39,7 @@
 package org.deckfour.xes.model.impl;
 
 import org.deckfour.xes.extension.XExtension;
+import org.deckfour.xes.model.XAttributeContinuous;
 import org.deckfour.xes.model.XAttributeDiscrete;
 
 /**
@@ -48,58 +49,79 @@ import org.deckfour.xes.model.XAttributeDiscrete;
  */
 public class XAttributeDiscreteImpl extends XAttributeImpl implements
 		XAttributeDiscrete {
-	
+
 	/**
 	 * Value of the attribute.
 	 */
 	private long value;
-	
+
 	/**
 	 * Creates a new instance.
 	 * 
-	 * @param key The key of the attribute.
-	 * @param value Value of the attribute.
+	 * @param key
+	 *            The key of the attribute.
+	 * @param value
+	 *            Value of the attribute.
 	 */
 	public XAttributeDiscreteImpl(String key, long value) {
 		this(key, value, null);
 	}
-	
+
 	/**
 	 * Creates a new instance.
 	 * 
-	 * @param key The key of the attribute.
-	 * @param value Value of the attribute.
-	 * @param extension The extension of the attribute.
+	 * @param key
+	 *            The key of the attribute.
+	 * @param value
+	 *            Value of the attribute.
+	 * @param extension
+	 *            The extension of the attribute.
 	 */
 	public XAttributeDiscreteImpl(String key, long value, XExtension extension) {
 		super(key, extension);
 		this.value = value;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.deckfour.xes.model.XAttributeDiscrete#getValue()
 	 */
 	public long getValue() {
 		return this.value;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.deckfour.xes.model.XAttributeDiscrete#setValue(long)
 	 */
 	public void setValue(long value) {
 		this.value = value;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return Long.toString(value);
 	}
-	
+
 	public Object clone() {
 		return super.clone();
+	}
+
+	public boolean equals(Object obj) {
+		if (obj instanceof XAttributeDiscrete) { // compares types
+			XAttributeDiscrete other = (XAttributeDiscrete) obj;
+			return super.equals(other) // compares keys
+					&& (value == other.getValue()); // compares values
+		} else {
+			return false;
+		}
 	}
 
 }

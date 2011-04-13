@@ -39,6 +39,7 @@
 package org.deckfour.xes.model.impl;
 
 import org.deckfour.xes.extension.XExtension;
+import org.deckfour.xes.model.XAttributeBoolean;
 import org.deckfour.xes.model.XAttributeContinuous;
 
 /**
@@ -53,53 +54,75 @@ public class XAttributeContinuousImpl extends XAttributeImpl implements
 	 * Value of the attribute.
 	 */
 	private double value;
-	
+
 	/**
 	 * Creates a new instance.
 	 * 
-	 * @param key The key of the attribute.
-	 * @param value Value of the attribute.
+	 * @param key
+	 *            The key of the attribute.
+	 * @param value
+	 *            Value of the attribute.
 	 */
 	public XAttributeContinuousImpl(String key, double value) {
 		this(key, value, null);
 	}
-	
+
 	/**
 	 * Creates a new instance.
 	 * 
-	 * @param key The key of the attribute.
-	 * @param value Value of the attribute.
-	 * @param extension The extension of the attribute.
+	 * @param key
+	 *            The key of the attribute.
+	 * @param value
+	 *            Value of the attribute.
+	 * @param extension
+	 *            The extension of the attribute.
 	 */
-	public XAttributeContinuousImpl(String key, double value, XExtension extension) {
+	public XAttributeContinuousImpl(String key, double value,
+			XExtension extension) {
 		super(key, extension);
 		this.value = value;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.deckfour.xes.model.XAttributeContinuous#getValue()
 	 */
 	public double getValue() {
 		return value;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.deckfour.xes.model.XAttributeContinuous#setValue(boolean)
 	 */
 	public void setValue(double value) {
 		this.value = value;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return Double.toString(this.value);
 	}
-	
+
 	public Object clone() {
 		return super.clone();
+	}
+
+	public boolean equals(Object obj) {
+		if (obj instanceof XAttributeContinuous) { // compares types
+			XAttributeContinuous other = (XAttributeContinuous) obj;
+			return super.equals(other) // compares keys
+					&& (value == other.getValue()); // compares values
+		} else {
+			return false;
+		}
 	}
 
 }
