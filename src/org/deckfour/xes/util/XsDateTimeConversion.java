@@ -91,6 +91,10 @@ public class XsDateTimeConversion {
 	 * @return Parsed Date object.
 	 */
 	public Date parseXsDateTime(String xsDateTime) {
+		// HV: date format hack requires length of xsDateTime to be at least 3.
+		if (xsDateTime.length() < 3) {
+			return null;
+		}
 		// try to parse with date format hack
 		if (xsDateTime.charAt(xsDateTime.length() - 3) == ':') {
 			String modified = xsDateTime.substring(0, xsDateTime.length() - 3)
