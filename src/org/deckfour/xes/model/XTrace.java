@@ -38,6 +38,7 @@
  */
 package org.deckfour.xes.model;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -53,5 +54,16 @@ import java.util.List;
  */
 public interface XTrace extends XElement, List<XEvent> {
 	
+	/**
+	 * Insert the event in an ordered manner, if timestamp information is
+	 * available in this trace.
+	 * 
+	 * @param event
+	 *            the event to be inserted.
+	 * @return index of the inserted event.
+	 * @throws Exception 
+	 */
+	public int insertOrdered(XEvent event);
+
 
 }

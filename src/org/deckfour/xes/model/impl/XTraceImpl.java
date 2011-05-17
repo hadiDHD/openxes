@@ -38,11 +38,16 @@
  */
 package org.deckfour.xes.model.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Set;
 
 import org.deckfour.xes.extension.XExtension;
+import org.deckfour.xes.extension.std.XTimeExtension;
+import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeMap;
+import org.deckfour.xes.model.XAttributeTimestamp;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XTrace;
 import org.deckfour.xes.util.XAttributeUtils;
@@ -51,7 +56,7 @@ import org.deckfour.xes.util.XAttributeUtils;
  * Memory-based implementation for the XTrace interface.
  * 
  * @author Christian W. Guenther (christian@deckfour.org)
- *
+ * 
  */
 public class XTraceImpl extends ArrayList<XEvent> implements XTrace {
 
@@ -59,38 +64,43 @@ public class XTraceImpl extends ArrayList<XEvent> implements XTrace {
 	 * Serial version UID.
 	 */
 	private static final long serialVersionUID = 843122019760036963L;
-	
+
 	/**
 	 * Map of attributes for this trace.
 	 */
 	private XAttributeMap attributes;
-	
-	
+
 	/**
 	 * Creates a new trace.
 	 * 
-	 * @param attributeMap Attribute map used to 
-	 * 	store this trace's attributes.
+	 * @param attributeMap
+	 *            Attribute map used to store this trace's attributes.
 	 */
 	public XTraceImpl(XAttributeMap attributeMap) {
 		this.attributes = attributeMap;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.deckfour.xes.model.XAttributable#getAttributes()
 	 */
 	public XAttributeMap getAttributes() {
 		return attributes;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.deckfour.xes.model.XAttributable#getExtensions()
 	 */
 	public Set<XExtension> getExtensions() {
 		return XAttributeUtils.extractExtensions(attributes);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.deckfour.xes.model.XAttributable#setAttributes(java.util.Map)
 	 */
 	public void setAttributes(XAttributeMap attributes) {
@@ -101,13 +111,47 @@ public class XTraceImpl extends ArrayList<XEvent> implements XTrace {
 	 * Creates a clone, i.e. deep copy, of this trace.
 	 */
 	public Object clone() {
-		XTraceImpl clone = (XTraceImpl)super.clone();
-		clone.attributes = (XAttributeMap)attributes.clone();
+		XTraceImpl clone = (XTraceImpl) super.clone();
+		clone.attributes = (XAttributeMap) attributes.clone();
 		clone.clear();
-		for(XEvent event : this) {
-			clone.add((XEvent)event.clone());
+		for (XEvent event : this) {
+			clone.add((XEvent) event.clone());
 		}
 		return clone;
+	}
+
+	public synchronized int insertOrdered(XEvent event) {
+		if (this.size() == 0) {
+			// append if list is empty
+			add(event);
+			return 0;
+		}
+		XAttribute insTsAttr = event.getAttributes().get(
+				XTimeExtension.KEY_TIMESTAMP);
+		if (insTsAttr == null) {
+			// append if event has no timestamp
+			add(event);
+			return (size() - 1);
+		}
+		Date insTs = ((XAttributeTimestamp) insTsAttr).getValue();
+		for (int i = (size() - 1); i >= 0; i--) {
+			XAttribute refTsAttr = get(i).getAttributes().get(
+					XTimeExtension.KEY_TIMESTAMP);
+			if (refTsAttr == null) {
+				// trace contains events w/o timestamps, append.
+				add(event);
+				return (size() - 1);
+			}
+			Date refTs = ((XAttributeTimestamp) refTsAttr).getValue();
+			if (insTs.before(refTs) == false) {
+				// insert position reached
+				add(i + 1, event);
+				return (i + 1);
+			}
+		}
+		// beginning reached, insert at head
+		add(0, event);
+		return 0;
 	}
 
 }
