@@ -41,6 +41,7 @@ package org.deckfour.xes.model.impl;
 import java.util.Date;
 
 import org.deckfour.xes.extension.XExtension;
+import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeTimestamp;
 
 /**
@@ -177,4 +178,15 @@ public class XAttributeTimestampImpl extends XAttributeImpl implements
 		}
 	}
 
+	@Override
+	public int compareTo(XAttribute other) {
+		if (!(other instanceof XAttributeTimestamp)) {
+			throw new ClassCastException();
+		}
+		int result = super.compareTo(other);
+		if (result != 0) {
+			return result;
+		}
+		return value.compareTo(((XAttributeTimestamp)other).getValue());
+	}
 }

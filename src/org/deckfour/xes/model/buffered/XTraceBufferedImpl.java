@@ -100,6 +100,42 @@ public class XTraceBufferedImpl implements XTrace {
 		}
 	}
 
+	/**
+	 * List equality for XTrace
+	 * 
+	 * Equality as defined in the List interface and as implemented in the AbstractList class, 
+	 * with a small tweak for efficiency.
+	 * 
+	 * @param o Object to be compared with this XTrace implementation.
+	 * 
+	 * @return Returns true if both objects are lists and the elements of both lists are equal. 
+	 */
+	public boolean equals(Object o) { 
+		if (o == this) {
+			return true;
+		}
+		if (!(o instanceof XTrace)) {
+			return false;
+		}
+		XTrace other = (XTrace)o;
+		// First compare the size of the lists, since iterating through them can be expensive,
+		// because of on-disk caching operations being performed in the background. 
+		if (size() != other.size()) {
+			return false;
+		}
+		ListIterator<XEvent> i1 = listIterator();
+		ListIterator<XEvent> i2 = other.listIterator();
+		while (i1.hasNext() && i2.hasNext()) {
+			XEvent e1 = i1.next();
+			XEvent e2 = i2.next();
+			if (!(e1 == null ? e2 == null : !e1.equals(e2))) {
+				return false;
+			}
+		}
+		// i1 empty or i2 empty, hence i1 empty and i2 empty (as #i1 == #i2).
+		return true;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

@@ -39,7 +39,7 @@
 package org.deckfour.xes.model.impl;
 
 import org.deckfour.xes.extension.XExtension;
-import org.deckfour.xes.model.XAttributeContinuous;
+import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeDiscrete;
 
 /**
@@ -124,4 +124,15 @@ public class XAttributeDiscreteImpl extends XAttributeImpl implements
 		}
 	}
 
+	@Override
+	public int compareTo(XAttribute other) {
+		if (!(other instanceof XAttributeDiscrete)) {
+			throw new ClassCastException();
+		}
+		int result = super.compareTo(other);
+		if (result != 0) {
+			return result;
+		}
+		return ((Long)value).compareTo(((XAttributeDiscrete)other).getValue());
+	}
 }

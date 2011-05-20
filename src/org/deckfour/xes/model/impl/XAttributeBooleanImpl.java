@@ -39,6 +39,7 @@
 package org.deckfour.xes.model.impl;
 
 import org.deckfour.xes.extension.XExtension;
+import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeBoolean;
 
 /**
@@ -128,4 +129,15 @@ public class XAttributeBooleanImpl extends XAttributeImpl implements
 		}
 	}
 
+	@Override
+	public int compareTo(XAttribute other) {
+		if (!(other instanceof XAttributeBoolean)) {
+			throw new ClassCastException();
+		}
+		int result = super.compareTo(other);
+		if (result != 0) {
+			return result;
+		}
+		return ((Boolean)value).compareTo(((XAttributeBoolean)other).getValue());
+	}
 }
