@@ -128,7 +128,7 @@ public class XTraceBufferedImpl implements XTrace {
 		while (i1.hasNext() && i2.hasNext()) {
 			XEvent e1 = i1.next();
 			XEvent e2 = i2.next();
-			if (!(e1 == null ? e2 == null : !e1.equals(e2))) {
+			if (!(e1 == null ? e2 == null : e1.equals(e2))) {
 				return false;
 			}
 		}
