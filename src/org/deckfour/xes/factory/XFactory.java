@@ -46,6 +46,7 @@ import org.deckfour.xes.id.XID;
 import org.deckfour.xes.model.XAttributeBoolean;
 import org.deckfour.xes.model.XAttributeContinuous;
 import org.deckfour.xes.model.XAttributeDiscrete;
+import org.deckfour.xes.model.XAttributeID;
 import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XAttributeTimestamp;
@@ -246,4 +247,18 @@ public interface XFactory {
 	public abstract XAttributeTimestamp createAttributeTimestamp(String key,
 			long millis, XExtension extension);
 
+	/**
+	 * Creates a new XES attribute with id type (Factory method).
+	 * 
+	 * @param key
+	 *            The key of the attribute.
+	 * @param value
+	 *            The value of the attribute.
+	 * @param extension
+	 *            The extension defining the attribute (set to <code>null</code>
+	 *            , if the attribute is not associated to an extension)
+	 * @return A newly created attribute.
+	 */
+	public abstract XAttributeID createAttributeID(String key,
+			XID value, XExtension extension);
 }

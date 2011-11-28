@@ -52,6 +52,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.deckfour.xes.factory.XFactory;
 import org.deckfour.xes.factory.XFactoryRegistry;
+import org.deckfour.xes.id.XID;
 import org.deckfour.xes.info.XGlobalAttributeNameMap;
 import org.deckfour.xes.model.XAttribute;
 import org.xml.sax.Attributes;
@@ -218,6 +219,10 @@ public class XExtensionParser {
 			} else if(tagName.equalsIgnoreCase("boolean")) {
 				String key = extension.getPrefix() + ':' + attributes.getValue("key");
 				currentAttribute = factory.createAttributeBoolean(key, false, extension);
+				xAttributes.add(currentAttribute);
+			} else if(tagName.equalsIgnoreCase("id")) {
+				String key = extension.getPrefix() + ':' + attributes.getValue("key");
+				currentAttribute = factory.createAttributeID(key, new XID(), extension);
 				xAttributes.add(currentAttribute);
 			} else if(currentAttribute != null && tagName.equalsIgnoreCase("alias")) {
 				// globally register mapping alias

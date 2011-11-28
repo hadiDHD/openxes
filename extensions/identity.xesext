@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xesextension name="Identity" prefix="identity" uri="http://www.xes-standard.org/identity.xesext">
+	<log>
+		<string key="id">
+			<alias mapping="EN" name="Identity"/>
+			<alias mapping="DE" name="Identität"/>
+			<alias mapping="FR" name="Identité"/>
+			<alias mapping="ES" name="Identidad"/>
+			<alias mapping="PT" name="Identidade"/>
+		</string>
+	</log>
+	<trace>
+		<string key="id">
+			<alias mapping="EN" name="Identity"/>
+			<alias mapping="DE" name="Identität"/>
+			<alias mapping="FR" name="Identité"/>
+			<alias mapping="ES" name="Identidad"/>
+			<alias mapping="PT" name="Identidade"/>
+		</string>
+	</trace>
+	<event>
+		<string key="id">
+			<alias mapping="EN" name="Identity"/>
+			<alias mapping="DE" name="Identität"/>
+			<alias mapping="FR" name="Identité"/>
+			<alias mapping="ES" name="Identidad"/>
+			<alias mapping="PT" name="Identidade"/>
+		</string>
+	</event>
+	<meta>
+		<string key="id">
+			<alias mapping="EN" name="Identity"/>
+			<alias mapping="DE" name="Identität"/>
+			<alias mapping="FR" name="Identité"/>
+			<alias mapping="ES" name="Identidad"/>
+			<alias mapping="PT" name="Identidade"/>
+		</string>
+	</meta>
+</xesextension>

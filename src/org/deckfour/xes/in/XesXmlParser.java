@@ -57,6 +57,7 @@ import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.extension.XExtensionManager;
 import org.deckfour.xes.factory.XFactory;
 import org.deckfour.xes.factory.XFactoryRegistry;
+import org.deckfour.xes.id.XID;
 import org.deckfour.xes.model.XAttributable;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
@@ -295,6 +296,9 @@ public class XesXmlParser extends XParser {
 					} else if (tagName.equalsIgnoreCase("boolean")) {
 						attribute = factory.createAttributeBoolean(key, Boolean
 								.parseBoolean(value), extension);
+					} else if (tagName.equalsIgnoreCase("id")) {
+						attribute = factory.createAttributeID(key, XID
+								.parse(value), extension);
 					}
 					// add to current attributable and push to stack
 					attributeStack.push(attribute);
@@ -373,7 +377,8 @@ public class XesXmlParser extends XParser {
 					|| tagName.equalsIgnoreCase("date")
 					|| tagName.equalsIgnoreCase("int")
 					|| tagName.equalsIgnoreCase("float")
-					|| tagName.equalsIgnoreCase("boolean")) {
+					|| tagName.equalsIgnoreCase("boolean")
+					|| tagName.equalsIgnoreCase("id")) {
 				XAttribute attribute = attributeStack.pop();
 				attributableStack.pop(); // remove self from top
 				if (globals != null) {

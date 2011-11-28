@@ -38,7 +38,9 @@
  */
 package org.deckfour.xes.id;
 
+import java.io.DataInput;
 import java.io.DataInputStream;
+import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.UUID;
@@ -77,6 +79,19 @@ public class XID implements Cloneable, Comparable<XID> {
 	}
 
 	/**
+	 * Reads a binary-serialized XID from a data input.
+	 * 
+	 * @param in
+	 *            Data input to read XID from.
+	 * @return The read XID object.
+	 */
+	public static XID read(DataInput in) throws IOException {
+		long msb = in.readLong();
+		long lsb = in.readLong();
+		return new XID(msb, lsb);
+	}
+
+	/**
 	 * Serializes an XID object binarily to a data output stream.
 	 * 
 	 * @param id
@@ -87,6 +102,19 @@ public class XID implements Cloneable, Comparable<XID> {
 	public static void write(XID id, DataOutputStream dos) throws IOException {
 		dos.writeLong(id.uuid.getMostSignificantBits());
 		dos.writeLong(id.uuid.getLeastSignificantBits());
+	}
+
+	/**
+	 * Serializes an XID object binarily to a data output stream.
+	 * 
+	 * @param id
+	 *            XID to be serialized.
+	 * @param out
+	 *            Data output to store XID serialization.
+	 */
+	public static void write(XID id, DataOutput out) throws IOException {
+		out.writeLong(id.uuid.getMostSignificantBits());
+		out.writeLong(id.uuid.getLeastSignificantBits());
 	}
 
 	/**

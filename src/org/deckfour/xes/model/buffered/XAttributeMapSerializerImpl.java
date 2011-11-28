@@ -46,10 +46,12 @@ import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.extension.XExtensionManager;
 import org.deckfour.xes.factory.XFactory;
 import org.deckfour.xes.factory.XFactoryRegistry;
+import org.deckfour.xes.id.XID;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeBoolean;
 import org.deckfour.xes.model.XAttributeContinuous;
 import org.deckfour.xes.model.XAttributeDiscrete;
+import org.deckfour.xes.model.XAttributeID;
 import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XAttributeTimestamp;
@@ -95,6 +97,9 @@ public class XAttributeMapSerializerImpl implements XAttributeMapSerializer {
 			} else if(attribute instanceof XAttributeTimestamp) {
 				out.writeByte(4);
 				out.writeLong(((XAttributeTimestamp)attribute).getValueMillis());
+			} else if(attribute instanceof XAttributeID) {
+				out.writeByte(5);
+				XID.write(((XAttributeID)attribute).getValue(), out);
 			} else {
 				throw new AssertionError("Unknown attribute type, cannot serialize!");
 			}
@@ -137,6 +142,9 @@ public class XAttributeMapSerializerImpl implements XAttributeMapSerializer {
 			} else if(type == 4) {
 				long value = in.readLong();
 				attribute = factory.createAttributeTimestamp(key, value, extension);
+			} else if(type == 5) {
+				XID value = XID.read(in);
+				attribute = factory.createAttributeID(key, value, extension);
 			} else {
 				throw new AssertionError("Unknown attribute type, cannot deserialize!");
 			}
