@@ -65,5 +65,5 @@ public interface XTrace extends XElement, List<XEvent> {
 	 */
 	public int insertOrdered(XEvent event);
 
-
+	public void accept(XVisitor visitor, XLog log);
 }

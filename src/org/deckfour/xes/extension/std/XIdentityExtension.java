@@ -49,7 +49,6 @@ import org.deckfour.xes.info.XGlobalAttributeNameMap;
 import org.deckfour.xes.model.XAttributable;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeID;
-import org.deckfour.xes.model.XAttributeLiteral;
 
 /**
  * @author Eric Verbeek (h.m.w.verbeek@tue.nl)

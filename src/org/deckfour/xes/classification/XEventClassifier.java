@@ -39,6 +39,8 @@
 package org.deckfour.xes.classification;
 
 import org.deckfour.xes.model.XEvent;
+import org.deckfour.xes.model.XLog;
+import org.deckfour.xes.model.XVisitor;
 
 /**
  * This interface defines a classification of events.
@@ -82,4 +84,9 @@ public interface XEventClassifier {
 	 * used for defining this classifier.
 	 */
 	public String[] getDefiningAttributeKeys();
+	
+	/**
+	 * Runs the given visitor for the given log on this classifier.
+	 */
+	public void accept(XVisitor visior, XLog log);
 }

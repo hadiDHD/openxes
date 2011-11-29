@@ -52,7 +52,6 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.deckfour.xes.factory.XFactory;
 import org.deckfour.xes.factory.XFactoryRegistry;
-import org.deckfour.xes.id.XID;
 import org.deckfour.xes.id.XIDFactory;
 import org.deckfour.xes.info.XGlobalAttributeNameMap;
 import org.deckfour.xes.model.XAttribute;

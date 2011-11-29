@@ -59,4 +59,5 @@ public interface XEvent extends XElement {
 	 */
 	XID getID();
 
+	public void accept(XVisitor visitor, XTrace trace);
 }

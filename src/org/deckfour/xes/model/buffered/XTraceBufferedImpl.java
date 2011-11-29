@@ -46,9 +46,12 @@ import java.util.ListIterator;
 import java.util.Set;
 
 import org.deckfour.xes.extension.XExtension;
+import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XEvent;
+import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
+import org.deckfour.xes.model.XVisitor;
 import org.deckfour.xes.util.XAttributeUtils;
 
 /**
@@ -556,5 +559,34 @@ public class XTraceBufferedImpl implements XTrace {
 	protected void finalize() throws Throwable {
 		super.finalize();
 		events.cleanup();
+	}
+
+	/*
+	 * Runs the given visitor for the given log on this trace.
+	 * 
+	 * (non-Javadoc)
+	 * @see org.deckfour.xes.model.XTrace#accept(org.deckfour.xes.model.XVisitor, org.deckfour.xes.model.XLog)
+	 */
+	public void accept(XVisitor visitor, XLog log) {
+		/*
+		 * First call.
+		 */
+		visitor.visitTracePre(this, log);
+		/*
+		 * Visit the attributes.
+		 */
+		for (XAttribute attribute: attributes.values()) {
+			attribute.accept(visitor, this);
+		}
+		/*
+		 * Visit the events.
+		 */
+		for (XEvent event: this) {
+			event.accept(visitor, this);
+		}
+		/*
+		 * Last call.
+		 */
+		visitor.visitTracePost(this, log);
 	}
 }

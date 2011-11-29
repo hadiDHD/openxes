@@ -43,8 +43,11 @@ import java.util.Set;
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.id.XID;
 import org.deckfour.xes.id.XIDFactory;
+import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XEvent;
+import org.deckfour.xes.model.XTrace;
+import org.deckfour.xes.model.XVisitor;
 import org.deckfour.xes.util.XAttributeUtils;
 
 /**
@@ -185,4 +188,26 @@ public class XEventImpl implements XEvent {
 		this.id = id;
 	}
 
+	/*
+	 * Runs the given visitor for the given trace on this event.
+	 * 
+	 * (non-Javadoc)
+	 * @see org.deckfour.xes.model.XEvent#accept(org.deckfour.xes.model.XVisitor, org.deckfour.xes.model.XTrace)
+	 */
+	public void accept(XVisitor visitor, XTrace trace) {
+		/*
+		 * First call.
+		 */
+		visitor.visitEventPre(this, trace);
+		/*
+		 * Visit the attributes.
+		 */
+		for (XAttribute attribute: attributes.values()) {
+			attribute.accept(visitor, this);
+		}
+		/*
+		 * Last call.
+		 */
+		visitor.visitEventPost(this, trace);
+	}
 }

@@ -44,6 +44,8 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import org.deckfour.xes.model.XAttribute;
+import org.deckfour.xes.model.XLog;
+import org.deckfour.xes.model.XVisitor;
 
 /**
  * This class defines and implements extensions to the basic log meta-model.
@@ -246,5 +248,17 @@ public class XExtension implements Serializable {
 		return name;
 	}
 
-
+	/*
+	 * Runs the given visitor for the given log on this extension.
+	 */
+	public void accept(XVisitor visitor, XLog log) {
+		/*
+		 * First call.
+		 */
+		visitor.visitExtensionPre(this, log);
+		/*
+		 * Last call.
+		 */
+		visitor.visitExtensionPost(this, log);
+	}
 }

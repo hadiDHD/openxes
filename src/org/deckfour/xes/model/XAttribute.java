@@ -79,4 +79,5 @@ public interface XAttribute extends XAttributable, Cloneable, Comparable<XAttrib
 	 */
 	public Object clone();
 
+	public void accept(XVisitor visitor, XAttributable attributable);
 }

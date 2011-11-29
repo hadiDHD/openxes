@@ -49,6 +49,7 @@ import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
+import org.deckfour.xes.model.XVisitor;
 
 /**
  * Implementation for the XLog interface.
@@ -155,4 +156,55 @@ public class XLogImpl extends ArrayList<XTrace> implements XLog {
 		return globalTraceAttributes;
 	}
 
+	/*
+	 * Runs the given visitor on this log.
+	 * 
+	 * (non-Javadoc)
+	 * @see org.deckfour.xes.model.XLog#accept(org.deckfour.xes.model.XVisitor)
+	 */
+	public boolean accept(XVisitor visitor) {
+		/*
+		 * Check whether the visitor may run.
+		 */
+		if (visitor.precondition()) {
+			/*
+			 * Yes, it may. Now initialize.
+			 */
+			visitor.init(this);
+			/*
+			 * First call.
+			 */
+			visitor.visitLogPre(this);
+			/*
+			 * Visit the extensions.
+			 */
+			for (XExtension extension: extensions) {
+				extension.accept(visitor, this);
+			}
+			/*
+			 * Visit the classifiers.
+			 */
+			for (XEventClassifier classifier: classifiers) {
+				classifier.accept(visitor, this);
+			}
+			/*
+			 * Visit the attributes.
+			 */
+			for (XAttribute attribute: attributes.values()) {
+				attribute.accept(visitor, this);
+			}
+			/*
+			 * Visit the traces.
+			 */
+			for (XTrace trace: this) {
+				trace.accept(visitor, this);
+			}
+			/*
+			 * Last call.
+			 */
+			visitor.visitLogPost(this);
+			return true;
+		}
+		return false;
+	}
 }

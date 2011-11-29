@@ -79,4 +79,5 @@ public interface XLog extends XElement, List<XTrace> {
 	 */
 	public List<XAttribute> getGlobalEventAttributes();
 
+	public boolean accept(XVisitor visitor);
 }

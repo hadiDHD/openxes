@@ -42,6 +42,8 @@ import java.util.Arrays;
 
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
+import org.deckfour.xes.model.XLog;
+import org.deckfour.xes.model.XVisitor;
 
 /**
  * Event classifier which considers two events as equal, if, for a set of given
@@ -172,5 +174,16 @@ public class XEventAttributeClassifier implements XEventClassifier,
 			return false;
 		}
 		return compareTo((XEventAttributeClassifier) o) == 0;
+	}
+	
+	public void accept(XVisitor visitor, XLog log) {
+		/*
+		 * First call.
+		 */
+		visitor.visitClassifierPre(this, log);
+		/*
+		 * Last call.
+		 */
+		visitor.visitClassifierPost(this, log);
 	}
 }
