@@ -54,6 +54,7 @@ import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeBoolean;
 import org.deckfour.xes.model.XAttributeContinuous;
 import org.deckfour.xes.model.XAttributeDiscrete;
+import org.deckfour.xes.model.XAttributeID;
 import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.XAttributeTimestamp;
 import org.deckfour.xes.model.XEvent;
@@ -201,6 +202,10 @@ public class XesXmlSerializer implements XSerializer {
 				attributeTag.addAttribute("value", xsDateTimeConversion.format(timestamp));
 			} else if(attribute instanceof XAttributeBoolean) {
 				attributeTag = tag.addChildNode("boolean");
+				attributeTag.addAttribute("key", attribute.getKey());
+				attributeTag.addAttribute("value", attribute.toString());
+			} else if(attribute instanceof XAttributeID) {
+				attributeTag = tag.addChildNode("id");
 				attributeTag.addAttribute("key", attribute.getKey());
 				attributeTag.addAttribute("value", attribute.toString());
 			} else {

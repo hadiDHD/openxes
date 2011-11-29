@@ -254,7 +254,8 @@ public class XesXmlParser extends XParser {
 					|| tagName.equalsIgnoreCase("date")
 					|| tagName.equalsIgnoreCase("int")
 					|| tagName.equalsIgnoreCase("float")
-					|| tagName.equalsIgnoreCase("boolean")) {
+					|| tagName.equalsIgnoreCase("boolean")
+					|| tagName.equalsIgnoreCase("id")) {
 				// attribute tag.
 				String key = attributes.getValue("key");
 				if (key == null) {

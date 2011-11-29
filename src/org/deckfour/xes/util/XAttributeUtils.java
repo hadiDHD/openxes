@@ -45,10 +45,13 @@ import java.util.Set;
 
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.factory.XFactory;
+import org.deckfour.xes.id.XID;
+import org.deckfour.xes.id.XIDFactory;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeBoolean;
 import org.deckfour.xes.model.XAttributeContinuous;
 import org.deckfour.xes.model.XAttributeDiscrete;
+import org.deckfour.xes.model.XAttributeID;
 import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.XAttributeTimestamp;
 
@@ -78,6 +81,8 @@ public class XAttributeUtils {
 			return XAttributeDiscrete.class;
 		} else if (attribute instanceof XAttributeTimestamp) {
 			return XAttributeTimestamp.class;
+		} else if (attribute instanceof XAttributeID) {
+			return XAttributeID.class;
 		} else {
 			throw new AssertionError("Unexpected attribute type!");
 		}
@@ -102,6 +107,8 @@ public class XAttributeUtils {
 			return "DISCRETE";
 		} else if (attribute instanceof XAttributeTimestamp) {
 			return "TIMESTAMP";
+		} else if (attribute instanceof XAttributeID) {
+			return "ID";
 		} else {
 			throw new AssertionError("Unexpected attribute type!");
 		}
@@ -129,6 +136,8 @@ public class XAttributeUtils {
 			((XAttributeDiscrete) prototype).setValue(0);
 		} else if (prototype instanceof XAttributeTimestamp) {
 			((XAttributeTimestamp) prototype).setValueMillis(0);
+		} else if (prototype instanceof XAttributeID) {
+			((XAttributeID) prototype).setValue(XIDFactory.instance().createId());
 		} else {
 			throw new AssertionError("Unexpected attribute type!");
 		}
@@ -183,6 +192,9 @@ public class XAttributeUtils {
 						"OpenXES: could not parse date-time attribute. Value: "
 								+ value);
 			}
+			return attr;
+		} else if (type.equalsIgnoreCase("ID")) {
+			XAttributeID attr = factory.createAttributeID(key, XID.parse(value), extension);
 			return attr;
 		} else {
 			throw new AssertionError("OpenXES: could not parse attribute type!");

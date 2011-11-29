@@ -44,6 +44,7 @@ import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.factory.XFactory;
 import org.deckfour.xes.factory.XFactoryRegistry;
 import org.deckfour.xes.id.XID;
+import org.deckfour.xes.id.XIDFactory;
 import org.deckfour.xes.info.XGlobalAttributeNameMap;
 import org.deckfour.xes.model.XAttributable;
 import org.deckfour.xes.model.XAttribute;
@@ -98,7 +99,7 @@ public class XIdentityExtension extends XExtension {
 	private XIdentityExtension() {
 		super("Identity", "identity", EXTENSION_URI);
 		XFactory factory = XFactoryRegistry.instance().currentDefault();
-		ATTR_ID = factory.createAttributeID(KEY_ID, new XID(),
+		ATTR_ID = factory.createAttributeID(KEY_ID, XIDFactory.instance().createId(),
 				this);
 		this.logAttributes.add((XAttribute) ATTR_ID.clone());
 		this.traceAttributes.add((XAttribute) ATTR_ID.clone());
