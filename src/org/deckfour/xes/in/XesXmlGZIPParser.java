@@ -88,13 +88,14 @@ public class XesXmlGZIPParser extends XesXmlParser {
 	@Override
 	public boolean canParse(File file) {
 		String filename = file.getName();
-		String suffix = filename.substring(filename.length() - 3);
-		if(suffix.equalsIgnoreCase("xez")) {
-			return true;
-		} else {
-			suffix = filename.substring(filename.length() - 6);
-			return suffix.equalsIgnoreCase("xes.gz");
-		}
+		return endsWithIgnoreCase(filename, ".xez") || endsWithIgnoreCase(filename, ".xes.gz");
+//		String suffix = filename.substring(filename.length() - 3);
+//		if(suffix.equalsIgnoreCase("xez")) {
+//			return true;
+//		} else {
+//			suffix = filename.substring(filename.length() - 6);
+//			return suffix.equalsIgnoreCase("xes.gz");
+//		}
 	}
 
 	/* (non-Javadoc)

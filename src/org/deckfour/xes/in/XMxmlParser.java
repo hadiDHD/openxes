@@ -153,15 +153,16 @@ public class XMxmlParser extends XParser {
 	@Override
 	public boolean canParse(File file) {
 		String filename = file.getName();
-		String suffix = filename.substring(filename.length() - 4);
-		if(suffix.equalsIgnoreCase("mxml")) {
-			return true;
-		} else {
-			suffix = filename.substring(filename.length() - 3);
-			return suffix.equalsIgnoreCase("xml");
-		}
+		return endsWithIgnoreCase(filename, ".mxml") || endsWithIgnoreCase(filename, ".xml");
+//		String suffix = filename.substring(filename.length() - 4);
+//		if(suffix.equalsIgnoreCase("mxml")) {
+//			return true;
+//		} else {
+//			suffix = filename.substring(filename.length() - 3);
+//			return suffix.equalsIgnoreCase("xml");
+//		}
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see org.deckfour.xes.in.XParser#description()
 	 */

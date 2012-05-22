@@ -127,8 +127,9 @@ public class XesXmlParser extends XParser {
 	@Override
 	public boolean canParse(File file) {
 		String filename = file.getName();
-		String suffix = filename.substring(filename.length() - 3);
-		return suffix.equalsIgnoreCase("xes");
+		return endsWithIgnoreCase(filename, ".xes");
+//		String suffix = filename.substring(filename.length() - 3);
+//		return suffix.equalsIgnoreCase("xes");
 	}
 
 	/*

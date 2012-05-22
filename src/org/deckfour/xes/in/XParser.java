@@ -118,4 +118,26 @@ public abstract class XParser {
 		return name();
 	}
 
+	/**
+	 * Returns whether the given file name ends (ignoring the case) with the given suffix.
+	 * @param name The given file name.
+	 * @param suffix The given suffix.
+	 * @return Whether the given file name ends (ignoring the case) with the given suffix.
+	 */
+	protected boolean endsWithIgnoreCase(String name, String suffix) {
+		if (name == null || suffix == null) {
+			/*
+			 * No name or no suffix. Return false.
+			 */
+			return false;
+		}
+		int i = name.length() - suffix.length();
+		if (i < 0) {
+			/*
+			 * Suffix is longer than name, hence name cannot end with suffix.
+			 */
+			return false;
+		}
+		return name.substring(i).equalsIgnoreCase(suffix);
+	}
 }

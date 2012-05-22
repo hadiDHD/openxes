@@ -87,8 +87,9 @@ public class XMxmlGZIPParser extends XMxmlParser {
 	@Override
 	public boolean canParse(File file) {
 		String filename = file.getName();
-		String suffix = filename.substring(filename.length() - 7);
-		return suffix.equalsIgnoreCase("mxml.gz");
+		return endsWithIgnoreCase(filename, ".mxml.gz");
+//		String suffix = filename.substring(filename.length() - 7);
+//		return suffix.equalsIgnoreCase("mxml.gz");
 	}
 
 	/* (non-Javadoc)
