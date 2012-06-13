@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
   <!-- This file describes the  serialization for extensions of the XES format for event log data. -->
-  <!-- For more information about XES, visit http://code.fluxicon.com/xes/ -->
+  <!-- For more information about XES, visit http://www.xes-standard.org/ -->
   
-  <!-- (c) 2009 by Christian W. Guenther (christian@fluxicon.com) -->
+  <!-- (c) 2012 IEEE Task Force on Process Mining (http://wwww.win.tue.nl/ieeetfpm)  -->
   
+  <!-- Date: June 12, 2012 -->
+  <!-- Version: 1.1 -->
+  <!-- Author: Christian Günther (christian@fluxicom.com) -->
+  <!-- Author: Eric Verbeek (h.m.w.verbeek@tue.nl) -->
+  <!-- Change: Added AttributableType (list of attribute types now occurs only once) -->
+  <!-- Change: Added id type -->
+  
+  <!-- Date: November 25, 2009 -->
+  <!-- Version: 1.0 -->
+  <!-- Author: Christian Günther (christian@fluxicom.com) -->
+
   <!-- Any extension definition has an xesextension root element. -->
   <!-- Child elements are containers, which define attributes for -->
   <!-- the log, trace, event, and meta level of the XES -->
@@ -19,73 +30,33 @@
   <xs:element name="xesextension">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" maxOccurs="1" ref="log"/>
-        <xs:element minOccurs="0" maxOccurs="1" ref="trace"/>
-        <xs:element minOccurs="0" maxOccurs="1" ref="event"/>
-        <xs:element minOccurs="0" maxOccurs="1" ref="meta"/>
+        <xs:element name="log" minOccurs="0" maxOccurs="1" type="AttributableType"/>
+        <xs:element name="trace" minOccurs="0" maxOccurs="1" type="AttributableType"/>
+        <xs:element name="event" minOccurs="0" maxOccurs="1" type="AttributableType"/>
+        <xs:element name="meta" minOccurs="0" maxOccurs="1" type="AttributableType"/>
       </xs:sequence>
       <xs:attribute name="name" use="required" type="xs:NCName"/>
       <xs:attribute name="prefix" use="required" type="xs:NCName"/>
       <xs:attribute name="uri" use="required" type="xs:anyURI"/>
     </xs:complexType>
   </xs:element>
-  
-  <!-- Container tag for the definition of log attributes. -->
-  <xs:element name="log">
-    <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="string" type="AttributeType"/>
-        <xs:element name="date" type="AttributeType"/>
-        <xs:element name="int" type="AttributeType"/>
-        <xs:element name="float" type="AttributeType"/>
-        <xs:element name="boolean" type="AttributeType"/>
-      </xs:choice>
-    </xs:complexType>
-  </xs:element>
-  
-  <!-- Container tag for the definition of trace attributes. -->
-  <xs:element name="trace">
-    <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="string" type="AttributeType"/>
-        <xs:element name="date" type="AttributeType"/>
-        <xs:element name="int" type="AttributeType"/>
-        <xs:element name="float" type="AttributeType"/>
-        <xs:element name="boolean" type="AttributeType"/>
-      </xs:choice>
-    </xs:complexType>
-  </xs:element>
-  
-  <!-- Container tag for the definition of event attributes. -->
-  <xs:element name="event">
-    <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="string" type="AttributeType"/>
-        <xs:element name="date" type="AttributeType"/>
-        <xs:element name="int" type="AttributeType"/>
-        <xs:element name="float" type="AttributeType"/>
-        <xs:element name="boolean" type="AttributeType"/>
-      </xs:choice>
-    </xs:complexType>
-  </xs:element>
-  
-  <!-- Container tag for the definition of meta attributes. -->
-  <xs:element name="meta">
-    <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="string" type="AttributeType"/>
-        <xs:element name="date" type="AttributeType"/>
-        <xs:element name="int" type="AttributeType"/>
-        <xs:element name="float" type="AttributeType"/>
-        <xs:element name="boolean" type="AttributeType"/>
-      </xs:choice>
-    </xs:complexType>
-  </xs:element>
+
+  <!-- Attributes -->
+  <xs:complexType name="AttributableType">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="string" type="AttributeType"/>
+      <xs:element name="date" type="AttributeType"/>
+      <xs:element name="int" type="AttributeType"/>
+      <xs:element name="float" type="AttributeType"/>
+      <xs:element name="boolean" type="AttributeType"/>
+      <xs:element name="id" type="AttributeType"/>
+    </xs:choice>
+  </xs:complexType>
   
   <!-- Attribute -->
   <xs:complexType name="AttributeType">
     <xs:sequence>
-      <xs:element name="alias" type="AliasType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="alias" minOccurs="0" maxOccurs="unbounded" type="AliasType"/>
     </xs:sequence>
     <xs:attribute name="key" use="required" type="xs:Name"/>
   </xs:complexType>

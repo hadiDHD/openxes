@@ -83,7 +83,7 @@ public class XesXmlParser extends XParser {
 	 * Unique URI for the format definition.
 	 */
 	protected static final URI XES_URI = URI
-			.create("http://code.deckfour.org/xes");
+			.create("http://www.xes-standard.org/");
 
 	/**
 	 * XES model factory used to build model.

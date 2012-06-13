@@ -102,14 +102,14 @@ public class XFactoryNaiveImpl implements XFactory {
 	 * @see org.deckfour.xes.model.factory.XModelFactory#getUri()
 	 */
 	public URI getUri() {
-		return URI.create("http://code.deckfour.org/xes/");
+		return URI.create("http://www.xes-standard.org/");
 	}
 
 	/* (non-Javadoc)
 	 * @see org.deckfour.xes.model.factory.XModelFactory#getVendor()
 	 */
 	public String getVendor() {
-		return "code.deckfour.org";
+		return "xes-standard.org";
 	}
 	
 	/* (non-Javadoc)

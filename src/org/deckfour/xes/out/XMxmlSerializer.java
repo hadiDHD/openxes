@@ -145,7 +145,7 @@ public class XMxmlSerializer implements XSerializer {
 		doc.addComment("to the legacy MXML standard for log storage and management.");
 		doc.addComment("OpenXES library version: "
 				+ XRuntimeUtils.OPENXES_VERSION);
-		doc.addComment("OpenXES is available from http://code.deckfour.org/xes/");
+		doc.addComment("OpenXES is available from http://www.xes-standard.org/");
 		SXTag root = doc.addNode("WorkflowLog");
 		SXTag source = root.addChildNode("Source");
 		source.addAttribute("program", "XES MXML serialization");

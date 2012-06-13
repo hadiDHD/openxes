@@ -91,7 +91,7 @@ public class XFactoryBufferedImpl extends XFactoryNaiveImpl {
 	 */
 	@Override
 	public URI getUri() {
-		return URI.create("http://code.deckfour.org/xes/");
+		return URI.create("http://www.xes-standard.org/");
 	}
 
 	/* (non-Javadoc)
@@ -99,7 +99,7 @@ public class XFactoryBufferedImpl extends XFactoryNaiveImpl {
 	 */
 	@Override
 	public String getVendor() {
-		return "code.deckfour.org";
+		return "xes-standard.org";
 	}
 
 	/* (non-Javadoc)
