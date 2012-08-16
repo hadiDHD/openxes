@@ -97,7 +97,8 @@ public class XAttributeLiteralImpl extends XAttributeImpl implements
 	 * @see org.deckfour.xes.model.XAttributeLiteral#setValue(java.lang.String)
 	 */
 	public void setValue(String value) {
-		if (value == null || value.trim().length() == 0) {
+		//#251 An empty trimmed string should not be treated as a null value.
+		if (value == null) { //#251 || value.trim().length() == 0) {
 			throw new NullPointerException(
 					"No null value allowed in literal attribute!");
 		}
