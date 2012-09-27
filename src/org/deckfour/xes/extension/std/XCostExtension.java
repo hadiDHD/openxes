@@ -351,6 +351,7 @@ public class XCostExtension extends XExtension {
 	 * For example, the XES fragment:
 	 * 
 	 * <pre>
+	 * {@code
 	 * <trace>
 	 *     <string key="a" value="">
 	 *         <float key="cost:amount" value="10.00"/>
@@ -368,6 +369,7 @@ public class XCostExtension extends XExtension {
 	 *        <float key="cost:amount" value="25.00"/>
 	 *     </string>
 	 * </trace>
+	 * }
 	 * </pre>
 	 * 
 	 * should result into the following:
@@ -391,6 +393,7 @@ public class XCostExtension extends XExtension {
 	 * For example, the XES fragment:
 	 * 
 	 * <pre>
+	 * {@code
 	 * <event>
 	 *     <string key="a" value="">
 	 *         <float key="cost:amount" value="10.00"/>
@@ -408,6 +411,7 @@ public class XCostExtension extends XExtension {
 	 *        <float key="cost:amount" value="25.00"/>
 	 *     </string>
 	 * </event>
+	 * }
 	 * </pre>
 	 * 
 	 * should result into the following:
@@ -497,6 +501,7 @@ public class XCostExtension extends XExtension {
 	 * should result into the following XES fragment:
 	 * 
 	 * <pre>
+	 * {@code
 	 * <trace>
 	 *     <string key="a" value="">
 	 *         <float key="cost:amount" value="10.00"/>
@@ -514,6 +519,7 @@ public class XCostExtension extends XExtension {
 	 *        <float key="cost:amount" value="25.00"/>
 	 *     </string>
 	 * </trace>
+	 * }
 	 * </pre>
 	 * 
 	 * @param trace
@@ -540,6 +546,7 @@ public class XCostExtension extends XExtension {
 	 * should result into the following XES fragment:
 	 * 
 	 * <pre>
+	 * {@code
 	 * <event>
 	 *     <string key="a" value="">
 	 *         <float key="cost:amount" value="10.00"/>
@@ -557,6 +564,7 @@ public class XCostExtension extends XExtension {
 	 *        <float key="cost:amount" value="25.00"/>
 	 *     </string>
 	 * </event>
+	 * }
 	 * </pre>
 	 * 
 	 * @param event
