@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xesextension name="Cost" prefix="cost" uri="http://www.xes-standard.org/cost.xesext">
+	<trace>
+		<float key="total">
+			<alias mapping="EN" name="Total Cost"/>
+		</float>
+		<string key="currency">
+			<alias mapping="EN" name="Currency of Cost"/>
+		</string>
+	</trace>
+	<event>
+		<float key="total">
+			<alias mapping="EN" name="Total Cost"/>
+		</float>
+		<string key="currency">
+			<alias mapping="EN" name="Currency of Cost"/>
+		</string>
+	</event>                     
+	<meta>
+		<float key="amount">
+			<alias mapping="EN" name="Cost Amount"/>
+		</float>
+		<string type="driver">
+			<alias mapping="EN" name="Cost Driver"/>
+		</string>
+		<string key="type">
+			<alias mapping="EN" name="Cost Type"/>
+		</string>
+	</meta>
+</xesextension>
