@@ -45,6 +45,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.deckfour.xes.extension.XExtension;
+import org.deckfour.xes.extension.std.cost.XCostAmount;
+import org.deckfour.xes.extension.std.cost.XCostDriver;
+import org.deckfour.xes.extension.std.cost.XCostType;
 import org.deckfour.xes.factory.XFactory;
 import org.deckfour.xes.factory.XFactoryRegistry;
 import org.deckfour.xes.info.XGlobalAttributeNameMap;
@@ -72,7 +75,7 @@ import org.deckfour.xes.model.XTrace;
  * - cost:type: The value contains the cost type (e.g., Fixed, Overhead,
  * Materials).
  * 
- * @author H.M.W. Verbeek (h.m.w.verbeek@tue.nl)
+ * @author Eric Verbeek (h.m.w.verbeek@tue.nl)
  * 
  */
 public class XCostExtension extends XExtension {
@@ -345,6 +348,90 @@ public class XCostExtension extends XExtension {
 	}
 
 	/**
+	 * Retrieves a map containing all cost amounts for all child attributes of a
+	 * trace.
+	 * 
+	 * For example, the XES fragment:
+	 * 
+	 * <pre>
+	 * {@code
+	 * <trace>
+	 *     <string key="a" value="">
+	 *         <float key="cost:amount" value="10.00"/>
+	 *         <string key="b" value="">
+	 *         	  <float key="cost:amount" value="20.00"/>
+	 *         </string>
+	 *         <string key="c" value="">
+	 *         	  <float key="cost:amount" value="30.00"/>
+	 *         </string>
+	 *     </string>
+	 *     <string key="b" value="">
+	 *        <float key="cost:amount" value="15.00"/>
+	 *     </string>
+	 *     <string key="c" value="">
+	 *        <float key="cost:amount" value="25.00"/>
+	 *     </string>
+	 * </trace>
+	 * }
+	 * </pre>
+	 * 
+	 * should result into the following:
+	 * 
+	 * <pre>
+	 * [[a 10.00] [b 15.00] [c 25.00]]
+	 * </pre>
+	 * 
+	 * @param trace
+	 *            Trace to retrieve all cost amounts for.
+	 * @return Map from all child keys to cost amounts.
+	 */
+	public Map<String, Double> extractAmounts(XTrace trace) {
+		return XCostAmount.instance().extractValues(trace);
+	}
+
+	/**
+	 * Retrieves a map containing all cost amounts for all child attributes of
+	 * an event.
+	 * 
+	 * For example, the XES fragment:
+	 * 
+	 * <pre>
+	 * {@code
+	 * <event>
+	 *     <string key="a" value="">
+	 *         <float key="cost:amount" value="10.00"/>
+	 *         <string key="b" value="">
+	 *         	  <float key="cost:amount" value="20.00"/>
+	 *         </string>
+	 *         <string key="c" value="">
+	 *         	  <float key="cost:amount" value="30.00"/>
+	 *         </string>
+	 *     </string>
+	 *     <string key="b" value="">
+	 *        <float key="cost:amount" value="15.00"/>
+	 *     </string>
+	 *     <string key="c" value="">
+	 *        <float key="cost:amount" value="25.00"/>
+	 *     </string>
+	 * </event>
+	 * }
+	 * </pre>
+	 * 
+	 * should result into the following:
+	 * 
+	 * <pre>
+	 * [[a 10.00] [b 15.00] [c 25.00]]
+	 * </pre>
+	 * 
+	 * @param event
+	 *            Event to retrieve all cost amounts for.
+	 * @return Map from all child keys to cost amounts.
+	 */
+	public Map<String, Double> extractAmounts(XEvent event) {
+		return XCostAmount.instance().extractValues(event);
+	}
+
+	/**
 	 * Retrieves a map containing all cost amounts for all descending attributes
 	 * of a trace.
 	 * 
@@ -382,8 +469,8 @@ public class XCostExtension extends XExtension {
 	 *            Trace to retrieve all cost amounts for.
 	 * @return Map from all descending keys to cost amounts.
 	 */
-	public Map<List<String>, Double> extractAmounts(XTrace trace) {
-		return extractAmountsPrivate(trace);
+	public Map<List<String>, Double> extractNestedAmounts(XTrace trace) {
+		return XCostAmount.instance().extractNestedValues(trace);
 	}
 
 	/**
@@ -424,48 +511,8 @@ public class XCostExtension extends XExtension {
 	 *            Event to retrieve all cost amounts for.
 	 * @return Map from all descending keys to cost amounts.
 	 */
-	public Map<List<String>, Double> extractAmounts(XEvent event) {
-		return extractAmountsPrivate(event);
-	}
-
-	/*
-	 * Retrieves a map containing all cost amounts for all descending attributes
-	 * of an element.
-	 * 
-	 * @param element Element to retrieve all cost amounts for.
-	 * 
-	 * @return Map from all descending keys to cost amounts.
-	 */
-	private Map<List<String>, Double> extractAmountsPrivate(
-			XAttributable element) {
-		Map<List<String>, Double> amounts = new HashMap<List<String>, Double>();
-		for (XAttribute attr : element.getAttributes().values()) {
-			List<String> keys = new ArrayList<String>();
-			keys.add(attr.getKey());
-			extractAmountsPrivate(attr, amounts, keys);
-		}
-		return amounts;
-	}
-
-	/*
-	 * Fills a map with all cost amounts for all descending attributes of an
-	 * element.
-	 * 
-	 * @param element Element to retrieve all cost amounts for.
-	 * 
-	 * @param amounts Map with cost amounts found so far.
-	 */
-	private void extractAmountsPrivate(XAttribute element,
-			Map<List<String>, Double> amounts, List<String> keys) {
-		Double amount = extractAmount(element);
-		if (amount != null) {
-			amounts.put(keys, amount);
-		}
-		for (XAttribute attr : element.getAttributes().values()) {
-			List<String> newKeys = new ArrayList<String>(keys);
-			newKeys.add(element.getKey());
-			extractAmountsPrivate(attr, amounts, newKeys);
-		}
+	public Map<List<String>, Double> extractNestedAmounts(XEvent event) {
+		return XCostAmount.instance().extractNestedValues(event);
 	}
 
 	/**
@@ -484,6 +531,82 @@ public class XCostExtension extends XExtension {
 			attr.setValue(amount);
 			attribute.getAttributes().put(KEY_AMOUNT, attr);
 		}
+	}
+
+	/**
+	 * Assigns (to the given trace) multiple amounts given their keys. Note that
+	 * as a side effect this method creates attributes when it does not find an
+	 * attribute with the proper key.
+	 * 
+	 * For example, the call:
+	 * 
+	 * <pre>
+	 * assignAmounts(trace, [[a 10.00] [b 15.00] [c 25.00]])
+	 * </pre>
+	 * 
+	 * should result into the following XES fragment:
+	 * 
+	 * <pre>
+	 * {@code
+	 * <trace>
+	 *     <string key="a" value="">
+	 *         <float key="cost:amount" value="10.00"/>
+	 *     </string>
+	 *     <string key="b" value="">
+	 *         <float key="cost:amount" value="15.00"/>
+	 *     </string>
+	 *     <string key="c" value="">
+	 *         <float key="cost:amount" value="25.00"/>
+	 *     </string>
+	 * </trace>
+	 * }
+	 * </pre>
+	 * 
+	 * @param trace
+	 *            Trace to assign the amounts to.
+	 * @param amounts
+	 *            Mapping from keys to amounts which are to be assigned.
+	 */
+	public void assignAmounts(XTrace trace, Map<String, Double> amounts) {
+		XCostAmount.instance().assignValues(trace, amounts);
+	}
+
+	/**
+	 * Assigns (to the given event) multiple amounts given their keys. Note that
+	 * as a side effect this method creates attributes when it does not find an
+	 * attribute with the proper key.
+	 * 
+	 * For example, the call:
+	 * 
+	 * <pre>
+	 * assignAmounts(event, [[a 10.00] [b 15.00] [c 25.00]])
+	 * </pre>
+	 * 
+	 * should result into the following XES fragment:
+	 * 
+	 * <pre>
+	 * {@code
+	 * <event>
+	 *     <string key="a" value="">
+	 *         <float key="cost:amount" value="10.00"/>
+	 *     </string>
+	 *     <string key="b" value="">
+	 *         <float key="cost:amount" value="15.00"/>
+	 *     </string>
+	 *     <string key="c" value="">
+	 *         <float key="cost:amount" value="25.00"/>
+	 *     </string>
+	 * </event>
+	 * }
+	 * </pre>
+	 * 
+	 * @param event
+	 *            Event to assign the amounts to.
+	 * @param amounts
+	 *            Mapping from keys to amounts which are to be assigned.
+	 */
+	public void assignAmounts(XEvent event, Map<String, Double> amounts) {
+		XCostAmount.instance().assignValues(event, amounts);
 	}
 
 	/**
@@ -527,8 +650,9 @@ public class XCostExtension extends XExtension {
 	 * @param amounts
 	 *            Mapping from key lists to amounts which are to be assigned.
 	 */
-	public void assignAmounts(XTrace trace, Map<List<String>, Double> amounts) {
-		assignAmountsPrivate(trace, amounts);
+	public void assignNestedAmounts(XTrace trace,
+			Map<List<String>, Double> amounts) {
+		XCostAmount.instance().assignNestedValues(trace, amounts);
 	}
 
 	/**
@@ -572,74 +696,9 @@ public class XCostExtension extends XExtension {
 	 * @param amounts
 	 *            Mapping from key lists to amounts which are to be assigned.
 	 */
-	public void assignAmounts(XEvent event, Map<List<String>, Double> amounts) {
-		assignAmountsPrivate(event, amounts);
-	}
-
-	/*
-	 * Assigns (to the given element) multiple amounts given their key lists.
-	 * The i-th element in the key list should correspond to an i-level
-	 * attribute with the prescribed key. Note that as a side effect this method
-	 * creates attributes when it does not find an attribute with the proper
-	 * key.
-	 * 
-	 * @param element Element to assign the amounts to.
-	 * 
-	 * @param amounts Mapping from key lists to amounts which are to be
-	 * assigned.
-	 */
-	private void assignAmountsPrivate(XAttributable element,
+	public void assignNestedAmounts(XEvent event,
 			Map<List<String>, Double> amounts) {
-		/*
-		 * Add the proper amount for every key list.
-		 */
-		for (List<String> keys : amounts.keySet()) {
-			assignAmountsPrivate(element, keys, amounts.get(keys));
-		}
-	}
-
-	/*
-	 * Assigns the given amount to the attribute that can be found through the
-	 * given key list. The first key corresponds to the highest-level attribute,
-	 * whereas the latest key corresponds to the lowest-level attribute.
-	 */
-	private void assignAmountsPrivate(XAttributable element, List<String> keys,
-			Double amount) {
-		if (keys.isEmpty()) {
-			/*
-			 * Key list is empty. Assign amount here if attribute. Else skip.
-			 */
-			if (element instanceof XAttribute) {
-				assignAmount((XAttribute) element, amount);
-			}
-		} else {
-			/*
-			 * Key list not empty yet. Step down to the next attribute.
-			 */
-			String key = keys.get(0);
-			List<String> keysTail = keys.subList(1, keys.size());
-			XAttribute attr;
-			if (element.getAttributes().containsKey(key)) {
-				/*
-				 * Attribute with given key already exists. Use it.
-				 */
-				attr = element.getAttributes().get(key);
-			} else {
-				/*
-				 * Attribute with given key does not exist yet.
-				 */
-				attr = XFactoryRegistry.instance().currentDefault()
-						.createAttributeLiteral(key, "", null);
-				element.getAttributes().put(key, attr);
-				/*
-				 * Now it does.
-				 */
-			}
-			/*
-			 * Step down.
-			 */
-			assignAmountsPrivate(attr, keysTail, amount);
-		}
+		XCostAmount.instance().assignNestedValues(event, amounts);
 	}
 
 	/**
@@ -660,71 +719,59 @@ public class XCostExtension extends XExtension {
 	}
 
 	/**
+	 * Retrieves a map containing all cost drivers for all child attributes of a
+	 * trace.
+	 * 
+	 * @see #extractAmounts(XTrace)
+	 * 
+	 * @param trace
+	 *            Trace to retrieve all cost drivers for.
+	 * @return Map from all child keys to cost drivers.
+	 */
+	public Map<String, String> extractDrivers(XTrace trace) {
+		return XCostDriver.instance().extractValues(trace);
+	}
+
+	/**
+	 * Retrieves a map containing all cost drivers for all child attributes of
+	 * an event.
+	 * 
+	 * @see #extractAmounts(XEvent)
+	 * 
+	 * @param event
+	 *            Event to retrieve all cost drivers for.
+	 * @return Map from all child keys to cost drivers.
+	 */
+	public Map<String, String> extractDrivers(XEvent event) {
+		return XCostDriver.instance().extractValues(event);
+	}
+
+	/**
 	 * Retrieves a map containing all cost drivers for all descending attributes
 	 * of a trace.
 	 * 
-	 * @see #extractDrivers(XTrace)
+	 * @see #extractNestedAmounts(XTrace)
 	 * 
 	 * @param trace
 	 *            Trace to retrieve all cost drivers for.
 	 * @return Map from all descending keys to cost drivers.
 	 */
-	public Map<List<String>, String> extractDrivers(XTrace trace) {
-		return extractDriversPrivate(trace);
+	public Map<List<String>, String> extractNestedDrivers(XTrace trace) {
+		return XCostDriver.instance().extractNestedValues(trace);
 	}
 
 	/**
 	 * Retrieves a map containing all cost drivers for all descending attributes
 	 * of an event.
 	 * 
-	 * @see #extractDrivers(XEvent)
+	 * @see #extractNestedDrivers(XEvent)
 	 * 
 	 * @param event
 	 *            Event to retrieve all cost drivers for.
 	 * @return Map from all descending keys to cost drivers.
 	 */
-	public Map<List<String>, String> extractDrivers(XEvent event) {
-		return extractDriversPrivate(event);
-	}
-
-	/*
-	 * Retrieves a map containing all cost drivers for all descending attributes
-	 * of an element.
-	 * 
-	 * @param element Element to retrieve all cost drivers for.
-	 * 
-	 * @return Map from all descending keys to cost drivers.
-	 */
-	private Map<List<String>, String> extractDriversPrivate(
-			XAttributable element) {
-		Map<List<String>, String> drivers = new HashMap<List<String>, String>();
-		for (XAttribute attr : element.getAttributes().values()) {
-			List<String> keys = new ArrayList<String>();
-			keys.add(attr.getKey());
-			extractDriversPrivate(attr, drivers, keys);
-		}
-		return drivers;
-	}
-
-	/*
-	 * Fills a map with all cost drivers for all descending attributes of an
-	 * element.
-	 * 
-	 * @param element Element to retrieve all cost drivers for.
-	 * 
-	 * @param amounts Map with cost drivers found so far.
-	 */
-	private void extractDriversPrivate(XAttribute element,
-			Map<List<String>, String> drivers, List<String> keys) {
-		String driver = extractDriver(element);
-		if (driver != null) {
-			drivers.put(keys, driver);
-		}
-		for (XAttribute attr : element.getAttributes().values()) {
-			List<String> newKeys = new ArrayList<String>(keys);
-			newKeys.add(element.getKey());
-			extractDriversPrivate(attr, drivers, newKeys);
-		}
+	public Map<List<String>, String> extractNestedDrivers(XEvent event) {
+		return XCostDriver.instance().extractNestedValues(event);
 	}
 
 	/**
@@ -745,13 +792,45 @@ public class XCostExtension extends XExtension {
 	}
 
 	/**
+	 * Assigns (to the given trace) multiple cost drivers given their keys. Note
+	 * that as a side effect this method creates attributes when it does not
+	 * find an attribute with the proper key.
+	 * 
+	 * @see #assignAmounts(XTrace, Map)
+	 * 
+	 * @param trace
+	 *            Trace to assign the cost drivers to.
+	 * @param drivers
+	 *            Mapping from keys to cost drivers which are to be assigned.
+	 */
+	public void assignDrivers(XTrace trace, Map<String, String> drivers) {
+		XCostDriver.instance().assignValues(trace, drivers);
+	}
+
+	/**
+	 * Assigns (to the given event) multiple cost drivers given their key. Note
+	 * that as a side effect this method creates attributes when it does not
+	 * find an attribute with the proper key.
+	 * 
+	 * @see #assignAmounts(XEvent, Map)
+	 * 
+	 * @param event
+	 *            Event to assign the cost drivers to.
+	 * @param drivers
+	 *            Mapping from keys to cost drivers which are to be assigned.
+	 */
+	public void assignDrivers(XEvent event, Map<String, String> drivers) {
+		XCostDriver.instance().assignValues(event, drivers);
+	}
+
+	/**
 	 * Assigns (to the given trace) multiple cost drivers given their key lists.
 	 * The i-th element in the key list should correspond to an i-level
 	 * attribute with the prescribed key. Note that as a side effect this method
 	 * creates attributes when it does not find an attribute with the proper
 	 * key.
 	 * 
-	 * @see #assignAmounts(XTrace, Map)
+	 * @see #assignNestedAmounts(XTrace, Map)
 	 * 
 	 * @param trace
 	 *            Trace to assign the cost drivers to.
@@ -759,8 +838,9 @@ public class XCostExtension extends XExtension {
 	 *            Mapping from key lists to cost drivers which are to be
 	 *            assigned.
 	 */
-	public void assignDrivers(XTrace trace, Map<List<String>, String> drivers) {
-		assignDriversPrivate(trace, drivers);
+	public void assignNestedDrivers(XTrace trace,
+			Map<List<String>, String> drivers) {
+		XCostDriver.instance().assignNestedValues(trace, drivers);
 	}
 
 	/**
@@ -770,7 +850,7 @@ public class XCostExtension extends XExtension {
 	 * creates attributes when it does not find an attribute with the proper
 	 * key.
 	 * 
-	 * @see #assignAmounts(XEvent, Map)
+	 * @see #assignNestedAmounts(XEvent, Map)
 	 * 
 	 * @param event
 	 *            Event to assign the cost drivers to.
@@ -778,76 +858,9 @@ public class XCostExtension extends XExtension {
 	 *            Mapping from key lists to cost drivers which are to be
 	 *            assigned.
 	 */
-	public void assignDrivers(XEvent event, Map<List<String>, String> drivers) {
-		assignDriversPrivate(event, drivers);
-	}
-
-	/*
-	 * Assigns (to the given element) multiple cost drivers given their key
-	 * lists. The i-th element in the key list should correspond to an i-level
-	 * attribute with the prescribed key. Note that as a side effect this method
-	 * creates attributes when it does not find an attribute with the proper
-	 * key.
-	 * 
-	 * @param element Element to assign the cost drivers to.
-	 * 
-	 * @param drivers Mapping from key lists to cost drivers which are to be
-	 * assigned.
-	 */
-	private void assignDriversPrivate(XAttributable element,
+	public void assignNestedDrivers(XEvent event,
 			Map<List<String>, String> drivers) {
-		/*
-		 * Add the proper cost driver for every key list.
-		 */
-		for (List<String> keys : drivers.keySet()) {
-			assignDriversPrivate(element, keys, drivers.get(keys));
-		}
-	}
-
-	/*
-	 * Assigns the given cost driver to the attribute that can be found through
-	 * the given key list. The first key corresponds to the highest-level
-	 * attribute, whereas the latest key corresponds to the lowest-level
-	 * attribute.
-	 */
-	private void assignDriversPrivate(XAttributable element, List<String> keys,
-			String driver) {
-		if (keys.isEmpty()) {
-			/*
-			 * Key list is empty. Assign cost driver here if attribute. Else
-			 * skip.
-			 */
-			if (element instanceof XAttribute) {
-				assignDriver((XAttribute) element, driver);
-			}
-		} else {
-			/*
-			 * Key list not empty yet. Step down to the next attribute.
-			 */
-			String key = keys.get(0);
-			List<String> keysTail = keys.subList(1, keys.size());
-			XAttribute attr;
-			if (element.getAttributes().containsKey(key)) {
-				/*
-				 * Attribute with given key already exists. Use it.
-				 */
-				attr = element.getAttributes().get(key);
-			} else {
-				/*
-				 * Attribute with given key does not exist yet.
-				 */
-				attr = XFactoryRegistry.instance().currentDefault()
-						.createAttributeLiteral(key, "", null);
-				element.getAttributes().put(key, attr);
-				/*
-				 * Now it does.
-				 */
-			}
-			/*
-			 * Step down.
-			 */
-			assignDriversPrivate(attr, keysTail, driver);
-		}
+		XCostDriver.instance().assignNestedValues(event, drivers);
 	}
 
 	/**
@@ -868,70 +881,59 @@ public class XCostExtension extends XExtension {
 	}
 
 	/**
-	 * Retrieves a map containing all cost types for all descending attributes
+	 * Retrieves a map containing all cost types for all child attributes
 	 * of a trace.
 	 * 
 	 * @see #extractAmounts(XTrace)
 	 * 
 	 * @param trace
 	 *            Trace to retrieve all cost types for.
-	 * @return Map from all descending keys to cost types.
+	 * @return Map from all child keys to cost types.
 	 */
-	public Map<List<String>, String> extractTypes(XTrace trace) {
-		return extractTypesPrivate(trace);
+	public Map<String, String> extractTypes(XTrace trace) {
+		return XCostType.instance().extractValues(trace);
 	}
 
 	/**
-	 * Retrieves a map containing all cost types for all descending attributes
+	 * Retrieves a map containing all cost types for all child attributes
 	 * of an event.
 	 * 
 	 * @see #extractAmounts(XEvent)
 	 * 
 	 * @param event
 	 *            Event to retrieve all cost types for.
-	 * @return Map from all descending keys to cost types.
+	 * @return Map from all child keys to cost types.
 	 */
-	public Map<List<String>, String> extractTypes(XEvent event) {
-		return extractTypesPrivate(event);
+	public Map<String, String> extractTypes(XEvent event) {
+		return XCostType.instance().extractValues(event);
 	}
 
-	/*
+	/**
 	 * Retrieves a map containing all cost types for all descending attributes
-	 * of an element.
+	 * of a trace.
 	 * 
-	 * @param element Element to retrieve all cost types for.
+	 * @see #extractNestedAmounts(XTrace)
 	 * 
+	 * @param trace
+	 *            Trace to retrieve all cost types for.
 	 * @return Map from all descending keys to cost types.
 	 */
-	private Map<List<String>, String> extractTypesPrivate(XAttributable element) {
-		Map<List<String>, String> types = new HashMap<List<String>, String>();
-		for (XAttribute attr : element.getAttributes().values()) {
-			List<String> keys = new ArrayList<String>();
-			keys.add(attr.getKey());
-			extractTypesPrivate(attr, types, keys);
-		}
-		return types;
+	public Map<List<String>, String> extractNestedTypes(XTrace trace) {
+		return XCostType.instance().extractNestedValues(trace);
 	}
 
-	/*
-	 * Fills a map with all cost drivers for all descending attributes of an
-	 * element.
+	/**
+	 * Retrieves a map containing all cost types for all descending attributes
+	 * of an event.
 	 * 
-	 * @param element Element to retrieve all cost drivers for.
+	 * @see #extractNestedAmounts(XEvent)
 	 * 
-	 * @param amounts Map with cost drivers found so far.
+	 * @param event
+	 *            Event to retrieve all cost types for.
+	 * @return Map from all descending keys to cost types.
 	 */
-	private void extractTypesPrivate(XAttribute element,
-			Map<List<String>, String> types, List<String> keys) {
-		String type = extractDriver(element);
-		if (type != null) {
-			types.put(keys, type);
-		}
-		for (XAttribute attr : element.getAttributes().values()) {
-			List<String> newKeys = new ArrayList<String>(keys);
-			newKeys.add(element.getKey());
-			extractTypesPrivate(attr, types, keys);
-		}
+	public Map<List<String>, String> extractNestedTypes(XEvent event) {
+		return XCostType.instance().extractNestedValues(event);
 	}
 
 	/**
@@ -952,9 +954,8 @@ public class XCostExtension extends XExtension {
 	}
 
 	/**
-	 * Assigns (to the given trace) multiple cost types given their key lists.
-	 * The i-th element in the key list should correspond to an i-level
-	 * attribute with the prescribed key. Note that as a side effect this method
+	 * Assigns (to the given trace) multiple cost types given their keys.
+	 * Note that as a side effect this method
 	 * creates attributes when it does not find an attribute with the proper
 	 * key.
 	 * 
@@ -963,10 +964,45 @@ public class XCostExtension extends XExtension {
 	 * @param trace
 	 *            Trace to assign the cost types to.
 	 * @param types
-	 *            Mapping from key lists to cost types which are to be assigned.
+	 *            Mapping from keys to cost types which are to be assigned.
 	 */
 	public void assignTypes(XTrace trace, Map<List<String>, String> types) {
-		assignDriversPrivate(trace, types);
+		XCostType.instance().assignNestedValues(trace, types);
+	}
+
+	/**
+	 * Assigns (to the given event) multiple cost types given their keys.
+	 * Note that as a side effect this method
+	 * creates attributes when it does not find an attribute with the proper
+	 * key.
+	 * 
+	 * @see #assignAmounts(XEvent, Map)
+	 * 
+	 * @param event
+	 *            Event to assign the cost types to.
+	 * @param types
+	 *            Mapping from keys to cost types which are to be assigned.
+	 */
+	public void assignTypes(XEvent event, Map<List<String>, String> types) {
+		XCostType.instance().assignNestedValues(event, types);
+	}
+
+	/**
+	 * Assigns (to the given trace) multiple cost types given their key lists.
+	 * The i-th element in the key list should correspond to an i-level
+	 * attribute with the prescribed key. Note that as a side effect this method
+	 * creates attributes when it does not find an attribute with the proper
+	 * key.
+	 * 
+	 * @see #assignNestedAmounts(XTrace, Map)
+	 * 
+	 * @param trace
+	 *            Trace to assign the cost types to.
+	 * @param types
+	 *            Mapping from key lists to cost types which are to be assigned.
+	 */
+	public void assignNestedTypes(XTrace trace, Map<List<String>, String> types) {
+		XCostType.instance().assignNestedValues(trace, types);
 	}
 
 	/**
@@ -976,81 +1012,15 @@ public class XCostExtension extends XExtension {
 	 * creates attributes when it does not find an attribute with the proper
 	 * key.
 	 * 
-	 * @see #assignAmounts(XEvent, Map)
+	 * @see #assignNestedAmounts(XEvent, Map)
 	 * 
 	 * @param event
 	 *            Event to assign the cost types to.
 	 * @param types
 	 *            Mapping from key lists to cost types which are to be assigned.
 	 */
-	public void assignTypes(XEvent event, Map<List<String>, String> types) {
-		assignTypesPrivate(event, types);
+	public void assignNestedTypes(XEvent event, Map<List<String>, String> types) {
+		XCostType.instance().assignNestedValues(event, types);
 	}
 
-	/*
-	 * Assigns (to the given element) multiple cost types given their key lists.
-	 * The i-th element in the key list should correspond to an i-level
-	 * attribute with the prescribed key. Note that as a side effect this method
-	 * creates attributes when it does not find an attribute with the proper
-	 * key.
-	 * 
-	 * @param element Element to assign the cost types to.
-	 * 
-	 * @param types Mapping from key lists to cost types which are to be
-	 * assigned.
-	 */
-	private void assignTypesPrivate(XAttributable element,
-			Map<List<String>, String> types) {
-		/*
-		 * Add the proper cost driver for every key list.
-		 */
-		for (List<String> keys : types.keySet()) {
-			assignTypesPrivate(element, keys, types.get(keys));
-		}
-	}
-
-	/*
-	 * Assigns the given cost type to the attribute that can be found through
-	 * the given key list. The first key corresponds to the highest-level
-	 * attribute, whereas the latest key corresponds to the lowest-level
-	 * attribute.
-	 */
-	private void assignTypesPrivate(XAttributable element, List<String> keys,
-			String type) {
-		if (keys.isEmpty()) {
-			/*
-			 * Key list is empty. Assign cost type here if attribute. Else skip.
-			 */
-			if (element instanceof XAttribute) {
-				assignType((XAttribute) element, type);
-			}
-		} else {
-			/*
-			 * Key list not empty yet. Step down to the next attribute.
-			 */
-			String key = keys.get(0);
-			List<String> keysTail = keys.subList(1, keys.size());
-			XAttribute attr;
-			if (element.getAttributes().containsKey(key)) {
-				/*
-				 * Attribute with given key already exists. Use it.
-				 */
-				attr = element.getAttributes().get(key);
-			} else {
-				/*
-				 * Attribute with given key does not exist yet.
-				 */
-				attr = XFactoryRegistry.instance().currentDefault()
-						.createAttributeLiteral(key, "", null);
-				element.getAttributes().put(key, attr);
-				/*
-				 * Now it does.
-				 */
-			}
-			/*
-			 * Step down.
-			 */
-			assignTypesPrivate(attr, keysTail, type);
-		}
-	}
 }
