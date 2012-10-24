@@ -349,7 +349,7 @@ public class XesXmlParser extends XParser {
 				String keys = attributes.getValue("keys");
 				if (name != null && keys != null && name.length() > 0
 						&& keys.length() > 0) {
-					String keysArr[] = keys.split("\\s+");
+					String keysArr[] = fixKeys(log, keys.split("\\s+"));
 					XEventClassifier classifier = new XEventAttributeClassifier(
 							name, keysArr);
 					log.getClassifiers().add(classifier);
@@ -411,4 +411,67 @@ public class XesXmlParser extends XParser {
 
 	}
 
+	private String[] fixKeys(XLog log, String[] keys) {
+		/*
+		 * Try to fix the keys using the global event attributes.
+		 */
+		String[] fixedKeys = fixKeys(log, keys, 0);
+		return fixedKeys == null ? keys : fixedKeys;
+	}
+	
+	private String[] fixKeys(XLog log, String[] keys, int index) {
+		if (index >= keys.length) {
+			return keys;
+		} else {
+			if (findGlobalEventAttribute(log, keys[index])) {
+				/*
+				 * Another one checked. Proceed with next key.
+				 */
+				return fixKeys(log, keys, index + 1);
+			} else {
+				/*
+				 * No such global event attribute. Try merging key with next key.
+				 */
+				if (index + 1 == keys.length) {
+					/*
+					 * No next key. Escape.
+					 */
+					return  null;
+				}
+				/*
+				 * Copy all checked keys.
+				 */
+				String[] newKeys = new String[keys.length - 1];
+				for (int i = 0; i < index; i++) {
+					newKeys[i] = keys[i];
+				}
+				/*
+				 * Merge this key.
+				 */
+				newKeys[index] = keys[index] + " " + keys[index + 1];
+				/*
+				 * Copy all keys still left to check.
+				 */
+				for (int i = index + 2; i < keys.length; i++) {
+					newKeys[i - 1] = keys[i];
+				}
+				/*
+				 * Check with merged key.
+				 */
+				return fixKeys(log, newKeys, index);
+			}
+		}
+	}
+	
+	private boolean findGlobalEventAttribute(XLog log, String key) {
+		for (XAttribute attribute: log.getGlobalEventAttributes()) {
+			if (attribute.getKey().equals(key)) {
+				return true;
+			}
+		}
+		/*
+		 * Did not find attribute with given key.
+		 */
+		return false;		
+	}
 }
