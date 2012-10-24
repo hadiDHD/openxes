@@ -55,7 +55,7 @@ public class NikeFS2FileAccessMonitor {
 	private static NikeFS2FileAccessMonitor singleton = null;
 	
 	public synchronized static NikeFS2FileAccessMonitor instance() {
-		return instance(16);
+		return instance(4);
 	}
 	
 	public synchronized static NikeFS2FileAccessMonitor instance(int shadowSize) {
