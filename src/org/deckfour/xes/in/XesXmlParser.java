@@ -128,8 +128,8 @@ public class XesXmlParser extends XParser {
 	public boolean canParse(File file) {
 		String filename = file.getName();
 		return endsWithIgnoreCase(filename, ".xes");
-//		String suffix = filename.substring(filename.length() - 3);
-//		return suffix.equalsIgnoreCase("xes");
+		// String suffix = filename.substring(filename.length() - 3);
+		// return suffix.equalsIgnoreCase("xes");
 	}
 
 	/*
@@ -260,9 +260,11 @@ public class XesXmlParser extends XParser {
 				// attribute tag.
 				String key = attributes.getValue("key");
 				if (key == null) {
-					// Note that this should not happen according to the XES specification,
+					// Note that this should not happen according to the XES
+					// specification,
 					// but the XES export omits keys that are empty.
-					// Workaround can be removed after Ticket #271 is fixed in Spex
+					// Workaround can be removed after Ticket #271 is fixed in
+					// Spex
 					// http://prom.win.tue.nl:8000/Tracsites/ticket/271
 					key = "";
 				}
@@ -290,17 +292,17 @@ public class XesXmlParser extends XParser {
 							return;
 						}
 					} else if (tagName.equalsIgnoreCase("int")) {
-						attribute = factory.createAttributeDiscrete(key, Long
-								.parseLong(value), extension);
+						attribute = factory.createAttributeDiscrete(key,
+								Long.parseLong(value), extension);
 					} else if (tagName.equalsIgnoreCase("float")) {
 						attribute = factory.createAttributeContinuous(key,
 								Double.parseDouble(value), extension);
 					} else if (tagName.equalsIgnoreCase("boolean")) {
-						attribute = factory.createAttributeBoolean(key, Boolean
-								.parseBoolean(value), extension);
+						attribute = factory.createAttributeBoolean(key,
+								Boolean.parseBoolean(value), extension);
 					} else if (tagName.equalsIgnoreCase("id")) {
-						attribute = factory.createAttributeID(key, XID
-								.parse(value), extension);
+						attribute = factory.createAttributeID(key,
+								XID.parse(value), extension);
 					}
 					// add to current attributable and push to stack
 					attributeStack.push(attribute);
@@ -386,8 +388,8 @@ public class XesXmlParser extends XParser {
 				if (globals != null) {
 					globals.add(attribute);
 				} else {
-					attributableStack.peek().getAttributes().put(
-							attribute.getKey(), attribute);
+					attributableStack.peek().getAttributes()
+							.put(attribute.getKey(), attribute);
 				}
 			} else if (tagName.equalsIgnoreCase("event")) {
 				trace.add(event);
@@ -418,53 +420,72 @@ public class XesXmlParser extends XParser {
 		String[] fixedKeys = fixKeys(log, keys, 0);
 		return fixedKeys == null ? keys : fixedKeys;
 	}
-	
+
 	private String[] fixKeys(XLog log, String[] keys, int index) {
 		if (index >= keys.length) {
+			/*
+			 * keys[0,...,length-1] are matched to global event attributes.
+			 */
 			return keys;
 		} else {
+			/*
+			 * keys[0,...,index-1] are matched to global event attributes. Try
+			 * to match keys[index].
+			 */
 			if (findGlobalEventAttribute(log, keys[index])) {
 				/*
-				 * Another one checked. Proceed with next key.
+				 * keys[index] matches a global event attribute. Try if
+				 * keys[index+1,..,length-1] match with global event attributes.
 				 */
-				return fixKeys(log, keys, index + 1);
-			} else {
-				/*
-				 * No such global event attribute. Try merging key with next key.
-				 */
-				if (index + 1 == keys.length) {
+				String[] fixedKeys = fixKeys(log, keys, index + 1);
+				if (fixedKeys != null) {
 					/*
-					 * No next key. Escape.
+					 * Yes they do. Return the match.
 					 */
-					return  null;
+					return fixedKeys;
 				}
 				/*
-				 * Copy all checked keys.
+				 * No, they do not. Fall thru to match keys[index]+" "+keys[index+1]
+				 * to a global event attribute,
 				 */
-				String[] newKeys = new String[keys.length - 1];
-				for (int i = 0; i < index; i++) {
-					newKeys[i] = keys[i];
-				}
-				/*
-				 * Merge this key.
-				 */
-				newKeys[index] = keys[index] + " " + keys[index + 1];
-				/*
-				 * Copy all keys still left to check.
-				 */
-				for (int i = index + 2; i < keys.length; i++) {
-					newKeys[i - 1] = keys[i];
-				}
-				/*
-				 * Check with merged key.
-				 */
-				return fixKeys(log, newKeys, index);
 			}
+			/*
+			 * No such global event attribute, or no match when key[index] is
+			 * matched to a global event attribute. Try merging key[index] with 
+			 * key[index+1].
+			 */
+			if (index + 1 == keys.length) {
+				/*
+				 * No keys[index+1]. We cannot match keys[length-1]. Fail.
+				 */
+				return null;
+			}
+			/*
+			 * Copy all matched keys.
+			 */
+			String[] newKeys = new String[keys.length - 1];
+			for (int i = 0; i < index; i++) {
+				newKeys[i] = keys[i];
+			}
+			/*
+			 * Merge keys[index] with keys[index+1].
+			 */
+			newKeys[index] = keys[index] + " " + keys[index + 1];
+			/*
+			 * Copy all keys still left to match.
+			 */
+			for (int i = index + 2; i < keys.length; i++) {
+				newKeys[i - 1] = keys[i];
+			}
+			/*
+			 * Check match with merged key.
+			 */
+			return fixKeys(log, newKeys, index);
 		}
 	}
-	
+
 	private boolean findGlobalEventAttribute(XLog log, String key) {
-		for (XAttribute attribute: log.getGlobalEventAttributes()) {
+		for (XAttribute attribute : log.getGlobalEventAttributes()) {
 			if (attribute.getKey().equals(key)) {
 				return true;
 			}
@@ -472,6 +493,6 @@ public class XesXmlParser extends XParser {
 		/*
 		 * Did not find attribute with given key.
 		 */
-		return false;		
+		return false;
 	}
 }
