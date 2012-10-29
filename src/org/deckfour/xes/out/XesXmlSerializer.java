@@ -40,6 +40,7 @@ package org.deckfour.xes.out;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -61,6 +62,7 @@ import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.deckfour.xes.util.XRuntimeUtils;
+import org.deckfour.xes.util.XTokenHelper;
 import org.deckfour.xes.util.XsDateTimeConversion;
 
 /**
@@ -135,15 +137,7 @@ public class XesXmlSerializer implements XSerializer {
 				XEventAttributeClassifier attrClass = (XEventAttributeClassifier)classifier;
 				SXTag clsTag = logTag.addChildNode("classifier");
 				clsTag.addAttribute("name", attrClass.name());
-				StringBuilder sb = new StringBuilder();
-				String[] keys = attrClass.getDefiningAttributeKeys();
-				for(int i=0; i<keys.length; i++) {
-					sb.append(keys[i]);
-					if(i < (keys.length - 1)) {
-						sb.append(' ');
-					}
-				}
-				clsTag.addAttribute("keys", sb.toString());
+				clsTag.addAttribute("keys", XTokenHelper.formatTokenString((List<String>) Arrays.asList(attrClass.getDefiningAttributeKeys())));
 			}
 		}
 		// add log attributes

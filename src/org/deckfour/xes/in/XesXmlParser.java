@@ -64,6 +64,7 @@ import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.deckfour.xes.model.buffered.XTraceBufferedImpl;
+import org.deckfour.xes.util.XTokenHelper;
 import org.deckfour.xes.util.XsDateTimeConversion;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -351,9 +352,9 @@ public class XesXmlParser extends XParser {
 				String keys = attributes.getValue("keys");
 				if (name != null && keys != null && name.length() > 0
 						&& keys.length() > 0) {
-					String keysArr[] = fixKeys(log, keys.split("\\s+"));
+					List<String> keysArr = fixKeys(log, XTokenHelper.extractTokens(keys));
 					XEventClassifier classifier = new XEventAttributeClassifier(
-							name, keysArr);
+							name, (String[]) keysArr.toArray());
 					log.getClassifiers().add(classifier);
 				}
 			}
@@ -413,16 +414,16 @@ public class XesXmlParser extends XParser {
 
 	}
 
-	private String[] fixKeys(XLog log, String[] keys) {
+	private List<String> fixKeys(XLog log, List<String> keys) {
 		/*
 		 * Try to fix the keys using the global event attributes.
 		 */
-		String[] fixedKeys = fixKeys(log, keys, 0);
+		List<String> fixedKeys = fixKeys(log, keys, 0);
 		return fixedKeys == null ? keys : fixedKeys;
 	}
 
-	private String[] fixKeys(XLog log, String[] keys, int index) {
-		if (index >= keys.length) {
+	private List<String> fixKeys(XLog log, List<String> keys, int index) {
+		if (index >= keys.size()) {
 			/*
 			 * keys[0,...,length-1] are matched to global event attributes.
 			 */
@@ -432,12 +433,12 @@ public class XesXmlParser extends XParser {
 			 * keys[0,...,index-1] are matched to global event attributes. Try
 			 * to match keys[index].
 			 */
-			if (findGlobalEventAttribute(log, keys[index])) {
+			if (findGlobalEventAttribute(log, keys.get(index))) {
 				/*
 				 * keys[index] matches a global event attribute. Try if
 				 * keys[index+1,..,length-1] match with global event attributes.
 				 */
-				String[] fixedKeys = fixKeys(log, keys, index + 1);
+				List<String> fixedKeys = fixKeys(log, keys, index + 1);
 				if (fixedKeys != null) {
 					/*
 					 * Yes they do. Return the match.
@@ -454,7 +455,7 @@ public class XesXmlParser extends XParser {
 			 * matched to a global event attribute. Try merging key[index] with 
 			 * key[index+1].
 			 */
-			if (index + 1 == keys.length) {
+			if (index + 1 == keys.size()) {
 				/*
 				 * No keys[index+1]. We cannot match keys[length-1]. Fail.
 				 */
@@ -463,19 +464,19 @@ public class XesXmlParser extends XParser {
 			/*
 			 * Copy all matched keys.
 			 */
-			String[] newKeys = new String[keys.length - 1];
+			List<String> newKeys = new ArrayList<String>(keys.size() - 1);
 			for (int i = 0; i < index; i++) {
-				newKeys[i] = keys[i];
+				newKeys.add(keys.get(i));
 			}
 			/*
 			 * Merge keys[index] with keys[index+1].
 			 */
-			newKeys[index] = keys[index] + " " + keys[index + 1];
+			newKeys.add(keys.get(index) + " " + keys.get(index + 1));
 			/*
 			 * Copy all keys still left to match.
 			 */
-			for (int i = index + 2; i < keys.length; i++) {
-				newKeys[i - 1] = keys[i];
+			for (int i = index + 2; i < keys.size(); i++) {
+				newKeys.add(keys.get(i));
 			}
 			/*
 			 * Check match with merged key.
