@@ -352,9 +352,14 @@ public class XesXmlParser extends XParser {
 				String keys = attributes.getValue("keys");
 				if (name != null && keys != null && name.length() > 0
 						&& keys.length() > 0) {
-					List<String> keysArr = fixKeys(log, XTokenHelper.extractTokens(keys));
+					List<String> keysList = fixKeys(log, XTokenHelper.extractTokens(keys));
+					String[] keysArray = new String[keysList.size()];
+					int i = 0;
+					for (String key: keysList) {
+						keysArray[i++] = key;
+					}
 					XEventClassifier classifier = new XEventAttributeClassifier(
-							name, (String[]) keysArr.toArray());
+							name, keysArray);
 					log.getClassifiers().add(classifier);
 				}
 			}
