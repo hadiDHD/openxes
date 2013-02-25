@@ -41,6 +41,7 @@ package org.deckfour.xes.model;
 import java.util.List;
 
 import org.deckfour.xes.classification.XEventClassifier;
+import org.deckfour.xes.info.XLogInfo;
 
 /**
  * A log is an element of an XES event log structure. Logs are contained in
@@ -80,4 +81,21 @@ public interface XLog extends XElement, List<XTrace> {
 	public List<XAttribute> getGlobalEventAttributes();
 
 	public boolean accept(XVisitor visitor);
+	
+	/**
+	 * Returns the cached info for the given classifier, null if not available.
+	 * 
+	 * @param classifier The given classifier.
+	 * @return The cached info for the given classifier, null if not available.
+	 */
+	public XLogInfo getInfo(XEventClassifier classifier);
+	
+	/**
+	 * Adds the given info for the given classifier to the info cache.
+	 * 
+	 * @param classifier The given classifier.
+	 * @param info The given info.
+	 */
+	public void setInfo(XEventClassifier classifier, XLogInfo info);
+
 }

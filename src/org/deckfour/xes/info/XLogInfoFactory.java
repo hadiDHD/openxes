@@ -56,7 +56,7 @@ public class XLogInfoFactory {
 	 * @return The log info for this log.
 	 */
 	public static XLogInfo createLogInfo(XLog log) {
-		return XLogInfoImpl.create(log);
+		return createLogInfo(log, XLogInfoImpl.STANDARD_CLASSIFIER);
 	}
 	
 	/**
@@ -67,7 +67,21 @@ public class XLogInfoFactory {
 	 * @return The log info summary for this log.
 	 */
 	public static XLogInfo createLogInfo(XLog log, XEventClassifier classifier) {
-		return XLogInfoImpl.create(log, classifier);
+		/*
+		 * Get the possible info cached by the log.
+		 */
+		XLogInfo info = log.getInfo(classifier);
+		if (info == null) {
+			/*
+			 * Info not cached. Create it.
+			 */
+			info = XLogInfoImpl.create(log, classifier);
+			/*
+			 * Cache it.
+			 */
+			log.setInfo(classifier, info);
+		}
+		return info;
 	}
 
 }

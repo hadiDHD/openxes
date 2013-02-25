@@ -39,12 +39,15 @@
 package org.deckfour.xes.model.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.extension.XExtension;
+import org.deckfour.xes.info.XLogInfo;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XLog;
@@ -85,7 +88,12 @@ public class XLogImpl extends ArrayList<XTrace> implements XLog {
 	 */
 	private List<XAttribute> globalEventAttributes;
 	
-	
+	/**
+	 * Single-item cache. Only the last info is cached. 
+	 * Typically, only one classifier will be used for a log.
+	 */
+	private XEventClassifier cachedClassifier;
+	private XLogInfo cachedInfo;
 	
 	/**
 	 * Creates a new log.
@@ -99,6 +107,8 @@ public class XLogImpl extends ArrayList<XTrace> implements XLog {
 		this.classifiers = new ArrayList<XEventClassifier>();
 		this.globalTraceAttributes = new ArrayList<XAttribute>();
 		this.globalEventAttributes = new ArrayList<XAttribute>();
+		this.cachedClassifier = null;
+		this.cachedInfo = null;
 	}
 
 	/* (non-Javadoc)
@@ -210,5 +220,21 @@ public class XLogImpl extends ArrayList<XTrace> implements XLog {
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Returns the cached info if the given classifier is the cached classifier.
+	 * Returns null otherwise.
+	 */
+	public XLogInfo getInfo(XEventClassifier classifier) {
+		return classifier.equals(cachedClassifier) ? cachedInfo : null;
+	}
+	
+	/**
+	 * Sets the cached classifier and info to the given objects.
+	 */
+	public void setInfo(XEventClassifier classifier, XLogInfo info) {
+		cachedClassifier = classifier;
+		cachedInfo = info;
 	}
 }
