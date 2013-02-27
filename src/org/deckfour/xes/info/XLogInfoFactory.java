@@ -71,7 +71,7 @@ public class XLogInfoFactory {
 		 * Get the possible info cached by the log.
 		 */
 		XLogInfo info = log.getInfo(classifier);
-		if (info == null) {
+		if (true || info == null) {
 			/*
 			 * Info not cached. Create it.
 			 */
