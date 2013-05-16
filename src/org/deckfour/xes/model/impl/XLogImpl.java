@@ -142,6 +142,8 @@ public class XLogImpl extends ArrayList<XTrace> implements XLog {
 		clone.classifiers = new ArrayList<XEventClassifier>(classifiers);
 		clone.globalTraceAttributes = new ArrayList<XAttribute>(globalTraceAttributes);
 		clone.globalEventAttributes = new ArrayList<XAttribute>(globalEventAttributes);
+		clone.cachedClassifier = null;
+		clone.cachedInfo = null;
 		clone.clear();
 		for(XTrace trace : this) {
 			clone.add((XTrace)trace.clone());
