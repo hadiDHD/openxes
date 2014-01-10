@@ -3,7 +3,12 @@
   <!-- This file describes the  serialization for extensions of the XES format for event log data. -->
   <!-- For more information about XES, visit http://www.xes-standard.org/ -->
   
-  <!-- (c) 2012 IEEE Task Force on Process Mining (http://wwww.win.tue.nl/ieeetfpm)  -->
+  <!-- (c) 2014 IEEE Task Force on Process Mining (http://wwww.win.tue.nl/ieeetfpm)  -->
+  
+  <!-- Date: January 10, 2014 -->  
+  <!--  Version 1.2 -->
+  <!-- Author: Eric Verbeek (h.m.w.verbeek@tue.nl) -->
+  <!-- Change: Added list attribute type -->
   
   <!-- Date: June 12, 2012 -->
   <!-- Version: 1.1 -->
@@ -50,6 +55,7 @@
       <xs:element name="float" type="AttributeType"/>
       <xs:element name="boolean" type="AttributeType"/>
       <xs:element name="id" type="AttributeType"/>
+      <xs:element name="list" type="AttributeType"/>
     </xs:choice>
   </xs:complexType>
   

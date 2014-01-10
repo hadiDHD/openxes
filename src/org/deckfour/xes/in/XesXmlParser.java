@@ -260,51 +260,52 @@ public class XesXmlParser extends XParser {
 					|| tagName.equalsIgnoreCase("id")) {
 				// attribute tag.
 				String key = attributes.getValue("key");
-				if (key == null) {
-					// Note that this should not happen according to the XES
-					// specification,
-					// but the XES export omits keys that are empty.
-					// Workaround can be removed after Ticket #271 is fixed in
-					// Spex
-					// http://prom.win.tue.nl:8000/Tracsites/ticket/271
-					key = "";
-				}
 				String value = attributes.getValue("value");
-				if (value != null) {
-					// derive extension, if attribute key hints that
-					XExtension extension = null;
+				// derive extension, if attribute key hints that
+				XExtension extension = null;
+				if (key != null) {
 					int colonIndex = key.indexOf(':');
 					if (colonIndex > 0 && colonIndex < (key.length() - 1)) {
 						String prefix = key.substring(0, colonIndex);
 						extension = XExtensionManager.instance().getByPrefix(
 								prefix);
 					}
-					// create attribute of correct type
-					XAttribute attribute = null;
-					if (tagName.equalsIgnoreCase("string")) {
-						attribute = factory.createAttributeLiteral(key, value,
+				}
+				// create attribute of correct type
+				XAttribute attribute = null;
+				if (tagName.equalsIgnoreCase("string") && value != null) {
+					attribute = factory.createAttributeLiteral(key, value,
+							extension);
+				} else if (tagName.equalsIgnoreCase("date") && value != null) {
+					Date date = xsDateTimeConversion.parseXsDateTime(value);
+					if (date != null) {
+						attribute = factory.createAttributeTimestamp(key, date,
 								extension);
-					} else if (tagName.equalsIgnoreCase("date")) {
-						Date date = xsDateTimeConversion.parseXsDateTime(value);
-						if (date != null) {
-							attribute = factory.createAttributeTimestamp(key,
-									date, extension);
-						} else {
-							return;
-						}
-					} else if (tagName.equalsIgnoreCase("int")) {
-						attribute = factory.createAttributeDiscrete(key,
-								Long.parseLong(value), extension);
-					} else if (tagName.equalsIgnoreCase("float")) {
-						attribute = factory.createAttributeContinuous(key,
-								Double.parseDouble(value), extension);
-					} else if (tagName.equalsIgnoreCase("boolean")) {
-						attribute = factory.createAttributeBoolean(key,
-								Boolean.parseBoolean(value), extension);
-					} else if (tagName.equalsIgnoreCase("id")) {
-						attribute = factory.createAttributeID(key,
-								XID.parse(value), extension);
+					} else {
+						return;
 					}
+				} else if (tagName.equalsIgnoreCase("int") && key != null
+						&& value != null) {
+					attribute = factory.createAttributeDiscrete(key,
+							Long.parseLong(value), extension);
+				} else if (tagName.equalsIgnoreCase("float") && key != null
+						&& value != null) {
+					attribute = factory.createAttributeContinuous(key,
+							Double.parseDouble(value), extension);
+				} else if (tagName.equalsIgnoreCase("boolean") && key != null
+						&& value != null) {
+					attribute = factory.createAttributeBoolean(key,
+							Boolean.parseBoolean(value), extension);
+				} else if (tagName.equalsIgnoreCase("id") && key != null
+						&& value != null) {
+					attribute = factory.createAttributeID(key,
+							XID.parse(value), extension);
+				} else if (tagName.equalsIgnoreCase("list") && key != null) {
+					attribute = factory.createAttributeList(key, extension);
+				} else if (tagName.equalsIgnoreCase("container")) {
+					attribute = factory.createAttributeContainer();
+				}
+				if (attribute != null) {
 					// add to current attributable and push to stack
 					attributeStack.push(attribute);
 					attributableStack.push(attribute);
@@ -352,10 +353,11 @@ public class XesXmlParser extends XParser {
 				String keys = attributes.getValue("keys");
 				if (name != null && keys != null && name.length() > 0
 						&& keys.length() > 0) {
-					List<String> keysList = fixKeys(log, XTokenHelper.extractTokens(keys));
+					List<String> keysList = fixKeys(log,
+							XTokenHelper.extractTokens(keys));
 					String[] keysArray = new String[keysList.size()];
 					int i = 0;
-					for (String key: keysList) {
+					for (String key : keysList) {
 						keysArray[i++] = key;
 					}
 					XEventClassifier classifier = new XEventAttributeClassifier(
@@ -388,7 +390,9 @@ public class XesXmlParser extends XParser {
 					|| tagName.equalsIgnoreCase("int")
 					|| tagName.equalsIgnoreCase("float")
 					|| tagName.equalsIgnoreCase("boolean")
-					|| tagName.equalsIgnoreCase("id")) {
+					|| tagName.equalsIgnoreCase("id")
+					|| tagName.equalsIgnoreCase("list")
+					|| tagName.equalsIgnoreCase("container")) {
 				XAttribute attribute = attributeStack.pop();
 				attributableStack.pop(); // remove self from top
 				if (globals != null) {
@@ -451,13 +455,13 @@ public class XesXmlParser extends XParser {
 					return fixedKeys;
 				}
 				/*
-				 * No, they do not. Fall thru to match keys[index]+" "+keys[index+1]
-				 * to a global event attribute,
+				 * No, they do not. Fall thru to match
+				 * keys[index]+" "+keys[index+1] to a global event attribute,
 				 */
 			}
 			/*
 			 * No such global event attribute, or no match when key[index] is
-			 * matched to a global event attribute. Try merging key[index] with 
+			 * matched to a global event attribute. Try merging key[index] with
 			 * key[index+1].
 			 */
 			if (index + 1 == keys.size()) {

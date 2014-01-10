@@ -49,9 +49,11 @@ import org.deckfour.xes.id.XID;
 import org.deckfour.xes.id.XIDFactory;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeBoolean;
+import org.deckfour.xes.model.XAttributeContainer;
 import org.deckfour.xes.model.XAttributeContinuous;
 import org.deckfour.xes.model.XAttributeDiscrete;
 import org.deckfour.xes.model.XAttributeID;
+import org.deckfour.xes.model.XAttributeList;
 import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.XAttributeTimestamp;
 
@@ -71,7 +73,11 @@ public class XAttributeUtils {
 	 * @return High-level type interface of this attribute.
 	 */
 	public static Class<? extends XAttribute> getType(XAttribute attribute) {
-		if (attribute instanceof XAttributeLiteral) {
+		if (attribute instanceof XAttributeList) {
+			return XAttributeList.class;
+		} else if (attribute instanceof XAttributeContainer) {
+			return XAttributeContainer.class;
+		} else if (attribute instanceof XAttributeLiteral) {
 			return XAttributeLiteral.class;
 		} else if (attribute instanceof XAttributeBoolean) {
 			return XAttributeBoolean.class;
@@ -97,7 +103,11 @@ public class XAttributeUtils {
 	 * @return String representation of the attribute's specific type.
 	 */
 	public static String getTypeString(XAttribute attribute) {
-		if (attribute instanceof XAttributeLiteral) {
+		if (attribute instanceof XAttributeList) {
+			return "LIST";
+		} else if (attribute instanceof XAttributeContainer) {
+			return "CONTAINER";
+		} else if (attribute instanceof XAttributeLiteral) {
 			return "LITERAL";
 		} else if (attribute instanceof XAttributeBoolean) {
 			return "BOOLEAN";
@@ -126,7 +136,9 @@ public class XAttributeUtils {
 	 */
 	public static XAttribute derivePrototype(XAttribute instance) {
 		XAttribute prototype = (XAttribute) instance.clone();
-		if (prototype instanceof XAttributeLiteral) {
+		if (prototype instanceof XAttributeList) {
+		} else if (prototype instanceof XAttributeContainer) {
+		} else if (prototype instanceof XAttributeLiteral) {
 			((XAttributeLiteral) prototype).setValue("DEFAULT");
 		} else if (prototype instanceof XAttributeBoolean) {
 			((XAttributeBoolean) prototype).setValue(true);
@@ -163,7 +175,13 @@ public class XAttributeUtils {
 	public static XAttribute composeAttribute(XFactory factory, String key,
 			String value, String type, XExtension extension) {
 		type = type.trim();
-		if (type.equalsIgnoreCase("LITERAL")) {
+		if (type.equalsIgnoreCase("LIST")) {
+			XAttributeList attr = factory.createAttributeList(key, extension);
+			return attr;
+		} else if (type.equalsIgnoreCase("CONTAINER")) {
+			XAttributeContainer attr = factory.createAttributeContainer();
+			return attr;
+		} else if (type.equalsIgnoreCase("LITERAL")) {
 			XAttributeLiteral attr = factory.createAttributeLiteral(key, value,
 					extension);
 			return attr;

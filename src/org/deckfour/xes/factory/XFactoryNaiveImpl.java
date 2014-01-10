@@ -44,9 +44,11 @@ import java.util.Date;
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.id.XID;
 import org.deckfour.xes.model.XAttributeBoolean;
+import org.deckfour.xes.model.XAttributeContainer;
 import org.deckfour.xes.model.XAttributeContinuous;
 import org.deckfour.xes.model.XAttributeDiscrete;
 import org.deckfour.xes.model.XAttributeID;
+import org.deckfour.xes.model.XAttributeList;
 import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XAttributeTimestamp;
@@ -54,9 +56,11 @@ import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.deckfour.xes.model.impl.XAttributeBooleanImpl;
+import org.deckfour.xes.model.impl.XAttributeContainerImpl;
 import org.deckfour.xes.model.impl.XAttributeContinuousImpl;
 import org.deckfour.xes.model.impl.XAttributeDiscreteImpl;
 import org.deckfour.xes.model.impl.XAttributeIDImpl;
+import org.deckfour.xes.model.impl.XAttributeListImpl;
 import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
 import org.deckfour.xes.model.impl.XAttributeMapImpl;
 import org.deckfour.xes.model.impl.XAttributeMapLazyImpl;
@@ -223,5 +227,13 @@ public class XFactoryNaiveImpl implements XFactory {
 	public XAttributeID createAttributeID(String key, XID value,
 			XExtension extension) {
 		return new XAttributeIDImpl(key, value, extension);
+	}
+	
+	public XAttributeList createAttributeList(String key, XExtension extension) {
+		return new XAttributeListImpl(key, extension);
+	}
+	
+	public XAttributeContainer createAttributeContainer() {
+		return new XAttributeContainerImpl();
 	}
 }

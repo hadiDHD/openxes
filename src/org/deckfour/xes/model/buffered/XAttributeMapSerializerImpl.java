@@ -49,104 +49,134 @@ import org.deckfour.xes.factory.XFactoryRegistry;
 import org.deckfour.xes.id.XID;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeBoolean;
+import org.deckfour.xes.model.XAttributeContainer;
 import org.deckfour.xes.model.XAttributeContinuous;
 import org.deckfour.xes.model.XAttributeDiscrete;
 import org.deckfour.xes.model.XAttributeID;
+import org.deckfour.xes.model.XAttributeList;
 import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XAttributeTimestamp;
 import org.deckfour.xes.model.impl.XAttributeMapImpl;
 
 /**
- * This class provides binary serialization of XAttributeMap
- * instances, based on the DataInput and DataOutput interfaces.
+ * This class provides binary serialization of XAttributeMap instances, based on
+ * the DataInput and DataOutput interfaces.
  * 
  * @author Christian W. Guenther (christian@deckfour.org)
- *
+ * 
  */
 public class XAttributeMapSerializerImpl implements XAttributeMapSerializer {
-	
-	/* (non-Javadoc)
-	 * @see org.deckfour.xes.model.buffered.XAttributeMapSerializer#serialize(org.deckfour.xes.model.XAttributeMap, java.io.DataOutput)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.deckfour.xes.model.buffered.XAttributeMapSerializer#serialize(org
+	 * .deckfour.xes.model.XAttributeMap, java.io.DataOutput)
 	 */
 	public void serialize(XAttributeMap map, DataOutput out) throws IOException {
 		out.writeInt(map.size());
-		for(XAttribute attribute : map.values()) {
+		for (XAttribute attribute : map.values()) {
 			// encode attribute key
 			out.writeUTF(attribute.getKey());
 			// encode attribute extension
 			XExtension extension = attribute.getExtension();
-			if(extension == null) {
+			if (extension == null) {
 				out.writeInt(-1);
 			} else {
 				out.writeInt(XExtensionManager.instance().getIndex(extension));
 			}
 			// encode attribute type and value
-			if(attribute instanceof XAttributeBoolean) {
+			/*
+			 * List and Container need to precede Literal, as they both extend Literal
+			 * (for reasons of backwards compatibility).
+			 */
+			if (attribute instanceof XAttributeList) {
+				out.writeByte(6);
+			} else if (attribute instanceof XAttributeContainer) {
+				out.writeByte(7);
+			} else if (attribute instanceof XAttributeBoolean) {
 				out.writeByte(0);
-				out.writeBoolean(((XAttributeBoolean)attribute).getValue());
-			} else if(attribute instanceof XAttributeContinuous) {
+				out.writeBoolean(((XAttributeBoolean) attribute).getValue());
+			} else if (attribute instanceof XAttributeContinuous) {
 				out.writeByte(1);
-				out.writeDouble(((XAttributeContinuous)attribute).getValue());
-			} else if(attribute instanceof XAttributeDiscrete) {
+				out.writeDouble(((XAttributeContinuous) attribute).getValue());
+			} else if (attribute instanceof XAttributeDiscrete) {
 				out.writeByte(2);
-				out.writeLong(((XAttributeDiscrete)attribute).getValue());
-			} else if(attribute instanceof XAttributeLiteral) {
+				out.writeLong(((XAttributeDiscrete) attribute).getValue());
+			} else if (attribute instanceof XAttributeLiteral) {
 				out.writeByte(3);
-				out.writeUTF(((XAttributeLiteral)attribute).getValue());
-			} else if(attribute instanceof XAttributeTimestamp) {
+				out.writeUTF(((XAttributeLiteral) attribute).getValue());
+			} else if (attribute instanceof XAttributeTimestamp) {
 				out.writeByte(4);
-				out.writeLong(((XAttributeTimestamp)attribute).getValueMillis());
-			} else if(attribute instanceof XAttributeID) {
+				out.writeLong(((XAttributeTimestamp) attribute)
+						.getValueMillis());
+			} else if (attribute instanceof XAttributeID) {
 				out.writeByte(5);
-				XID.write(((XAttributeID)attribute).getValue(), out);
+				XID.write(((XAttributeID) attribute).getValue(), out);
 			} else {
-				throw new AssertionError("Unknown attribute type, cannot serialize!");
+				throw new AssertionError(
+						"Unknown attribute type, cannot serialize!");
 			}
 			// recursive serialization of attribute map
 			serialize(attribute.getAttributes(), out);
 		}
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.deckfour.xes.model.buffered.XAttributeMapSerializer#deserialize(java.io.DataInput)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.deckfour.xes.model.buffered.XAttributeMapSerializer#deserialize(java
+	 * .io.DataInput)
 	 */
 	public XAttributeMap deserialize(DataInput in) throws IOException {
 		XFactory factory = XFactoryRegistry.instance().currentDefault();
 		int size = in.readInt();
 		XAttributeMapImpl map = new XAttributeMapImpl(size * 2);
-		for(int i=0; i<size; i++) {
+		for (int i = 0; i < size; i++) {
 			// read attribute key
 			String key = in.readUTF();
 			// decode attribute extension
 			int ext = in.readInt();
 			XExtension extension = null;
-			if(ext >= 0) {
+			if (ext >= 0) {
 				extension = XExtensionManager.instance().getByIndex(ext);
 			}
 			// assemble according to type and read value
 			XAttribute attribute;
 			byte type = in.readByte();
-			if(type == 0) {
+			if (type == 0) {
 				boolean value = in.readBoolean();
-				attribute = factory.createAttributeBoolean(key, value, extension);
-			} else if(type == 1) {
+				attribute = factory.createAttributeBoolean(key, value,
+						extension);
+			} else if (type == 1) {
 				double value = in.readDouble();
-				attribute = factory.createAttributeContinuous(key, value, extension);
-			} else if(type == 2) {
+				attribute = factory.createAttributeContinuous(key, value,
+						extension);
+			} else if (type == 2) {
 				long value = in.readLong();
-				attribute = factory.createAttributeDiscrete(key, value, extension);
-			} else if(type == 3) {
+				attribute = factory.createAttributeDiscrete(key, value,
+						extension);
+			} else if (type == 3) {
 				String value = in.readUTF();
-				attribute = factory.createAttributeLiteral(key, value, extension);
-			} else if(type == 4) {
+				attribute = factory.createAttributeLiteral(key, value,
+						extension);
+			} else if (type == 4) {
 				long value = in.readLong();
-				attribute = factory.createAttributeTimestamp(key, value, extension);
-			} else if(type == 5) {
+				attribute = factory.createAttributeTimestamp(key, value,
+						extension);
+			} else if (type == 5) {
 				XID value = XID.read(in);
 				attribute = factory.createAttributeID(key, value, extension);
+			} else if (type == 6) {
+				attribute = factory.createAttributeList(key, extension);
+			} else if (type == 7) {
+				attribute = factory.createAttributeContainer();
 			} else {
-				throw new AssertionError("Unknown attribute type, cannot deserialize!");
+				throw new AssertionError(
+						"Unknown attribute type, cannot deserialize!");
 			}
 			// read meta-attribute map
 			XAttributeMap metamap = deserialize(in);

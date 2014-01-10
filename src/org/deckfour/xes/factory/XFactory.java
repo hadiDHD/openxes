@@ -44,9 +44,11 @@ import java.util.Date;
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.id.XID;
 import org.deckfour.xes.model.XAttributeBoolean;
+import org.deckfour.xes.model.XAttributeContainer;
 import org.deckfour.xes.model.XAttributeContinuous;
 import org.deckfour.xes.model.XAttributeDiscrete;
 import org.deckfour.xes.model.XAttributeID;
+import org.deckfour.xes.model.XAttributeList;
 import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XAttributeTimestamp;
@@ -261,4 +263,8 @@ public interface XFactory {
 	 */
 	public abstract XAttributeID createAttributeID(String key,
 			XID value, XExtension extension);
+	
+	public abstract XAttributeList createAttributeList(String key, XExtension extension);
+	
+	public abstract XAttributeContainer createAttributeContainer();
 }
