@@ -179,7 +179,7 @@ public class XAttributeUtils {
 			XAttributeList attr = factory.createAttributeList(key, extension);
 			return attr;
 		} else if (type.equalsIgnoreCase("CONTAINER")) {
-			XAttributeContainer attr = factory.createAttributeContainer();
+			XAttributeContainer attr = factory.createAttributeContainer(key);
 			return attr;
 		} else if (type.equalsIgnoreCase("LITERAL")) {
 			XAttributeLiteral attr = factory.createAttributeLiteral(key, value,

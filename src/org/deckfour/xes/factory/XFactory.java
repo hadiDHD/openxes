@@ -266,5 +266,5 @@ public interface XFactory {
 	
 	public abstract XAttributeList createAttributeList(String key, XExtension extension);
 	
-	public abstract XAttributeContainer createAttributeContainer();
+	public abstract XAttributeContainer createAttributeContainer(String key);
 }

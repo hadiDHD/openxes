@@ -39,12 +39,15 @@
 package org.deckfour.xes.xstream;
 
 import java.net.URI;
+import java.util.Collection;
+import java.util.Stack;
 
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.extension.XExtensionManager;
 import org.deckfour.xes.factory.XFactory;
 import org.deckfour.xes.factory.XFactoryRegistry;
 import org.deckfour.xes.model.XAttribute;
+import org.deckfour.xes.model.XAttributeCollection;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.util.XAttributeUtils;
 
@@ -65,6 +68,8 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * 
  */
 public class XAttributeConverter extends XConverter {
+
+	protected static final Integer PARENT = 0;
 
 	/*
 	 * (non-Javadoc)
@@ -91,12 +96,15 @@ public class XAttributeConverter extends XConverter {
 		// marshal meta-attributes
 		if (attribute.getAttributes().size() > 0) {
 			writer.startNode("XAttributeMap");
+			XAttribute oldParent = (XAttribute) context.get(PARENT);
+			context.put(PARENT, attribute); 
 			context.convertAnother(attribute.getAttributes(),
 					XesXStreamPersistency.attributeMapConverter);
+			context.put(PARENT, oldParent);
 			writer.endNode();
 		}
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -110,23 +118,47 @@ public class XAttributeConverter extends XConverter {
 		String key = reader.getAttribute("key");
 		String type = reader.getAttribute("type");
 		String value = reader.getAttribute("value");
+		System.err.println("key == " + key);
+		System.err.println("type == " + type);
+		System.err.println("value == " + value);
 		XExtension extension = null;
+		System.err.println("1");
 		String extensionString = reader.getAttribute("extension");
+		System.err.println("2");
 		if (extensionString != null && extensionString.length() > 0) {
 			URI uri = URI.create(extensionString);
 			extension = XExtensionManager.instance().getByUri(uri);
 		}
+		System.err.println("3");
 		XFactory factory = XFactoryRegistry.instance().currentDefault();
+		System.err.println("4");
 		XAttribute attribute = XAttributeUtils.composeAttribute(factory, key,
 				value, type, extension);
+		System.err.println("5");
+		XAttribute parent = (XAttribute) context.get(PARENT);
+		System.err.println("6");
+//		System.err.println("parent == " + parent);
+		System.err.println("7");
+		if (parent != null && parent instanceof XAttributeCollection) {
+			((XAttributeCollection) parent).addKey(key);
+		}
+		System.err.println("8");
 		if (reader.hasMoreChildren()) {
+			System.err.println("9");
 			reader.moveDown();
+			Object oldParent = context.get(PARENT);
+//			System.err.println("oldParent == " + oldParent);
+			context.put(PARENT, attribute);
+//			System.err.println("parent := " + attribute);
 			XAttributeMap metaAttributes = (XAttributeMap) context
 					.convertAnother(attribute, XAttributeMap.class,
 							XesXStreamPersistency.attributeMapConverter);
+			context.put(PARENT, oldParent);
+//			System.err.println("oldParent := " + oldParent);
 			reader.moveUp();
 			attribute.setAttributes(metaAttributes);
 		}
+		System.err.println("done");
 		return attribute;
 	}
 

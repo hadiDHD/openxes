@@ -38,7 +38,11 @@
  */
 package org.deckfour.xes.xstream;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.deckfour.xes.model.XAttribute;
+import org.deckfour.xes.model.XAttributeCollection;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.buffered.XAttributeMapBufferedImpl;
 import org.deckfour.xes.model.impl.XAttributeMapImpl;
@@ -89,7 +93,15 @@ public class XAttributeMapConverter extends XConverter {
 		}
 		writer.addAttribute("lazy", lazy);
 		writer.addAttribute("buffered", buffered);
-		for (XAttribute attribute : map.values()) {
+		Collection<XAttribute> childAttributes = map.values();
+		XAttribute parent = (XAttribute) context.get(XAttributeConverter.PARENT);
+		if (parent instanceof XAttributeCollection) {
+			childAttributes = new ArrayList<XAttribute>();
+			for (String key: ((XAttributeCollection) parent).getKeys()) {
+				childAttributes.add(map.get(key));
+			}
+		}
+		for (XAttribute attribute : childAttributes) {
 			writer.startNode("XAttribute");
 			context.convertAnother(attribute,
 					XesXStreamPersistency.attributeConverter);

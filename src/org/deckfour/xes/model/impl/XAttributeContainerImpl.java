@@ -40,7 +40,6 @@ package org.deckfour.xes.model.impl;
 
 import java.util.HashSet;
 
-import org.deckfour.xes.id.XID;
 import org.deckfour.xes.model.XAttributeContainer;
 
 /**
@@ -54,9 +53,9 @@ public class XAttributeContainerImpl extends XAttributeCollectionImpl implements
 	 * that is unaware of the Container may consider it to be a Literal. 
 	 */
 	
-	public XAttributeContainerImpl() {
+	public XAttributeContainerImpl(String key) {
 		// Dummy (but unique) key, dummy value, no extension.
-		super((new XID()).toString(), null);
+		super(key, null);
 		// No ordering imposed on keys.
 		keys = new HashSet<String>();
 	}

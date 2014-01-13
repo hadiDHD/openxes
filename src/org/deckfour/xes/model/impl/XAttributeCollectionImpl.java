@@ -73,4 +73,21 @@ public abstract class XAttributeCollectionImpl extends XAttributeLiteralImpl imp
 	public Collection<String> getKeys() {
 		return keys;
 	}
+	
+	public String toString() {
+		StringBuffer buf = new StringBuffer();
+		String sep = "[";
+		for (String key: keys) {
+			buf.append(sep);
+			sep = ",";
+			buf.append(key);
+			buf.append("=");
+			buf.append(this.getAttributes().get(key).toString());
+		}
+		if (buf.length() == 0) {
+			buf.append("[");
+		}
+		buf.append("]");
+		return buf.toString();
+	}
 }

@@ -38,8 +38,6 @@
  */
 package org.deckfour.xes.model;
 
-import java.util.List;
-
 /**
  * @author Eric Verbeek (h.m.w.verbeek@tue.nl)
  *

@@ -41,6 +41,8 @@ package org.deckfour.xes.model.buffered;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.extension.XExtensionManager;
@@ -49,6 +51,7 @@ import org.deckfour.xes.factory.XFactoryRegistry;
 import org.deckfour.xes.id.XID;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeBoolean;
+import org.deckfour.xes.model.XAttributeCollection;
 import org.deckfour.xes.model.XAttributeContainer;
 import org.deckfour.xes.model.XAttributeContinuous;
 import org.deckfour.xes.model.XAttributeDiscrete;
@@ -76,8 +79,12 @@ public class XAttributeMapSerializerImpl implements XAttributeMapSerializer {
 	 * .deckfour.xes.model.XAttributeMap, java.io.DataOutput)
 	 */
 	public void serialize(XAttributeMap map, DataOutput out) throws IOException {
-		out.writeInt(map.size());
-		for (XAttribute attribute : map.values()) {
+		serialize(map.values(), out);
+	}
+	
+	private void serialize(Collection<XAttribute> attributes, DataOutput out) throws IOException {
+		out.writeInt(attributes.size());
+		for (XAttribute attribute : attributes) {
 			// encode attribute key
 			out.writeUTF(attribute.getKey());
 			// encode attribute extension
@@ -120,7 +127,16 @@ public class XAttributeMapSerializerImpl implements XAttributeMapSerializer {
 						"Unknown attribute type, cannot serialize!");
 			}
 			// recursive serialization of attribute map
-			serialize(attribute.getAttributes(), out);
+			if (attribute instanceof XAttributeCollection) {
+				Collection<XAttribute> childAttributes = new ArrayList<XAttribute>();
+				for (String key: ((XAttributeCollection) attribute).getKeys()) {
+					childAttributes.add(attribute.getAttributes().get(key));
+					System.err.println(key + "=" + attribute.getAttributes().get(key));
+				}
+				serialize(childAttributes, out);
+			} else {
+				serialize(attribute.getAttributes(), out);
+			}
 		}
 	}
 
@@ -132,6 +148,10 @@ public class XAttributeMapSerializerImpl implements XAttributeMapSerializer {
 	 * .io.DataInput)
 	 */
 	public XAttributeMap deserialize(DataInput in) throws IOException {
+		return deserialize(in, null);
+	}
+	
+	private XAttributeMap deserialize(DataInput in, XAttribute parent) throws IOException {
 		XFactory factory = XFactoryRegistry.instance().currentDefault();
 		int size = in.readInt();
 		XAttributeMapImpl map = new XAttributeMapImpl(size * 2);
@@ -173,13 +193,16 @@ public class XAttributeMapSerializerImpl implements XAttributeMapSerializer {
 			} else if (type == 6) {
 				attribute = factory.createAttributeList(key, extension);
 			} else if (type == 7) {
-				attribute = factory.createAttributeContainer();
+				attribute = factory.createAttributeContainer(key);
 			} else {
 				throw new AssertionError(
 						"Unknown attribute type, cannot deserialize!");
 			}
+			if (parent != null && parent instanceof XAttributeCollection) {
+				((XAttributeCollection) parent).addKey(key);
+			}
 			// read meta-attribute map
-			XAttributeMap metamap = deserialize(in);
+			XAttributeMap metamap = deserialize(in, attribute);
 			attribute.setAttributes(metamap);
 			// add to map
 			map.put(key, attribute);

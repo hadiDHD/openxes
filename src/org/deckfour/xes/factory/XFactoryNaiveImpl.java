@@ -233,7 +233,7 @@ public class XFactoryNaiveImpl implements XFactory {
 		return new XAttributeListImpl(key, extension);
 	}
 	
-	public XAttributeContainer createAttributeContainer() {
-		return new XAttributeContainerImpl();
+	public XAttributeContainer createAttributeContainer(String key) {
+		return new XAttributeContainerImpl(key);
 	}
 }

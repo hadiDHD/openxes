@@ -70,5 +70,4 @@ public class XAttributeListImpl extends XAttributeCollectionImpl implements XAtt
 		// Order keys by appearance.
 		keys = new ArrayList<String>();
 	}
-
 }

@@ -259,7 +259,9 @@ public class XesXmlParser extends XParser {
 					|| tagName.equalsIgnoreCase("int")
 					|| tagName.equalsIgnoreCase("float")
 					|| tagName.equalsIgnoreCase("boolean")
-					|| tagName.equalsIgnoreCase("id")) {
+					|| tagName.equalsIgnoreCase("id")
+					|| tagName.equalsIgnoreCase("list")
+					|| tagName.equalsIgnoreCase("container")) {
 				// attribute tag.
 				String key = attributes.getValue("key");
 				String value = attributes.getValue("value");
@@ -275,10 +277,12 @@ public class XesXmlParser extends XParser {
 				}
 				// create attribute of correct type
 				XAttribute attribute = null;
-				if (tagName.equalsIgnoreCase("string") && value != null) {
+				if (tagName.equalsIgnoreCase("string") && key != null
+						&& value != null) {
 					attribute = factory.createAttributeLiteral(key, value,
 							extension);
-				} else if (tagName.equalsIgnoreCase("date") && value != null) {
+				} else if (tagName.equalsIgnoreCase("date") && key != null
+						&& value != null) {
 					Date date = xsDateTimeConversion.parseXsDateTime(value);
 					if (date != null) {
 						attribute = factory.createAttributeTimestamp(key, date,
@@ -305,7 +309,8 @@ public class XesXmlParser extends XParser {
 				} else if (tagName.equalsIgnoreCase("list") && key != null) {
 					attribute = factory.createAttributeList(key, extension);
 				} else if (tagName.equalsIgnoreCase("container")) {
-					attribute = factory.createAttributeContainer();
+					key = (new XID()).toString();
+					attribute = factory.createAttributeContainer(key);
 				}
 				if (attribute != null) {
 					// add to current attributable and push to stack
@@ -402,8 +407,10 @@ public class XesXmlParser extends XParser {
 				} else {
 					attributableStack.peek().getAttributes()
 							.put(attribute.getKey(), attribute);
-					if (attributeStack.peek() instanceof XAttributeCollection) {
-						((XAttributeList) attributeStack.peek()).addKey(attribute.getKey());
+					if (!attributeStack.isEmpty() && attributeStack.peek() instanceof XAttributeCollection) {
+						// Has parent attribute which is a collection. Add the key to the collection.
+						((XAttributeCollection) attributeStack.peek())
+								.addKey(attribute.getKey());
 					}
 				}
 			} else if (tagName.equalsIgnoreCase("event")) {
