@@ -47,7 +47,7 @@
   <property name="lib" location="lib"/>
   <property name="dist"  location="dist"/>
   <property name="test"  location="test"/>
-  <property name="version" value="1.5"/>
+  <property name="version" value="2.0"/>
   
   <!-- Defines the project's class path in a global manner -->
   <path id="project.class.path">
