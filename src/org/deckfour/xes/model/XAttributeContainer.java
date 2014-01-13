@@ -44,6 +44,6 @@ import java.util.List;
  * @author Eric Verbeek (h.m.w.verbeek@tue.nl)
  *
  */
-public interface XAttributeContainer extends XAttribute {
+public interface XAttributeContainer extends XAttributeCollection {
 
 }

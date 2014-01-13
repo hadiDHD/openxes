@@ -60,6 +60,8 @@ import org.deckfour.xes.factory.XFactoryRegistry;
 import org.deckfour.xes.id.XID;
 import org.deckfour.xes.model.XAttributable;
 import org.deckfour.xes.model.XAttribute;
+import org.deckfour.xes.model.XAttributeCollection;
+import org.deckfour.xes.model.XAttributeList;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
@@ -400,6 +402,9 @@ public class XesXmlParser extends XParser {
 				} else {
 					attributableStack.peek().getAttributes()
 							.put(attribute.getKey(), attribute);
+					if (attributeStack.peek() instanceof XAttributeCollection) {
+						((XAttributeList) attributeStack.peek()).addKey(attribute.getKey());
+					}
 				}
 			} else if (tagName.equalsIgnoreCase("event")) {
 				trace.add(event);

@@ -38,26 +38,39 @@
  */
 package org.deckfour.xes.model.impl;
 
-import java.util.HashSet;
+import java.util.Collection;
 
-import org.deckfour.xes.id.XID;
-import org.deckfour.xes.model.XAttributeContainer;
+import org.deckfour.xes.extension.XExtension;
+import org.deckfour.xes.model.XAttributeCollection;
 
 /**
- * @author Eric Verbeek (h.m.w.verbeek@tue.nl)
+ * @author Christian W. Guenther (christian@deckfour.org)
  *
  */
-public class XAttributeContainerImpl extends XAttributeCollectionImpl implements XAttributeContainer {
+public abstract class XAttributeCollectionImpl extends XAttributeLiteralImpl implements XAttributeCollection {
 
-	/*
-	 * For backwards compatibility, Container extends from Literal. As a result, software
-	 * that is unaware of the Container may consider it to be a Literal. 
-	 */
+	protected Collection<String> keys;
 	
-	public XAttributeContainerImpl() {
-		// Dummy (but unique) key, dummy value, no extension.
-		super((new XID()).toString(), null);
-		// No ordering imposed on keys.
-		keys = new HashSet<String>();
+	/**
+	 * @param key
+	 */
+	public XAttributeCollectionImpl(String key) {
+		super(key, "", null);
+	}
+
+	/**
+	 * @param key
+	 * @param extension
+	 */
+	public XAttributeCollectionImpl(String key, XExtension extension) {
+		super(key, "", extension);
+	}
+
+	public void addKey(String key) {
+		keys.add(key);
+	}
+	
+	public Collection<String> getKeys() {
+		return keys;
 	}
 }

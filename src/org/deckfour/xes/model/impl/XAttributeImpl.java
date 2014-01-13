@@ -43,6 +43,7 @@ import java.util.Set;
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.model.XAttributable;
 import org.deckfour.xes.model.XAttribute;
+import org.deckfour.xes.model.XAttributeCollection;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XVisitor;
 import org.deckfour.xes.util.XAttributeUtils;
@@ -205,11 +206,20 @@ public abstract class XAttributeImpl implements XAttribute {
 		 * First call.
 		 */
 		visitor.visitAttributePre(this, parent);
-		/*
-		 * Visit the (meta) attributes.
-		 */
-		for (XAttribute attribute: attributes.values()) {
-			attribute.accept(visitor, this);
+		if (this instanceof XAttributeCollection) {
+			/*
+			 * Visit the (meta) attributes using the order a specified by the collection.
+			 */
+			for (String key: ((XAttributeCollection) this).getKeys()) {
+				attributes.get(key).accept(visitor, this);
+			}
+		} else {
+			/*
+			 * Visit the (meta) attributes.
+			 */
+			for (XAttribute attribute: attributes.values()) {
+				attribute.accept(visitor, this);
+			}
 		}
 		/*
 		 * Last call.

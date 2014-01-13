@@ -42,6 +42,6 @@ package org.deckfour.xes.model;
  * @author Eric Verbeek (h.m.w.verbeek@tue.nl)
  *
  */
-public interface XAttributeList extends XAttribute {
+public interface XAttributeList extends XAttributeCollection {
 
 }

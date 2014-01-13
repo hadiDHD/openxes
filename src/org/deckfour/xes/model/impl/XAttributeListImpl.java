@@ -38,6 +38,8 @@
  */
 package org.deckfour.xes.model.impl;
 
+import java.util.ArrayList;
+
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.model.XAttributeList;
 
@@ -45,7 +47,7 @@ import org.deckfour.xes.model.XAttributeList;
  * @author Eric Verbeek (h.m.w.verbeek@tue.nl)
  *
  */
-public class XAttributeListImpl extends XAttributeLiteralImpl implements XAttributeList {
+public class XAttributeListImpl extends XAttributeCollectionImpl implements XAttributeList {
 
 	/*
 	 * For backwards compatibility, List extends from Literal. As a result, software
@@ -56,7 +58,7 @@ public class XAttributeListImpl extends XAttributeLiteralImpl implements XAttrib
 	 * @param key
 	 */
 	public XAttributeListImpl(String key) {
-		super(key, "", null);
+		super(key, null);
 	}
 
 	/**
@@ -64,7 +66,9 @@ public class XAttributeListImpl extends XAttributeLiteralImpl implements XAttrib
 	 * @param extension
 	 */
 	public XAttributeListImpl(String key, XExtension extension) {
-		super(key, "", extension);
+		super(key, extension);
+		// Order keys by appearance.
+		keys = new ArrayList<String>();
 	}
 
 }
