@@ -207,6 +207,7 @@ public class XesXmlSerializer implements XSerializer {
 				attributeTag.addAttribute("key", attribute.getKey());
 			} else if (attribute instanceof XAttributeContainer) {
 				attributeTag = tag.addChildNode("container");
+				attributeTag.addAttribute("key", attribute.getKey());
 			} else if (attribute instanceof XAttributeLiteral) {
 				attributeTag = tag.addChildNode("string");
 				attributeTag.addAttribute("key", attribute.getKey());

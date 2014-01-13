@@ -193,7 +193,7 @@ public class XAttributeMapSerializerImpl implements XAttributeMapSerializer {
 			} else if (type == 6) {
 				attribute = factory.createAttributeList(key, extension);
 			} else if (type == 7) {
-				attribute = factory.createAttributeContainer(key);
+				attribute = factory.createAttributeContainer(key, extension);
 			} else {
 				throw new AssertionError(
 						"Unknown attribute type, cannot deserialize!");

@@ -309,8 +309,7 @@ public class XesXmlParser extends XParser {
 				} else if (tagName.equalsIgnoreCase("list") && key != null) {
 					attribute = factory.createAttributeList(key, extension);
 				} else if (tagName.equalsIgnoreCase("container")) {
-					key = (new XID()).toString();
-					attribute = factory.createAttributeContainer(key);
+					attribute = factory.createAttributeContainer(key, extension);
 				}
 				if (attribute != null) {
 					// add to current attributable and push to stack
