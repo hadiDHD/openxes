@@ -40,6 +40,7 @@ package org.deckfour.xes.out;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -53,6 +54,7 @@ import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.logging.XLogging;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeBoolean;
+import org.deckfour.xes.model.XAttributeCollection;
 import org.deckfour.xes.model.XAttributeContainer;
 import org.deckfour.xes.model.XAttributeContinuous;
 import org.deckfour.xes.model.XAttributeDiscrete;
@@ -234,7 +236,18 @@ public class XesXmlSerializer implements XSerializer {
 			} else {
 				throw new IOException("Unknown attribute type!");
 			}
-			addAttributes(attributeTag, attribute.getAttributes().values());
+			if (attribute instanceof XAttributeCollection) {
+				/*
+				 * Use order as specified by the collection.
+				 */
+				Collection<XAttribute> childAttributes = new ArrayList<XAttribute>();
+				for (String key: ((XAttributeCollection) attribute).getKeys()) {
+					childAttributes.add(attribute.getAttributes().get(key));
+				}
+				addAttributes(attributeTag, childAttributes);
+			} else {
+				addAttributes(attributeTag, attribute.getAttributes().values());
+			}
 		}
 	}
 
