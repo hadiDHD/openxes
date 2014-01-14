@@ -41,7 +41,6 @@ package org.deckfour.xes.model.buffered;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.deckfour.xes.extension.XExtension;
@@ -128,11 +127,7 @@ public class XAttributeMapSerializerImpl implements XAttributeMapSerializer {
 			}
 			// recursive serialization of attribute map
 			if (attribute instanceof XAttributeCollection) {
-				Collection<XAttribute> childAttributes = new ArrayList<XAttribute>();
-				for (String key: ((XAttributeCollection) attribute).getKeys()) {
-					childAttributes.add(attribute.getAttributes().get(key));
-					System.err.println(key + "=" + attribute.getAttributes().get(key));
-				}
+				Collection<XAttribute> childAttributes = ((XAttributeCollection) attribute).getCollection();
 				serialize(childAttributes, out);
 			} else {
 				serialize(attribute.getAttributes(), out);
@@ -199,7 +194,7 @@ public class XAttributeMapSerializerImpl implements XAttributeMapSerializer {
 						"Unknown attribute type, cannot deserialize!");
 			}
 			if (parent != null && parent instanceof XAttributeCollection) {
-				((XAttributeCollection) parent).addKey(key);
+				((XAttributeCollection) parent).addToCollection(attribute);
 			}
 			// read meta-attribute map
 			XAttributeMap metamap = deserialize(in, attribute);

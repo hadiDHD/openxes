@@ -38,7 +38,6 @@
  */
 package org.deckfour.xes.xstream;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.deckfour.xes.model.XAttribute;
@@ -96,10 +95,7 @@ public class XAttributeMapConverter extends XConverter {
 		Collection<XAttribute> childAttributes = map.values();
 		XAttribute parent = (XAttribute) context.get(XAttributeConverter.PARENT);
 		if (parent instanceof XAttributeCollection) {
-			childAttributes = new ArrayList<XAttribute>();
-			for (String key: ((XAttributeCollection) parent).getKeys()) {
-				childAttributes.add(map.get(key));
-			}
+			childAttributes = ((XAttributeCollection) parent).getCollection();
 		}
 		for (XAttribute attribute : childAttributes) {
 			writer.startNode("XAttribute");

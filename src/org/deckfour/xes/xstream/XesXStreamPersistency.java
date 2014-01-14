@@ -39,8 +39,6 @@
 package org.deckfour.xes.xstream;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.annotations.XStreamConverter;
-import com.thoughtworks.xstream.annotations.XStreamConverters;
 
 /**
  * Global static class for registering all XES XStream converters in a

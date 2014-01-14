@@ -38,8 +38,6 @@
  */
 package org.deckfour.xes.model.impl;
 
-import java.util.HashSet;
-
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.model.XAttributeContainer;
 
@@ -57,7 +55,7 @@ public class XAttributeContainerImpl extends XAttributeCollectionImpl implements
 	public XAttributeContainerImpl(String key, XExtension extension) {
 		// Dummy (but unique) key, dummy value, no extension.
 		super(key, extension);
-		// No ordering imposed on keys.
-		keys = new HashSet<String>();
+		// No separate collection required, existing map will do fine.
+		collection = null;
 	}
 }

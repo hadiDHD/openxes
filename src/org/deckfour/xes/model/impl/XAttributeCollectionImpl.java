@@ -41,6 +41,7 @@ package org.deckfour.xes.model.impl;
 import java.util.Collection;
 
 import org.deckfour.xes.extension.XExtension;
+import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeCollection;
 
 /**
@@ -49,7 +50,7 @@ import org.deckfour.xes.model.XAttributeCollection;
  */
 public abstract class XAttributeCollectionImpl extends XAttributeLiteralImpl implements XAttributeCollection {
 
-	protected Collection<String> keys;
+	protected Collection<XAttribute> collection;
 	
 	/**
 	 * @param key
@@ -66,23 +67,25 @@ public abstract class XAttributeCollectionImpl extends XAttributeLiteralImpl imp
 		super(key, "", extension);
 	}
 
-	public void addKey(String key) {
-		keys.add(key);
+	public void addToCollection(XAttribute attribute) {
+		if (collection != null) {
+			collection.add(attribute);
+		}
 	}
 	
-	public Collection<String> getKeys() {
-		return keys;
+	public Collection<XAttribute> getCollection() {
+		return collection != null ? collection : getAttributes().values();
 	}
 	
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
 		String sep = "[";
-		for (String key: keys) {
+		for (XAttribute attribute: getCollection()) {
 			buf.append(sep);
 			sep = ",";
-			buf.append(key);
-			buf.append("=");
-			buf.append(this.getAttributes().get(key).toString());
+			buf.append(attribute.getKey());
+			buf.append(":");
+			buf.append(attribute.toString());
 		}
 		if (buf.length() == 0) {
 			buf.append("[");

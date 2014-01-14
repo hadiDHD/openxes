@@ -46,7 +46,7 @@ import java.util.Collection;
  */
 public interface XAttributeCollection extends XAttribute {
 
-	public void addKey(String key);
+	public void addToCollection(XAttribute attribute);
 	
-	public Collection<String> getKeys();
+	public Collection<XAttribute> getCollection();
 }

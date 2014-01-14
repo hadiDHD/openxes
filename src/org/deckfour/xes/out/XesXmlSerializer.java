@@ -40,7 +40,6 @@ package org.deckfour.xes.out;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -241,10 +240,7 @@ public class XesXmlSerializer implements XSerializer {
 				/*
 				 * Use order as specified by the collection.
 				 */
-				Collection<XAttribute> childAttributes = new ArrayList<XAttribute>();
-				for (String key: ((XAttributeCollection) attribute).getKeys()) {
-					childAttributes.add(attribute.getAttributes().get(key));
-				}
+				Collection<XAttribute> childAttributes = ((XAttributeCollection) attribute).getCollection();
 				addAttributes(attributeTag, childAttributes);
 			} else {
 				addAttributes(attributeTag, attribute.getAttributes().values());

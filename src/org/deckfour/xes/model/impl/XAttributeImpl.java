@@ -210,8 +210,8 @@ public abstract class XAttributeImpl implements XAttribute {
 			/*
 			 * Visit the (meta) attributes using the order a specified by the collection.
 			 */
-			for (String key: ((XAttributeCollection) this).getKeys()) {
-				attributes.get(key).accept(visitor, this);
+			for (XAttribute attribute: ((XAttributeCollection) this).getCollection()) {
+				attribute.accept(visitor, this);
 			}
 		} else {
 			/*

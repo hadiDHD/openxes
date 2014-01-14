@@ -41,6 +41,7 @@ package org.deckfour.xes.model.impl;
 import java.util.ArrayList;
 
 import org.deckfour.xes.extension.XExtension;
+import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeList;
 
 /**
@@ -67,7 +68,7 @@ public class XAttributeListImpl extends XAttributeCollectionImpl implements XAtt
 	 */
 	public XAttributeListImpl(String key, XExtension extension) {
 		super(key, extension);
-		// Order keys by appearance.
-		keys = new ArrayList<String>();
+		// Order attributes by appearance.
+		collection = new ArrayList<XAttribute>();
 	}
 }

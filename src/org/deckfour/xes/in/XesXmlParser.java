@@ -61,7 +61,6 @@ import org.deckfour.xes.id.XID;
 import org.deckfour.xes.model.XAttributable;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeCollection;
-import org.deckfour.xes.model.XAttributeList;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
@@ -409,7 +408,7 @@ public class XesXmlParser extends XParser {
 					if (!attributeStack.isEmpty() && attributeStack.peek() instanceof XAttributeCollection) {
 						// Has parent attribute which is a collection. Add the key to the collection.
 						((XAttributeCollection) attributeStack.peek())
-								.addKey(attribute.getKey());
+								.addToCollection(attribute);
 					}
 				}
 			} else if (tagName.equalsIgnoreCase("event")) {
