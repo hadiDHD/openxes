@@ -263,7 +263,15 @@ public class XesXmlParser extends XParser {
 					|| tagName.equalsIgnoreCase("container")) {
 				// attribute tag.
 				String key = attributes.getValue("key");
+				if (key == null) {
+					// Should not be
+					key = "";
+				}
 				String value = attributes.getValue("value");
+				if (value == null) {
+					// Should not be. 
+					value = "";
+				}
 				// derive extension, if attribute key hints that
 				XExtension extension = null;
 				if (key != null) {
@@ -276,12 +284,10 @@ public class XesXmlParser extends XParser {
 				}
 				// create attribute of correct type
 				XAttribute attribute = null;
-				if (tagName.equalsIgnoreCase("string") && key != null
-						&& value != null) {
+				if (tagName.equalsIgnoreCase("string")) {
 					attribute = factory.createAttributeLiteral(key, value,
 							extension);
-				} else if (tagName.equalsIgnoreCase("date") && key != null
-						&& value != null) {
+				} else if (tagName.equalsIgnoreCase("date")) {
 					Date date = xsDateTimeConversion.parseXsDateTime(value);
 					if (date != null) {
 						attribute = factory.createAttributeTimestamp(key, date,
@@ -289,23 +295,19 @@ public class XesXmlParser extends XParser {
 					} else {
 						return;
 					}
-				} else if (tagName.equalsIgnoreCase("int") && key != null
-						&& value != null) {
+				} else if (tagName.equalsIgnoreCase("int")) {
 					attribute = factory.createAttributeDiscrete(key,
 							Long.parseLong(value), extension);
-				} else if (tagName.equalsIgnoreCase("float") && key != null
-						&& value != null) {
+				} else if (tagName.equalsIgnoreCase("float")) {
 					attribute = factory.createAttributeContinuous(key,
 							Double.parseDouble(value), extension);
-				} else if (tagName.equalsIgnoreCase("boolean") && key != null
-						&& value != null) {
+				} else if (tagName.equalsIgnoreCase("boolean")) {
 					attribute = factory.createAttributeBoolean(key,
 							Boolean.parseBoolean(value), extension);
-				} else if (tagName.equalsIgnoreCase("id") && key != null
-						&& value != null) {
+				} else if (tagName.equalsIgnoreCase("id")) {
 					attribute = factory.createAttributeID(key,
 							XID.parse(value), extension);
-				} else if (tagName.equalsIgnoreCase("list") && key != null) {
+				} else if (tagName.equalsIgnoreCase("list")) {
 					attribute = factory.createAttributeList(key, extension);
 				} else if (tagName.equalsIgnoreCase("container")) {
 					attribute = factory.createAttributeContainer(key, extension);
