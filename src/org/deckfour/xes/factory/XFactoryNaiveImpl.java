@@ -69,6 +69,9 @@ import org.deckfour.xes.model.impl.XEventImpl;
 import org.deckfour.xes.model.impl.XLogImpl;
 import org.deckfour.xes.model.impl.XTraceImpl;
 
+import com.google.common.collect.Interner;
+import com.google.common.collect.Interners;
+
 /**
  * This factory will create the naive implementations of
  * all model hierarchy elements, i.e., no buffering or
@@ -78,7 +81,20 @@ import org.deckfour.xes.model.impl.XTraceImpl;
  *
  */
 public class XFactoryNaiveImpl implements XFactory {
+
+	// Use String interning to save memory
+	private Interner<String> interner;
+
+	public XFactoryNaiveImpl() {
+		super();
+		// Use an weak references as this factory may stay around in the XFactoryRegistry for a long time 
+		interner = Interners.newWeakInterner();
+	}
 	
+	private String intern(String s) {
+		return interner.intern(s);	
+	}
+
 	/* (non-Javadoc)
 	 * @see org.deckfour.xes.model.factory.XModelFactory#getAuthor()
 	 */
@@ -178,7 +194,7 @@ public class XFactoryNaiveImpl implements XFactory {
 	 */
 	public XAttributeBoolean createAttributeBoolean(String key, boolean value,
 			XExtension extension) {
-		return new XAttributeBooleanImpl(key, value, extension);
+		return new XAttributeBooleanImpl(intern(key), value, extension);
 	}
 
 	/* (non-Javadoc)
@@ -186,7 +202,7 @@ public class XFactoryNaiveImpl implements XFactory {
 	 */
 	public XAttributeContinuous createAttributeContinuous(String key,
 			double value, XExtension extension) {
-		return new XAttributeContinuousImpl(key, value, extension);
+		return new XAttributeContinuousImpl(intern(key), value, extension);
 	}
 
 	/* (non-Javadoc)
@@ -194,7 +210,7 @@ public class XFactoryNaiveImpl implements XFactory {
 	 */
 	public XAttributeDiscrete createAttributeDiscrete(String key, long value,
 			XExtension extension) {
-		return new XAttributeDiscreteImpl(key, value, extension);
+		return new XAttributeDiscreteImpl(intern(key), value, extension);
 	}
 
 	/* (non-Javadoc)
@@ -202,7 +218,7 @@ public class XFactoryNaiveImpl implements XFactory {
 	 */
 	public XAttributeLiteral createAttributeLiteral(String key, String value,
 			XExtension extension) {
-		return new XAttributeLiteralImpl(key, value, extension);
+		return new XAttributeLiteralImpl(intern(key), intern(value), extension);
 	}
 
 	/* (non-Javadoc)
@@ -210,7 +226,7 @@ public class XFactoryNaiveImpl implements XFactory {
 	 */
 	public XAttributeTimestamp createAttributeTimestamp(String key, Date value,
 			XExtension extension) {
-		return new XAttributeTimestampImpl(key, value, extension);
+		return new XAttributeTimestampImpl(intern(key), value, extension);
 	}
 
 	/* (non-Javadoc)
@@ -218,7 +234,7 @@ public class XFactoryNaiveImpl implements XFactory {
 	 */
 	public XAttributeTimestamp createAttributeTimestamp(String key,
 			long millis, XExtension extension) {
-		return new XAttributeTimestampImpl(key, millis, extension);
+		return new XAttributeTimestampImpl(intern(key), millis, extension);
 	}
 	
 	/* (non-Javadoc)
@@ -226,14 +242,20 @@ public class XFactoryNaiveImpl implements XFactory {
 	 */
 	public XAttributeID createAttributeID(String key, XID value,
 			XExtension extension) {
-		return new XAttributeIDImpl(key, value, extension);
+		return new XAttributeIDImpl(intern(key), value, extension);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.deckfour.xes.factory.XFactory#createAttributeList(java.lang.String, org.deckfour.xes.extension.XExtension)
+	 */
 	public XAttributeList createAttributeList(String key, XExtension extension) {
-		return new XAttributeListImpl(key, extension);
+		return new XAttributeListImpl(intern(key), extension);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.deckfour.xes.factory.XFactory#createAttributeContainer(java.lang.String, org.deckfour.xes.extension.XExtension)
+	 */
 	public XAttributeContainer createAttributeContainer(String key, XExtension extension) {
-		return new XAttributeContainerImpl(key, extension);
+		return new XAttributeContainerImpl(intern(key), extension);
 	}
 }
