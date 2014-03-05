@@ -171,23 +171,23 @@ public class NikeFS2VirtualFileSystem implements NikeFS2StorageProvider {
 	 * @return An empty storage block abstraction.
 	 */
 	public NikeFS2Block allocateBlock() throws IOException {
-		synchronized (this) {
-			// try to allocate from already created providers first
-			for (NikeFS2BlockProvider provider : blockProviders) {
-				if (provider.numberOfFreeBlocks() > 0) {
-					NikeFS2Block block = provider.allocateBlock();
-					if (block != null) {
-						return block;
-					}
-				}
-			}
-		}
-		// force garbage collection and try again (stale files still around?)
-		// Running the finalization might cause the Finalizer thread to call the allocateBlock method again,
-		// hence the lock on "this" should be removed before calling System.runFinalization
-		System.gc();
-		System.runFinalization();
-		Thread.yield();
+//		synchronized (this) {
+//			// try to allocate from already created providers first
+//			for (NikeFS2BlockProvider provider : blockProviders) {
+//				if (provider.numberOfFreeBlocks() > 0) {
+//					NikeFS2Block block = provider.allocateBlock();
+//					if (block != null) {
+//						return block;
+//					}
+//				}
+//			}
+//		}
+//		// force garbage collection and try again (stale files still around?)
+//		// Running the finalization might cause the Finalizer thread to call the allocateBlock method again,
+//		// hence the lock on "this" should be removed before calling System.runFinalization
+//		System.gc();
+//		System.runFinalization();
+//		Thread.yield();
 		synchronized (this) {
 			for (NikeFS2BlockProvider provider : blockProviders) {
 				if (provider.numberOfFreeBlocks() > 0) {
