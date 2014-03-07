@@ -78,8 +78,9 @@ public class XFactoryRegistry extends XRegistry<XFactory> {
 	 */
 	private XFactoryRegistry() {
 		super();
-		register(new XFactoryNaiveImpl());
-		setCurrentDefault(new XFactoryBufferedImpl());
+//		register(new XFactoryNaiveImpl());
+//		setCurrentDefault(new XFactoryBufferedImpl());
+		setCurrentDefault(new XFactoryNaiveImpl());
 	}
 
 	/* (non-Javadoc)
