@@ -350,6 +350,14 @@ public class XExtendedEvent implements XEvent {
 	public void setAttributes(XAttributeMap attributes) {
 		original.setAttributes(attributes);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.deckfour.xes.model.XAttributable#hasAttributes()
+	 */
+	@Override
+	public boolean hasAttributes() {
+		return original.hasAttributes();
+	}
 
 	/**
 	 * Clones this event, i.e. creates a deep copy, but with a new ID, so equals
@@ -416,4 +424,5 @@ public class XExtendedEvent implements XEvent {
 		 */
 		visitor.visitEventPost(this, trace);
 	}
+
 }

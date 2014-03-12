@@ -140,4 +140,5 @@ public class XAttributeBooleanImpl extends XAttributeImpl implements
 		}
 		return ((Boolean)value).compareTo(((XAttributeBoolean)other).getValue());
 	}
+
 }

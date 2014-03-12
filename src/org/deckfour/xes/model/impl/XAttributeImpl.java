@@ -38,6 +38,7 @@
  */
 package org.deckfour.xes.model.impl;
 
+import java.util.Collections;
 import java.util.Set;
 
 import org.deckfour.xes.extension.XExtension;
@@ -47,6 +48,7 @@ import org.deckfour.xes.model.XAttributeCollection;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XVisitor;
 import org.deckfour.xes.util.XAttributeUtils;
+
 
 /**
  * This class implements the abstract base class for strongly-typed attributes.
@@ -93,8 +95,6 @@ public abstract class XAttributeImpl implements XAttribute {
 	protected XAttributeImpl(String key, XExtension extension) {
 		this.key = key;
 		this.extension = extension;
-		this.attributes = new XAttributeMapLazyImpl<XAttributeMapImpl>(
-				XAttributeMapImpl.class); // uses lazy implementation by default
 	}
 
 	/*
@@ -121,6 +121,11 @@ public abstract class XAttributeImpl implements XAttribute {
 	 * @see org.deckfour.xes.model.impl.XAttribute#getAttributes()
 	 */
 	public XAttributeMap getAttributes() {
+		// This is not thread-safe, but we don't give any thread safety guarantee anyway
+		if (attributes == null) {
+			this.attributes = new XAttributeMapLazyImpl<XAttributeMapImpl>(
+					XAttributeMapImpl.class); // uses lazy implementation by default
+		}
 		return attributes;
 	}
 
@@ -134,6 +139,14 @@ public abstract class XAttributeImpl implements XAttribute {
 	public void setAttributes(XAttributeMap attributes) {
 		this.attributes = attributes;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.deckfour.xes.model.XAttributable#hasAttributes()
+	 */
+	@Override
+	public boolean hasAttributes() {
+		return attributes != null && !attributes.isEmpty();
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -141,7 +154,11 @@ public abstract class XAttributeImpl implements XAttribute {
 	 * @see org.deckfour.xes.model.impl.XAttribute#getExtensions()
 	 */
 	public Set<XExtension> getExtensions() {
-		return XAttributeUtils.extractExtensions(attributes);
+		if (attributes != null) {
+			return XAttributeUtils.extractExtensions(getAttributes());	
+		} else {
+			return Collections.emptySet();
+		}
 	}
 
 	/*
@@ -157,7 +174,9 @@ public abstract class XAttributeImpl implements XAttribute {
 			e.printStackTrace();
 			return null;
 		}
-		clone.attributes = (XAttributeMap) attributes.clone();
+		if (attributes != null) {
+			clone.attributes = (XAttributeMap) getAttributes().clone();
+		}
 		return clone;
 	}
 
@@ -217,8 +236,10 @@ public abstract class XAttributeImpl implements XAttribute {
 			/*
 			 * Visit the (meta) attributes.
 			 */
-			for (XAttribute attribute: attributes.values()) {
-				attribute.accept(visitor, this);
+			if (attributes != null) {
+				for (XAttribute attribute: getAttributes().values()) {
+					attribute.accept(visitor, this);
+				}
 			}
 		}
 		/*

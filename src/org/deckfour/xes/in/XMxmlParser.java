@@ -69,6 +69,7 @@ import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.deckfour.xes.model.buffered.XTraceBufferedImpl;
 import org.deckfour.xes.util.XsDateTimeConversion;
+import org.deckfour.xes.util.XsDateTimeConversionJava7;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -81,7 +82,7 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class XMxmlParser extends XParser {
 	
-	protected XsDateTimeConversion xsDateTimeConversion = new XsDateTimeConversion();
+	protected XsDateTimeConversion xsDateTimeConversion = new XsDateTimeConversionJava7();
 
 	/**
 	 * Standard classifier used for MXML event logs.

@@ -38,7 +38,6 @@
  */
 package org.deckfour.xes.model;
 
-import java.io.IOException;
 import java.util.List;
 
 /**

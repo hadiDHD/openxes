@@ -43,32 +43,41 @@ import java.util.Set;
 import org.deckfour.xes.extension.XExtension;
 
 /**
- * This interface is implemented by all elements of the log
- * hierarchy, which can be equipped with attributes.
+ * This interface is implemented by all elements of the log hierarchy, which can
+ * be equipped with attributes.
  * 
  * @author Christian W. Guenther (christian@deckfour.org)
- *
+ * 
  */
 public interface XAttributable {
-	
+
 	/**
 	 * Retrieves the attributes set for this element.
 	 * 
 	 * @return A map of attributes.
 	 */
 	public XAttributeMap getAttributes();
-	
+
 	/**
 	 * Sets the map of attributes for this element.
 	 * 
-	 * @param attributes A map of attributes.
+	 * @param attributes
+	 *            A map of attributes.
 	 */
 	public void setAttributes(XAttributeMap attributes);
-	
+
 	/**
-	 * Retrieves the extensions used by this element, i.e.
-	 * the extensions used by all attributes of this
-	 * element, and the element itself.
+	 * Checks for the existence of attributes. This method can be a more
+	 * efficient way of checking for the existance of attributes than using
+	 * {@link #getAttributes()} in certain situations.
+	 * 
+	 * @return whether this element has any attributes
+	 */
+	public boolean hasAttributes();
+
+	/**
+	 * Retrieves the extensions used by this element, i.e. the extensions used
+	 * by all attributes of this element, and the element itself.
 	 * 
 	 * @return A set of extensions.
 	 */

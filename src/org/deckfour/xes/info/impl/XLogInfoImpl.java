@@ -260,11 +260,13 @@ public class XLogInfoImpl implements XLogInfo {
 	 * @param attributable Attributable whose attributes to register.
 	 */
 	protected void registerAttributes(XAttributeInfoImpl attributeInfo, XAttributable attributable) {
-		for(XAttribute attribute : attributable.getAttributes().values()) {
-			// register attribute in appropriate map
-			attributeInfo.register(attribute);
-			// register meta-attributes globally
-			registerAttributes(metaAttributeInfo, attribute);
+		if (attributable.hasAttributes()) {
+			for(XAttribute attribute : attributable.getAttributes().values()) {
+				// register attribute in appropriate map
+				attributeInfo.register(attribute);
+				// register meta-attributes globally
+				registerAttributes(metaAttributeInfo, attribute);
+			}			
 		}
 	}
 	

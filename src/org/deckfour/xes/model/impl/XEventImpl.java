@@ -126,6 +126,14 @@ public class XEventImpl implements XEvent {
 		this.attributes = attributes;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.deckfour.xes.model.XAttributable#hasAttributes()
+	 */
+	@Override
+	public boolean hasAttributes() {
+		return !attributes.isEmpty();
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -210,4 +218,5 @@ public class XEventImpl implements XEvent {
 		 */
 		visitor.visitEventPost(this, trace);
 	}
+
 }

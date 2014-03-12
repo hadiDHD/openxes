@@ -148,6 +148,14 @@ public class XTraceBufferedImpl implements XTrace {
 		return attributes;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.deckfour.xes.model.XAttributable#hasAttributes()
+	 */
+	@Override
+	public boolean hasAttributes() {
+		return !attributes.isEmpty();
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -589,4 +597,5 @@ public class XTraceBufferedImpl implements XTrace {
 		 */
 		visitor.visitTracePost(this, log);
 	}
+
 }

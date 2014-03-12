@@ -39,10 +39,8 @@
 package org.deckfour.xes.model.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.deckfour.xes.classification.XEventClassifier;
@@ -123,6 +121,14 @@ public class XLogImpl extends ArrayList<XTrace> implements XLog {
 	 */
 	public void setAttributes(XAttributeMap attributes) {
 		this.attributes = attributes;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.deckfour.xes.model.XAttributable#hasAttributes()
+	 */
+	@Override
+	public boolean hasAttributes() {
+		return !attributes.isEmpty();
 	}
 
 	/* (non-Javadoc)

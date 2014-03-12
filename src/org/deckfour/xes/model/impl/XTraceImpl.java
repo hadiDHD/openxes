@@ -107,6 +107,14 @@ public class XTraceImpl extends ArrayList<XEvent> implements XTrace {
 	public void setAttributes(XAttributeMap attributes) {
 		this.attributes = attributes;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.deckfour.xes.model.XAttributable#hasAttributes()
+	 */
+	@Override
+	public boolean hasAttributes() {
+		return !attributes.isEmpty();
+	}
 
 	/**
 	 * Creates a clone, i.e. deep copy, of this trace.
