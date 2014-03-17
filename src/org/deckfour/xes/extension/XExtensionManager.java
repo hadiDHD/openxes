@@ -79,7 +79,7 @@ public class XExtensionManager {
 	 * Maximal time for caching remotely-defined extensions in milliseconds. The
 	 * default for this value is 30 days.
 	 */
-	public static final long MAX_CACHE_MILLIS = 30 * 24 * 60 * 60 * 1000;
+	public static final long MAX_CACHE_MILLIS = 2592000000L; // = 30 * 24 * 60 * 60 * 1000;
 
 	/**
 	 * Singleton instance of the system-wide extension manager.
