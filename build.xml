@@ -41,6 +41,7 @@
         Build file for the OpenXES library
     </description>
   <!-- set global properties for this build -->
+  <property environment="env" />
   <property name="src" location="src"/>
   <property name="build" location="bindist"/>
   <property name="doc" location="doc"/>
