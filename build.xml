@@ -41,14 +41,13 @@
         Build file for the OpenXES library
     </description>
   <!-- set global properties for this build -->
-  <property environment="env" />
   <property name="src" location="src"/>
   <property name="build" location="bindist"/>
   <property name="doc" location="doc"/>
   <property name="lib" location="lib"/>
   <property name="dist"  location="dist"/>
   <property name="test"  location="test"/>
-  <property name="version" value="2.0.${env.BUILD_NUMBER}"/>
+  <property name="version" value="2.0"/>
   
   <!-- Defines the project's class path in a global manner -->
   <path id="project.class.path">
@@ -89,7 +88,7 @@
   <target name="dist" depends="compile"
         description="generate the distribution jar" >
     <!-- Create the main OpenXES archive -->
-    <jar jarfile="${dist}/OpenXES-${version}.jar">
+    <jar jarfile="${dist}/OpenXES-${DSTAMP}.jar">
     	<fileset dir="${build}">
     		<include name="**"/>
     		<exclude name="test**"/>
@@ -107,7 +106,7 @@
     	</manifest>
     </jar>
   	<!-- Create the OpenXES XStream adapter archive -->
-  	<jar jarfile="${dist}/OpenXES-XStream-${version}.jar">
+  	<jar jarfile="${dist}/OpenXES-XStream-${DSTAMP}.jar">
     	<fileset dir="${build}">
     		<include name="org/deckfour/xes/xstream/**.class"/>
     	</fileset>
@@ -123,8 +122,8 @@
     	</manifest>
     </jar>
   	<!-- Copy with release names to distribution directory -->
-  	<!-- copy file="${dist}/OpenXES-${version}.jar" tofile="${dist}/OpenXES.jar" overwrite="true"/-->
-  	<!-- copy file="${dist}/OpenXES-XStream-${version}.jar" tofile="${dist}/OpenXES-XStream.jar" overwrite="true"/-->
+  	<copy file="${dist}/OpenXES-${DSTAMP}.jar" tofile="${dist}/OpenXES.jar" overwrite="true"/>
+  	<copy file="${dist}/OpenXES-XStream-${DSTAMP}.jar" tofile="${dist}/OpenXES-XStream.jar" overwrite="true"/>
   </target>
 	
 <!-- create the project's javadoc -->
@@ -157,8 +156,8 @@
 			<include name="**"/>
 		</tarfileset>
 		<tarfileset dir="${dist}" prefix="OpenXES-${version}/lib" mode="755" username="openxes" group="openxes">
-			<include name="OpenXES-${version}.jar"/>
-			<include name="OpenXES-XStream-${version}.jar"/>
+			<include name="OpenXES.jar"/>
+			<include name="OpenXES-XStream.jar"/>
 		</tarfileset>
 		<tarfileset dir="${src}" prefix="OpenXES-${version}/src" mode="755" username="openxes" group="openxes">
 			<include name="**"/>

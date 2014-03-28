@@ -155,7 +155,7 @@
 	      <xs:element name="extension" minOccurs="0" maxOccurs="unbounded" type="ExtensionType"/>
 	      <xs:element name="global" minOccurs="0" maxOccurs="2" type="GlobalsType"/>
 	      <xs:element name="classifier" minOccurs="0" maxOccurs="unbounded" type="ClassifierType"/>
-	      <xs:element name="trace"  minOccurs="0"maxOccurs="unbounded" type="TraceType"/>
+	      <xs:element name="trace"  minOccurs="0" maxOccurs="unbounded" type="TraceType"/>
 	    </xs:sequence>
 	    <xs:attribute name="xes.version" type="xs:decimal" use="required"/>
 	    <xs:attribute name="xes.features" type="xs:token"/>
