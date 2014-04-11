@@ -50,6 +50,11 @@ import org.deckfour.xes.model.XAttributeCollection;
  */
 public abstract class XAttributeCollectionImpl extends XAttributeLiteralImpl implements XAttributeCollection {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4322597532345796274L;
+	
 	protected Collection<XAttribute> collection;
 	
 	/**

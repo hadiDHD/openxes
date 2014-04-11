@@ -50,6 +50,11 @@ import org.deckfour.xes.model.XAttributeID;
 public class XAttributeIDImpl extends XAttributeImpl implements XAttributeID {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5378932771467141311L;
+	
+	/**
 	 * Value of the attribute.
 	 */
 	private XID value;

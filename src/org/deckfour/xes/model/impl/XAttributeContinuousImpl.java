@@ -51,6 +51,11 @@ public class XAttributeContinuousImpl extends XAttributeImpl implements
 		XAttributeContinuous {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1789813595800348876L;
+	
+	/**
 	 * Value of the attribute.
 	 */
 	private double value;

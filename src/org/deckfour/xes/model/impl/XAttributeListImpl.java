@@ -56,6 +56,11 @@ public class XAttributeListImpl extends XAttributeCollectionImpl implements XAtt
 	 */
 	
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5584421551344100844L;
+
+	/**
 	 * @param key
 	 */
 	public XAttributeListImpl(String key) {

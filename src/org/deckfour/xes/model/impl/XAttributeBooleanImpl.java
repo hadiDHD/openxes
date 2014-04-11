@@ -51,6 +51,11 @@ public class XAttributeBooleanImpl extends XAttributeImpl implements
 		XAttributeBoolean {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4696555899349337644L;
+	
+	/**
 	 * Value of the attribute.
 	 */
 	private boolean value;

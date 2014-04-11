@@ -51,6 +51,11 @@ public class XAttributeLiteralImpl extends XAttributeImpl implements
 		XAttributeLiteral {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1844032762689490775L;
+	
+	/**
 	 * Value of the attribute.
 	 */
 	private String value;

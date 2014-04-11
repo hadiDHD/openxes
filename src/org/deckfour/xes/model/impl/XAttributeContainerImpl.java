@@ -52,6 +52,11 @@ public class XAttributeContainerImpl extends XAttributeCollectionImpl implements
 	 * that is unaware of the Container may consider it to be a Literal. 
 	 */
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2171609637065248221L;
+
 	public XAttributeContainerImpl(String key, XExtension extension) {
 		// Dummy (but unique) key, dummy value, no extension.
 		super(key, extension);

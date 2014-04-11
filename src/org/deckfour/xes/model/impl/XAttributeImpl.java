@@ -38,6 +38,7 @@
  */
 package org.deckfour.xes.model.impl;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Set;
 
@@ -56,8 +57,13 @@ import org.deckfour.xes.util.XAttributeUtils;
  * @author Christian W. Guenther (christian@deckfour.org)
  * 
  */
-public abstract class XAttributeImpl implements XAttribute {
+public abstract class XAttributeImpl implements XAttribute, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2570374546119649178L;
+	
 	/**
 	 * Key, i.e. unique name, of this attribute. If the attribute is defined in
 	 * an extension, its key will be prepended with the extension's defined

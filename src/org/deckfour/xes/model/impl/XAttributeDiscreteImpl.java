@@ -51,6 +51,11 @@ public class XAttributeDiscreteImpl extends XAttributeImpl implements
 		XAttributeDiscrete {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2209799959584107671L;
+	
+	/**
 	 * Value of the attribute.
 	 */
 	private long value;

@@ -53,6 +53,11 @@ public class XAttributeTimestampImpl extends XAttributeImpl implements
 		XAttributeTimestamp {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4627152242051009472L;
+	
+	/**
 	 * Value of the attribute.
 	 */
 	private Date value;
