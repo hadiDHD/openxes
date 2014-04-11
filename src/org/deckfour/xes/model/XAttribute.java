@@ -38,6 +38,8 @@
  */
 package org.deckfour.xes.model;
 
+import java.io.Serializable;
+
 import org.deckfour.xes.extension.XExtension;
 
 /**
@@ -55,7 +57,7 @@ import org.deckfour.xes.extension.XExtension;
  * 
  * @author Christian W. Guenther (christian@deckfour.org)
  */
-public interface XAttribute extends XAttributable, Cloneable, Comparable<XAttribute> {
+public interface XAttribute extends XAttributable, Cloneable, Comparable<XAttribute>, Serializable {
 
 	/**
 	 * Retrieves the key, i.e. unique identifier, of this attribute.

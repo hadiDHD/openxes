@@ -57,7 +57,7 @@ import org.deckfour.xes.util.XAttributeUtils;
  * @author Christian W. Guenther (christian@deckfour.org)
  * 
  */
-public abstract class XAttributeImpl implements XAttribute, Serializable {
+public abstract class XAttributeImpl implements XAttribute {
 
 	/**
 	 * 
