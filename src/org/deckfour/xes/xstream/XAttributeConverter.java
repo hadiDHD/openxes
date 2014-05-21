@@ -129,9 +129,7 @@ public class XAttributeConverter extends XConverter {
 		if (parent != null && parent instanceof XAttributeCollection) {
 			((XAttributeCollection) parent).addToCollection(attribute);
 		}
-		System.err.println("8");
 		if (reader.hasMoreChildren()) {
-			System.err.println("9");
 			reader.moveDown();
 			Object oldParent = context.get(PARENT);
 			context.put(PARENT, attribute);
@@ -142,7 +140,6 @@ public class XAttributeConverter extends XConverter {
 			reader.moveUp();
 			attribute.setAttributes(metaAttributes);
 		}
-		System.err.println("done");
 		return attribute;
 	}
 
