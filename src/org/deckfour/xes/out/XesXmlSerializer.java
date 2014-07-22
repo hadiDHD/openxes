@@ -243,7 +243,11 @@ public class XesXmlSerializer implements XSerializer {
 				Collection<XAttribute> childAttributes = ((XAttributeCollection) attribute).getCollection();
 				addAttributes(attributeTag, childAttributes);
 			} else {
-				addAttributes(attributeTag, attribute.getAttributes().values());
+				// FM: First check for existence of nested-attributes 
+				//     to avoid unnecessary creation of XAttributeMapLazyImpl instances
+				if (attribute.hasAttributes()) {
+					addAttributes(attributeTag, attribute.getAttributes().values());
+				}
 			}
 		}
 	}
