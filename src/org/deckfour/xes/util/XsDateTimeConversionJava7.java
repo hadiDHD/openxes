@@ -30,35 +30,66 @@ import org.deckfour.xes.util.XsDateTimeConversion;
 
 /**
  * Provides a faster conversion of DateTime for XES serialization using the new
- * parse patterns of Java 7
+ * parse patterns of the SimpleDateFormat class in Java 7
  * 
  * @author F. Mannhardt
  */
 public class XsDateTimeConversionJava7 extends XsDateTimeConversion {
 
-	public static boolean IS_JAVA7 = System.getProperty("java.version").startsWith("1.7");
-	private static final ThreadLocal<SoftReference<DateFormat>> THREAD_LOCAL_DF = new ThreadLocal<SoftReference<DateFormat>>();
+	public static boolean IS_JAVA7 = System.getProperty("java.version")
+			.startsWith("1.7");
+	private static final ThreadLocal<SoftReference<DateFormat>> THREAD_LOCAL_DF_WITH_MILLIS = new ThreadLocal<SoftReference<DateFormat>>();
+	private static final ThreadLocal<SoftReference<DateFormat>> THREAD_LOCAL_DF_WITHOUT_MILLIS = new ThreadLocal<SoftReference<DateFormat>>();
 
 	/**
 	 * Returns a DateFormat for each calling thread, using {@link ThreadLocal}.
 	 * 
 	 * @return a DateFormat that is safe to use in multi-threaded environments
 	 */
-	private static DateFormat getDateFormat() {
+	private static DateFormat getDateFormatWithMillis() {
 		if (IS_JAVA7) {
-			SoftReference<DateFormat> softReference = THREAD_LOCAL_DF.get();
+			SoftReference<DateFormat> softReference = THREAD_LOCAL_DF_WITH_MILLIS
+					.get();
 			if (softReference != null) {
 				DateFormat dateFormat = softReference.get();
 				if (dateFormat != null) {
 					return dateFormat;
 				}
 			}
-			DateFormat result = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.US);
+			DateFormat result = new SimpleDateFormat(
+					"yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.US);
 			softReference = new SoftReference<DateFormat>(result);
-			THREAD_LOCAL_DF.set(softReference);
+			THREAD_LOCAL_DF_WITH_MILLIS.set(softReference);
 			return result;
 		} else {
-			throw new RuntimeException("Error parsing XES log. This method should not be called unless running on Java 7!");
+			throw new RuntimeException(
+					"Error parsing XES log. This method should not be called unless running on Java 7!");
+		}
+	}
+
+	/**
+	 * Returns a DateFormat for each calling thread, using {@link ThreadLocal}.
+	 * 
+	 * @return a DateFormat that is safe to use in multi-threaded environments
+	 */
+	private static DateFormat getDateFormatWithoutMillis() {
+		if (IS_JAVA7) {
+			SoftReference<DateFormat> softReference = THREAD_LOCAL_DF_WITHOUT_MILLIS
+					.get();
+			if (softReference != null) {
+				DateFormat dateFormat = softReference.get();
+				if (dateFormat != null) {
+					return dateFormat;
+				}
+			}
+			DateFormat result = new SimpleDateFormat(
+					"yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US);
+			softReference = new SoftReference<DateFormat>(result);
+			THREAD_LOCAL_DF_WITHOUT_MILLIS.set(softReference);
+			return result;
+		} else {
+			throw new RuntimeException(
+					"Error parsing XES log. This method should not be called unless running on Java 7!");
 		}
 	}
 
@@ -72,17 +103,41 @@ public class XsDateTimeConversionJava7 extends XsDateTimeConversion {
 	public Date parseXsDateTime(String xsDateTime) {
 		// Try Java 7 parsing method
 		if (IS_JAVA7) {
-			// Use with ParsePosition to avoid throwing and catching a lot of exceptions, if our parsing method does not work
-			Date parsedDate = getDateFormat().parse(xsDateTime, new ParsePosition(0));
-			if (parsedDate == null) {	
-				// Fallback to old Java 6 method
-				return super.parseXsDateTime(xsDateTime);
+			// Use with ParsePosition to avoid throwing and catching a lot of
+			// exceptions, if our parsing method does not work
+			Date parsedDate = getDateFormatWithMillis().parse(xsDateTime,
+					new ParsePosition(0));
+			if (parsedDate == null) {
+				// Try format without milliseconds
+				parsedDate = getDateFormatWithoutMillis().parse(xsDateTime,
+						new ParsePosition(0));
+				if (parsedDate == null) {
+					// Fallback to old Java 6 method
+					return super.parseXsDateTime(xsDateTime);
+				} else {
+					return parsedDate;
+				}
 			} else {
 				return parsedDate;
 			}
 		} else {
 			// Fallback to old Java 6 method
 			return super.parseXsDateTime(xsDateTime);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.deckfour.xes.util.XsDateTimeConversion#format(java.util.Date)
+	 */
+	@Override
+	public String format(Date date) {
+		if (IS_JAVA7) {
+			return getDateFormatWithMillis().format(date);
+		} else {
+			// Fallback to old Java 6 method
+			return super.format(date);
 		}
 	}
 

@@ -67,6 +67,7 @@ import org.deckfour.xes.model.XTrace;
 import org.deckfour.xes.util.XRuntimeUtils;
 import org.deckfour.xes.util.XTokenHelper;
 import org.deckfour.xes.util.XsDateTimeConversion;
+import org.deckfour.xes.util.XsDateTimeConversionJava7;
 
 /**
  * XES plain XML serialization for the XES format.
@@ -76,7 +77,7 @@ import org.deckfour.xes.util.XsDateTimeConversion;
  */
 public class XesXmlSerializer implements XSerializer {
 
-	protected XsDateTimeConversion xsDateTimeConversion = new XsDateTimeConversion();
+	protected XsDateTimeConversion xsDateTimeConversion = new XsDateTimeConversionJava7();
 
 	/*
 	 * (non-Javadoc)
