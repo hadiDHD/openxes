@@ -47,24 +47,8 @@ public class XsDateTimeConversionJava7 extends XsDateTimeConversion {
 	 * @return a DateFormat that is safe to use in multi-threaded environments
 	 */
 	private static DateFormat getDateFormatWithMillis() {
-		if (IS_JAVA7) {
-			SoftReference<DateFormat> softReference = THREAD_LOCAL_DF_WITH_MILLIS
-					.get();
-			if (softReference != null) {
-				DateFormat dateFormat = softReference.get();
-				if (dateFormat != null) {
-					return dateFormat;
-				}
-			}
-			DateFormat result = new SimpleDateFormat(
-					"yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.US);
-			softReference = new SoftReference<DateFormat>(result);
-			THREAD_LOCAL_DF_WITH_MILLIS.set(softReference);
-			return result;
-		} else {
-			throw new RuntimeException(
-					"Error parsing XES log. This method should not be called unless running on Java 7!");
-		}
+		return getThreadLocaleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+				THREAD_LOCAL_DF_WITH_MILLIS);
 	}
 
 	/**
@@ -73,19 +57,23 @@ public class XsDateTimeConversionJava7 extends XsDateTimeConversion {
 	 * @return a DateFormat that is safe to use in multi-threaded environments
 	 */
 	private static DateFormat getDateFormatWithoutMillis() {
+		return getThreadLocaleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX",
+				THREAD_LOCAL_DF_WITHOUT_MILLIS);
+	}
+
+	private static DateFormat getThreadLocaleDateFormat(String formatString,
+			ThreadLocal<SoftReference<DateFormat>> threadLocal) {
 		if (IS_JAVA7) {
-			SoftReference<DateFormat> softReference = THREAD_LOCAL_DF_WITHOUT_MILLIS
-					.get();
+			SoftReference<DateFormat> softReference = threadLocal.get();
 			if (softReference != null) {
 				DateFormat dateFormat = softReference.get();
 				if (dateFormat != null) {
 					return dateFormat;
 				}
 			}
-			DateFormat result = new SimpleDateFormat(
-					"yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US);
+			DateFormat result = new SimpleDateFormat(formatString, Locale.US);
 			softReference = new SoftReference<DateFormat>(result);
-			THREAD_LOCAL_DF_WITHOUT_MILLIS.set(softReference);
+			threadLocal.set(softReference);
 			return result;
 		} else {
 			throw new RuntimeException(
@@ -105,12 +93,15 @@ public class XsDateTimeConversionJava7 extends XsDateTimeConversion {
 		if (IS_JAVA7) {
 			// Use with ParsePosition to avoid throwing and catching a lot of
 			// exceptions, if our parsing method does not work
+			ParsePosition position = new ParsePosition(0);
 			Date parsedDate = getDateFormatWithMillis().parse(xsDateTime,
-					new ParsePosition(0));
+					position);
 			if (parsedDate == null) {
 				// Try format without milliseconds
+				position.setIndex(0);
+				position.setErrorIndex(0);
 				parsedDate = getDateFormatWithoutMillis().parse(xsDateTime,
-						new ParsePosition(0));
+						position);
 				if (parsedDate == null) {
 					// Fallback to old Java 6 method
 					return super.parseXsDateTime(xsDateTime);
