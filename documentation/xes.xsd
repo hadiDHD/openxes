@@ -5,6 +5,11 @@
   
   <!-- (c) 2014 by IEEE Task Force on Process Mining (http://www.win.tue.nl/ieetfpm) -->
 
+  <!-- Date: August 5, 2014 -->  
+  <!-- Version 2.1a -->
+  <!-- Author: Eric Verbeek (h.m.w.verbeek@tue.nl) -->
+  <!-- Change: Added sequence to prevent xsd.exe tool from overflowing stack. -->
+
   <!-- Date: March 28, 2014 -->  
   <!-- Version 2.0 -->
   <!-- Author: Eric Verbeek (h.m.w.verbeek@tue.nl) -->
@@ -27,16 +32,19 @@
   
   <!-- Attributables -->
   <xs:complexType name="AttributableType">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:element name="string" minOccurs="0" maxOccurs="unbounded" type="AttributeStringType"/>
-      <xs:element name="date" minOccurs="0" maxOccurs="unbounded" type="AttributeDateType"/>
-      <xs:element name="int" minOccurs="0" maxOccurs="unbounded" type="AttributeIntType"/>
-      <xs:element name="float" minOccurs="0" maxOccurs="unbounded" type="AttributeFloatType"/>
-      <xs:element name="boolean" minOccurs="0" maxOccurs="unbounded" type="AttributeBooleanType"/>
-      <xs:element name="id" minOccurs="0" maxOccurs="unbounded" type="AttributeIDType"/>
-      <xs:element name="list" minOccurs="0" maxOccurs="unbounded" type="AttributeListType"/>
-      <xs:element name="container" minOccurs="0" maxOccurs="unbounded" type="AttributeContainerType"/>
-    </xs:choice>
+    <!-- The following sequence element prevents the xsd.exe tool from overflowing its stack. Otherwise, it has no use. -->
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="string" minOccurs="0" maxOccurs="unbounded" type="AttributeStringType"/>
+        <xs:element name="date" minOccurs="0" maxOccurs="unbounded" type="AttributeDateType"/>
+        <xs:element name="int" minOccurs="0" maxOccurs="unbounded" type="AttributeIntType"/>
+        <xs:element name="float" minOccurs="0" maxOccurs="unbounded" type="AttributeFloatType"/>
+        <xs:element name="boolean" minOccurs="0" maxOccurs="unbounded" type="AttributeBooleanType"/>
+        <xs:element name="id" minOccurs="0" maxOccurs="unbounded" type="AttributeIDType"/>
+        <xs:element name="list" minOccurs="0" maxOccurs="unbounded" type="AttributeListType"/>
+        <xs:element name="container" minOccurs="0" maxOccurs="unbounded" type="AttributeContainerType"/>
+      </xs:choice>
+    </xs:sequence> 
   </xs:complexType>
 
   <!-- String attribute -->

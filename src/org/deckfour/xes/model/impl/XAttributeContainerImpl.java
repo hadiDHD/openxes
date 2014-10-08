@@ -57,6 +57,13 @@ public class XAttributeContainerImpl extends XAttributeCollectionImpl implements
 	 */
 	private static final long serialVersionUID = -2171609637065248221L;
 
+	/**
+	 * @param key
+	 */
+	public XAttributeContainerImpl(String key) {
+		super(key, null);
+	}
+	
 	public XAttributeContainerImpl(String key, XExtension extension) {
 		// Dummy (but unique) key, dummy value, no extension.
 		super(key, extension);
