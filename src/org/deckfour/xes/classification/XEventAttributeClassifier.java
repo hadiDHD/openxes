@@ -169,6 +169,18 @@ public class XEventAttributeClassifier implements XEventClassifier,
 		return 0;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(keys);
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
 	public boolean equals(Object o) {
 		if (!(o instanceof XEventAttributeClassifier)) {
 			return false;
