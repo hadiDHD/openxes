@@ -80,6 +80,12 @@ public interface XAttribute extends XAttributable, Cloneable, Comparable<XAttrib
 	 * @return A clone of this attribute.
 	 */
 	public Object clone();
+	
+	/**
+	 * String representation of the value.
+	 * @return Returns the String representation of the value.
+	 */
+	public String toString();
 
 	public void accept(XVisitor visitor, XAttributable attributable);
 }
