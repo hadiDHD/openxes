@@ -38,6 +38,7 @@
  */
 package org.deckfour.xes.classification;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import org.deckfour.xes.model.XAttribute;
@@ -53,7 +54,12 @@ import org.deckfour.xes.model.XVisitor;
  * 
  */
 public class XEventAttributeClassifier implements XEventClassifier,
-		Comparable<XEventAttributeClassifier> {
+		Comparable<XEventAttributeClassifier>, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2697438317286269727L;
 
 	/**
 	 * Keys of the attributes used for event comparison.
