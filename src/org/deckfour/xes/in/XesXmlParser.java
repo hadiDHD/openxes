@@ -346,6 +346,8 @@ public class XesXmlParser extends XParser {
 				}
 				if (extension != null) {
 					log.getExtensions().add(extension);
+				} else {
+					System.err.println("Unknown extension: " + uriString);
 				}
 			} else if (tagName.equalsIgnoreCase("global")) {
 				// global element

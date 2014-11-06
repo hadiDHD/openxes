@@ -48,6 +48,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.deckfour.xes.extension.std.XConceptExtension;
+import org.deckfour.xes.extension.std.XCostExtension;
+import org.deckfour.xes.extension.std.XIdentityExtension;
 import org.deckfour.xes.extension.std.XLifecycleExtension;
 import org.deckfour.xes.extension.std.XOrganizationalExtension;
 import org.deckfour.xes.extension.std.XSemanticExtension;
@@ -112,7 +114,7 @@ public class XExtensionManager {
 		extensionMap = new HashMap<URI, XExtension>();
 		extensionList = new ArrayList<XExtension>();
 		registerStandardExtensions();
-		loadExtensionCache();
+//		loadExtensionCache();
 	}
 
 	/**
@@ -145,21 +147,21 @@ public class XExtensionManager {
 	 */
 	public XExtension getByUri(URI uri) {
 		XExtension extension = extensionMap.get(uri);
-		if (extension == null) {
-			try {
-				extension = XExtensionParser.instance().parse(uri);
-				register(extension);
-				XLogging.log("Imported XES extension '" + extension.getUri()
-						+ "' from remote source", XLogging.Importance.DEBUG);
-			} catch (IOException e) {
-				// Now do something if the Internet is down...
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
-			cacheExtension(uri);
-		}
+//		if (extension == null) {
+//			try {
+//				extension = XExtensionParser.instance().parse(uri);
+//				register(extension);
+//				XLogging.log("Imported XES extension '" + extension.getUri()
+//						+ "' from remote source", XLogging.Importance.DEBUG);
+//			} catch (IOException e) {
+//				// Now do something if the Internet is down...
+//
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//				return null;
+//			}
+//			cacheExtension(uri);
+//		}
 		return extension;
 	}
 
@@ -239,10 +241,12 @@ public class XExtensionManager {
 	 */
 	protected void registerStandardExtensions() {
 		register(XConceptExtension.instance());
-		register(XTimeExtension.instance());
+		register(XCostExtension.instance());
+		register(XIdentityExtension.instance());
 		register(XLifecycleExtension.instance());
 		register(XOrganizationalExtension.instance());
 		register(XSemanticExtension.instance());
+		register(XTimeExtension.instance());
 	}
 
 	/**
