@@ -41,7 +41,6 @@ package org.deckfour.xes.classification;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.deckfour.xes.extension.std.XClassExtension;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
@@ -94,10 +93,6 @@ public class XEventAttributeClassifier implements XEventClassifier,
 	 * .deckfour.xes.model.XEvent)
 	 */
 	public String getClassIdentity(XEvent event) {
-		String name = XClassExtension.instance().extractName(event);
-		if (name != null) {
-			return name;
-		}
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < keys.length; i++) {
 			XAttribute attribute = event.getAttributes().get(keys[i]);

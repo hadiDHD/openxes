@@ -47,7 +47,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.deckfour.xes.extension.std.XClassExtension;
 import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.extension.std.XCostExtension;
 import org.deckfour.xes.extension.std.XIdentityExtension;
@@ -241,7 +240,6 @@ public class XExtensionManager {
 	 * before caching.
 	 */
 	protected void registerStandardExtensions() {
-		register(XClassExtension.instance());
 		register(XConceptExtension.instance());
 		register(XCostExtension.instance());
 		register(XIdentityExtension.instance());
