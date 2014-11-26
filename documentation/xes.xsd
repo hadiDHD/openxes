@@ -5,6 +5,11 @@
   
   <!-- (c) 2014 by IEEE Task Force on Process Mining (http://www.win.tue.nl/ieetfpm) -->
 
+  <!-- Date: November 26, 2014 -->
+  <!-- Version 2.1b -->
+  <!-- Author: Eric Verbeek (h.m.w.verbeek@tue.nl) -->
+  <!-- Change: Classifier keys are now of xs:Name type instead of xs:NCName type. -->
+
   <!-- Date: August 5, 2014 -->  
   <!-- Version 2.1a -->
   <!-- Author: Eric Verbeek (h.m.w.verbeek@tue.nl) -->
@@ -135,7 +140,7 @@
   
   <!-- Classifier definition -->
   <xs:complexType name="ClassifierType">
-    <xs:attribute name="name" type="xs:NCName" use="required"/>
+    <xs:attribute name="name" type="xs:Name" use="required"/>
     <xs:attribute name="keys" type="xs:token" use="required"/>
   </xs:complexType>
 
