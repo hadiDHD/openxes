@@ -8,7 +8,10 @@
   <!-- Date: November 26, 2014 -->
   <!-- Version 2.1 -->
   <!-- Author: Eric Verbeek (h.m.w.verbeek@tue.nl) -->
-  <!-- Change: Classifier keys are now of xs:Name type instead of xs:NCName type. -->
+  <!-- Change: Extension names are now of xs:string type instead of xs:NCName type. -->
+  <!-- Change: Classifier names are now of xs:string type instead of xs:NCName type. -->
+  <!-- Change: Classifier keys are now of xs:string type instead of xs:token type. -->
+  <!-- Change: Attribute keys are now of xs:string type instead of xs:Name type. -->
 
   <!-- Date: August 5, 2014 -->  
   <!-- Version 2.1a -->
@@ -124,7 +127,7 @@
   
   <!-- Extension definition -->
   <xs:complexType name="ExtensionType">
-    <xs:attribute name="name" use="required" type="xs:NCName"/>
+    <xs:attribute name="name" use="required" type="xs:string"/>
     <xs:attribute name="prefix" use="required" type="xs:NCName"/>
     <xs:attribute name="uri" use="required" type="xs:anyURI"/>
   </xs:complexType>
@@ -140,15 +143,15 @@
   
   <!-- Classifier definition -->
   <xs:complexType name="ClassifierType">
-    <xs:attribute name="name" type="xs:Name" use="required"/>
-    <xs:attribute name="keys" type="xs:token" use="required"/>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="keys" type="xs:string" use="required"/>
   </xs:complexType>
 
   <!-- Attribute -->
   <xs:complexType name="AttributeType">
     <xs:complexContent>
       <xs:extension base="AttributableType">
-	    <xs:attribute name="key" use="required" type="xs:Name"/>
+	    <xs:attribute name="key" use="required" type="xs:string"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
