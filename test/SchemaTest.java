@@ -28,11 +28,11 @@ public class SchemaTest {
 
 	private void runTest() {
 		try {
-        	URI uriXES = URI.create("http://www.xes-standard.org/xes.xsd");
+        	URI uriXES = URI.create("http://www.xes-standard.org/xes21.xsd");
             BufferedInputStream isXES = new BufferedInputStream(uriXES.toURL().openStream());
             Source xesSchemaFile = new StreamSource(isXES);
 
-            URI uriEXT = URI.create("http://www.xes-standard.org/xesext.xsd");
+            URI uriEXT = URI.create("http://www.xes-standard.org/xesext21.xsd");
             BufferedInputStream isEXT = new BufferedInputStream(uriEXT.toURL().openStream());
             Source extSchemaFile = new StreamSource(isEXT);             
 
