@@ -139,8 +139,6 @@ public class XesXmlSerializer implements XSerializer {
 		logTag.addAttribute("xes.features", "nested-attributes");
 		logTag.addAttribute("openxes.version", XRuntimeUtils.OPENXES_VERSION);
 //		logTag.addAttribute("xmlns", "http://www.xes-standard.org/");
-		// add log attributes
-		addAttributes(logTag, log.getAttributes().values());
 		// define extensions
 		for (XExtension extension : log.getExtensions()) {
 			SXTag extensionTag = logTag.addChildNode("extension");
@@ -163,7 +161,7 @@ public class XesXmlSerializer implements XSerializer {
 			}
 		}
 		// add log attributes
-//		addAttributes(logTag, log.getAttributes().values());
+		addAttributes(logTag, log.getAttributes().values());
 		for (XTrace trace : log) {
 			SXTag traceTag = logTag.addChildNode("trace");
 			addAttributes(traceTag, trace.getAttributes().values());
