@@ -211,8 +211,19 @@ public class XEventClasses {
 	 * @param event
 	 *            The event to be analyzed.
 	 */
-	public synchronized void register(XEvent event) {
-		String classId = classifier.getClassIdentity(event);
+	public void register(XEvent event) {
+		register(classifier.getClassIdentity(event));
+	}
+		
+	/**
+	 * Registers an event class with this set of event classes. This will potentially
+	 * add a new event class to this set of event classes. An event class will
+	 * be incremented in size, if the given event is found to be a member of it.
+	 * 
+	 * @param classId
+	 *            The event class to be analyzed.
+	 */
+	public synchronized void register(String classId) {
 		XEventClass eventClass = classMap.get(classId);
 		if (eventClass == null && classId != null) {
 			eventClass = new XEventClass(classId, classMap.size());
