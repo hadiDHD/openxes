@@ -57,6 +57,11 @@ public class XEventAttributeClassifier implements XEventClassifier,
 		Comparable<XEventAttributeClassifier>, Serializable {
 
 	/**
+	 *  Used to connect multiple attributes
+	 */
+	private static final String CONCATENATION_SYMBOL = "+";
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2697438317286269727L;
@@ -93,20 +98,50 @@ public class XEventAttributeClassifier implements XEventClassifier,
 	 * .deckfour.xes.model.XEvent)
 	 */
 	public String getClassIdentity(XEvent event) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < keys.length; i++) {
-			XAttribute attribute = event.getAttributes().get(keys[i]);
-//			if (attribute == null) {
-//				return null;
-//			}
-			if (attribute != null) {
-				sb.append(attribute.toString().trim());
-			}
-			if (i < (keys.length - 1)) {
-				sb.append("+");
-			}
+		switch (keys.length) {
+			case 1:
+				// Fast method in the case of 1 attribute
+				XAttribute attr = event.getAttributes().get(keys[0]);
+				if (attr != null) {
+					return attr.toString();	
+				} else {
+					// Special case original method would have returned empty String so we keep doing it
+					return "";
+				}
+	
+			case 2:
+				// A bit faster method avoiding allocation of a StringBuilder in the case of 2 attributes
+				XAttribute attr1 = event.getAttributes().get(keys[0]);
+				XAttribute attr2 = event.getAttributes().get(keys[1]);
+				if (attr1 != null && attr2 != null) {
+					String val1 = attr1.toString();
+					String val2 = attr2.toString();
+					return val1.concat(CONCATENATION_SYMBOL).concat(val2);					
+				} else if (attr1 != null) {
+					return attr1.toString().concat(CONCATENATION_SYMBOL);
+				} else {
+					return CONCATENATION_SYMBOL.concat(attr2.toString());
+				}
+	
+			default:
+				StringBuilder sb = new StringBuilder();
+				for (int i = 0; i < keys.length; i++) {
+					XAttribute attribute = event.getAttributes().get(keys[i]);
+					// if (attribute == null) {
+					// return null;
+					// }
+					if (attribute != null) {
+						// FM, the "trim" does not make sense here. what if the
+						// whitespace is added on purpose?
+						// sb.append(attribute.toString().trim());
+						sb.append(attribute.toString());
+					}
+					if (i < (keys.length - 1)) {
+						sb.append(CONCATENATION_SYMBOL);
+					}
+				}
+				return sb.toString();
 		}
-		return sb.toString();
 	}
 
 	/**
@@ -175,7 +210,9 @@ public class XEventAttributeClassifier implements XEventClassifier,
 		return 0;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -193,7 +230,7 @@ public class XEventAttributeClassifier implements XEventClassifier,
 		}
 		return compareTo((XEventAttributeClassifier) o) == 0;
 	}
-	
+
 	public void accept(XVisitor visitor, XLog log) {
 		/*
 		 * First call.

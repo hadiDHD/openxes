@@ -36,8 +36,21 @@ import org.deckfour.xes.util.XsDateTimeConversion;
  */
 public class XsDateTimeConversionJava7 extends XsDateTimeConversion {
 
-	public static boolean IS_JAVA7 = System.getProperty("java.version")
-			.startsWith("1.7");
+	public static final boolean SUPPORTS_JAVA7_DATE_FORMAT;
+
+	static {
+		boolean biggerEqualJava7 = false;
+		String[] splittedVersion = System.getProperty("java.version").split("\\.");
+		if (splittedVersion.length > 1) {			
+			try {
+				biggerEqualJava7 = Integer.parseInt(splittedVersion[1]) > 6;
+			} catch (NumberFormatException e) {
+				biggerEqualJava7 = false;
+			}
+		}
+		SUPPORTS_JAVA7_DATE_FORMAT = biggerEqualJava7;
+	}	
+	
 	private static final ThreadLocal<SoftReference<DateFormat>> THREAD_LOCAL_DF_WITH_MILLIS = new ThreadLocal<SoftReference<DateFormat>>();
 	private static final ThreadLocal<SoftReference<DateFormat>> THREAD_LOCAL_DF_WITHOUT_MILLIS = new ThreadLocal<SoftReference<DateFormat>>();
 
@@ -63,7 +76,7 @@ public class XsDateTimeConversionJava7 extends XsDateTimeConversion {
 
 	private static DateFormat getThreadLocaleDateFormat(String formatString,
 			ThreadLocal<SoftReference<DateFormat>> threadLocal) {
-		if (IS_JAVA7) {
+		if (SUPPORTS_JAVA7_DATE_FORMAT) {
 			SoftReference<DateFormat> softReference = threadLocal.get();
 			if (softReference != null) {
 				DateFormat dateFormat = softReference.get();
@@ -90,7 +103,7 @@ public class XsDateTimeConversionJava7 extends XsDateTimeConversion {
 	 */
 	public Date parseXsDateTime(String xsDateTime) {
 		// Try Java 7 parsing method
-		if (IS_JAVA7) {
+		if (SUPPORTS_JAVA7_DATE_FORMAT) {
 			// Use with ParsePosition to avoid throwing and catching a lot of
 			// exceptions, if our parsing method does not work
 			ParsePosition position = new ParsePosition(0);
@@ -124,7 +137,7 @@ public class XsDateTimeConversionJava7 extends XsDateTimeConversion {
 	 */
 	@Override
 	public String format(Date date) {
-		if (IS_JAVA7) {
+		if (SUPPORTS_JAVA7_DATE_FORMAT) {
 			return getDateFormatWithMillis().format(date);
 		} else {
 			// Fallback to old Java 6 method
