@@ -119,8 +119,10 @@ public class XEventAttributeClassifier implements XEventClassifier,
 					return val1.concat(CONCATENATION_SYMBOL).concat(val2);					
 				} else if (attr1 != null) {
 					return attr1.toString().concat(CONCATENATION_SYMBOL);
-				} else {
+				} else if (attr2 != null) {
 					return CONCATENATION_SYMBOL.concat(attr2.toString());
+				} else {
+					return CONCATENATION_SYMBOL;
 				}
 	
 			default:
