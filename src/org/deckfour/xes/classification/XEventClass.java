@@ -122,6 +122,9 @@ public class XEventClass implements Comparable<XEventClass> {
 	}
 
 	public boolean equals(Object o) {
+		if (this == o) {
+            return true;
+        }
 		if(o instanceof XEventClass) {
 			return this.id.equals(((XEventClass)o).id);
 		} else {
