@@ -38,6 +38,8 @@
  */
 package org.deckfour.xes.model.impl;
 
+import java.util.Objects;
+
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeContinuous;
@@ -120,7 +122,10 @@ public class XAttributeContinuousImpl extends XAttributeImpl implements
 		return super.clone();
 	}
 
+	@Override
 	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
 		if (obj instanceof XAttributeContinuous) { // compares types
 			XAttributeContinuous other = (XAttributeContinuous) obj;
 			return super.equals(other) // compares keys
@@ -130,6 +135,11 @@ public class XAttributeContinuousImpl extends XAttributeImpl implements
 		}
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(getKey(), value);
+	}
+	
 	@Override
 	public int compareTo(XAttribute other) {
 		if (!(other instanceof XAttributeContinuous)) {

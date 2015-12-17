@@ -38,6 +38,8 @@
  */
 package org.deckfour.xes.model.impl;
 
+import java.util.Objects;
+
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeDiscrete;
@@ -119,7 +121,10 @@ public class XAttributeDiscreteImpl extends XAttributeImpl implements
 		return super.clone();
 	}
 
+	@Override
 	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
 		if (obj instanceof XAttributeDiscrete) { // compares types
 			XAttributeDiscrete other = (XAttributeDiscrete) obj;
 			return super.equals(other) // compares keys
@@ -129,6 +134,11 @@ public class XAttributeDiscreteImpl extends XAttributeImpl implements
 		}
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(getKey(), value);
+	}
+	
 	@Override
 	public int compareTo(XAttribute other) {
 		if (!(other instanceof XAttributeDiscrete)) {

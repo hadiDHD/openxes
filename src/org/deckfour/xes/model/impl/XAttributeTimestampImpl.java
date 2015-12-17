@@ -174,6 +174,8 @@ public class XAttributeTimestampImpl extends XAttributeImpl implements
 	}
 
 	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
 		if (obj instanceof XAttributeTimestamp) { // compares types
 			XAttributeTimestamp other = (XAttributeTimestamp) obj;
 			return super.equals(other) // compares keys

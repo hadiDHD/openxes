@@ -38,6 +38,8 @@
  */
 package org.deckfour.xes.model.impl;
 
+import java.util.Objects;
+
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeLiteral;
@@ -126,7 +128,10 @@ public class XAttributeLiteralImpl extends XAttributeImpl implements
 		return clone;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
 		if (obj instanceof XAttributeLiteral) { // compares types
 			XAttributeLiteral other = (XAttributeLiteral) obj;
 			return super.equals(other) // compares keys
@@ -134,6 +139,12 @@ public class XAttributeLiteralImpl extends XAttributeImpl implements
 		} else {
 			return false;
 		}
+	}
+	
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(getKey(), value);
 	}
 
 	@Override

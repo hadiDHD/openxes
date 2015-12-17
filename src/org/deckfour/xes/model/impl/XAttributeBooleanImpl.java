@@ -38,6 +38,8 @@
  */
 package org.deckfour.xes.model.impl;
 
+import java.util.Objects;
+
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeBoolean;
@@ -124,7 +126,10 @@ public class XAttributeBooleanImpl extends XAttributeImpl implements
 		return super.clone();
 	}
 
+	@Override
 	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
 		if (obj instanceof XAttributeBoolean) { // compares types
 			XAttributeBoolean other = (XAttributeBoolean) obj;
 			return super.equals(other) // compares keys
@@ -132,6 +137,11 @@ public class XAttributeBooleanImpl extends XAttributeImpl implements
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getKey(), value);
 	}
 
 	@Override
