@@ -51,6 +51,7 @@ import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.extension.std.XCostExtension;
 import org.deckfour.xes.extension.std.XIdentityExtension;
 import org.deckfour.xes.extension.std.XLifecycleExtension;
+import org.deckfour.xes.extension.std.XMicroExtension;
 import org.deckfour.xes.extension.std.XOrganizationalExtension;
 import org.deckfour.xes.extension.std.XSemanticExtension;
 import org.deckfour.xes.extension.std.XTimeExtension;
@@ -244,6 +245,7 @@ public class XExtensionManager {
 		register(XCostExtension.instance());
 		register(XIdentityExtension.instance());
 		register(XLifecycleExtension.instance());
+		register(XMicroExtension.instance());
 		register(XOrganizationalExtension.instance());
 		register(XSemanticExtension.instance());
 		register(XTimeExtension.instance());
