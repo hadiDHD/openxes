@@ -117,7 +117,7 @@ public class XMicroExtension extends XExtension {
 		super("Micro", "micro", EXTENSION_URI);
 		XFactory factory = XFactoryRegistry.instance().currentDefault();
 		ATTR_LEVEL = factory.createAttributeDiscrete(KEY_LEVEL, -1, this);
-		ATTR_PID = factory.createAttributeID(KEY_PID, null, this);
+		ATTR_PID = factory.createAttributeID(KEY_PID, new XID(), this);
 		ATTR_LENGTH = factory.createAttributeDiscrete(KEY_LENGTH, -1, this);
 		this.eventAttributes.add((XAttribute) ATTR_LEVEL.clone());
 		this.eventAttributes.add((XAttribute) ATTR_PID.clone());
