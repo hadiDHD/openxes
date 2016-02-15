@@ -82,7 +82,8 @@ public class XExtensionManager {
 	 * Maximal time for caching remotely-defined extensions in milliseconds. The
 	 * default for this value is 30 days.
 	 */
-	public static final long MAX_CACHE_MILLIS = 2592000000L; // = 30 * 24 * 60 * 60 * 1000;
+	public static final long MAX_CACHE_MILLIS = 2592000000L; // = 30 * 24 * 60 *
+																// 60 * 1000;
 
 	/**
 	 * Singleton instance of the system-wide extension manager.
@@ -115,7 +116,7 @@ public class XExtensionManager {
 		extensionMap = new HashMap<URI, XExtension>();
 		extensionList = new ArrayList<XExtension>();
 		registerStandardExtensions();
-//		loadExtensionCache();
+		// loadExtensionCache();
 	}
 
 	/**
@@ -148,21 +149,21 @@ public class XExtensionManager {
 	 */
 	public XExtension getByUri(URI uri) {
 		XExtension extension = extensionMap.get(uri);
-//		if (extension == null) {
-//			try {
-//				extension = XExtensionParser.instance().parse(uri);
-//				register(extension);
-//				XLogging.log("Imported XES extension '" + extension.getUri()
-//						+ "' from remote source", XLogging.Importance.DEBUG);
-//			} catch (IOException e) {
-//				// Now do something if the Internet is down...
-//
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//				return null;
-//			}
-//			cacheExtension(uri);
-//		}
+		// if (extension == null) {
+		// try {
+		// extension = XExtensionParser.instance().parse(uri);
+		// register(extension);
+		// XLogging.log("Imported XES extension '" + extension.getUri()
+		// + "' from remote source", XLogging.Importance.DEBUG);
+		// } catch (IOException e) {
+		// // Now do something if the Internet is down...
+		//
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// return null;
+		// }
+		// cacheExtension(uri);
+		// }
 		return extension;
 	}
 
@@ -245,7 +246,8 @@ public class XExtensionManager {
 		register(XCostExtension.instance());
 		register(XIdentityExtension.instance());
 		register(XLifecycleExtension.instance());
-		register(XMicroExtension.instance());
+		// FIXME: BvD: Removed this extension as it breaks ProMLite
+		// register(XMicroExtension.instance());
 		register(XOrganizationalExtension.instance());
 		register(XSemanticExtension.instance());
 		register(XTimeExtension.instance());
