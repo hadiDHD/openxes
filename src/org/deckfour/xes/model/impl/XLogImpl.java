@@ -108,6 +108,23 @@ public class XLogImpl extends ArrayList<XTrace> implements XLog {
 		this.cachedClassifier = null;
 		this.cachedInfo = null;
 	}
+	
+	/**
+	 * Creates a new log with initial capacity
+	 * 
+	 * @param attributeMap
+	 * @param initialCapacity
+	 */
+	private XLogImpl(XAttributeMap attributeMap, int initialCapacity) {
+		super(initialCapacity);
+		this.attributes = attributeMap;
+		this.extensions = new HashSet<XExtension>();
+		this.classifiers = new ArrayList<XEventClassifier>();
+		this.globalTraceAttributes = new ArrayList<XAttribute>();
+		this.globalEventAttributes = new ArrayList<XAttribute>();
+		this.cachedClassifier = null;
+		this.cachedInfo = null;
+	}
 
 	/* (non-Javadoc)
 	 * @see org.deckfour.xes.model.XAttributable#getAttributes()
@@ -142,15 +159,13 @@ public class XLogImpl extends ArrayList<XTrace> implements XLog {
 	 * @see java.util.ArrayList#clone()
 	 */
 	public Object clone() {
-		XLogImpl clone = (XLogImpl) super.clone();
-		clone.attributes = (XAttributeMap)attributes.clone();
+		XLogImpl clone = new XLogImpl((XAttributeMap)attributes.clone(), size());
 		clone.extensions = new HashSet<XExtension>(extensions);
 		clone.classifiers = new ArrayList<XEventClassifier>(classifiers);
 		clone.globalTraceAttributes = new ArrayList<XAttribute>(globalTraceAttributes);
 		clone.globalEventAttributes = new ArrayList<XAttribute>(globalEventAttributes);
 		clone.cachedClassifier = null;
 		clone.cachedInfo = null;
-		clone.clear();
 		for(XTrace trace : this) {
 			clone.add((XTrace)trace.clone());
 		}

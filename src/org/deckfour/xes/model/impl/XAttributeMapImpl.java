@@ -91,10 +91,9 @@ public class XAttributeMapImpl extends HashMap<String, XAttribute> implements
 	 * Creates a clone, i.e. deep copy, of this attribute map.
 	 */
 	public Object clone() {
-		XAttributeMapImpl clone = (XAttributeMapImpl)super.clone();
-		clone.clear();
-		for(String key : this.keySet()) {
-			clone.put(key, (XAttribute)this.get(key).clone());
+		XAttributeMapImpl clone = new XAttributeMapImpl(size());
+		for(XAttribute value: values()) {
+			clone.put(value.getKey(), (XAttribute)value.clone());
 		}
 		return clone;
 	}

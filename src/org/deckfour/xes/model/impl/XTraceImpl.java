@@ -80,6 +80,17 @@ public class XTraceImpl extends ArrayList<XEvent> implements XTrace {
 	public XTraceImpl(XAttributeMap attributeMap) {
 		this.attributes = attributeMap;
 	}
+	
+	/**
+	 * Create a new trace with specified capacity
+	 * 
+	 * @param attributeMap
+	 * @param initialCapacity
+	 */
+	private XTraceImpl(XAttributeMap attributeMap, int initialCapacity) {
+		super(initialCapacity);
+		this.attributes = attributeMap;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -120,9 +131,7 @@ public class XTraceImpl extends ArrayList<XEvent> implements XTrace {
 	 * Creates a clone, i.e. deep copy, of this trace.
 	 */
 	public Object clone() {
-		XTraceImpl clone = (XTraceImpl) super.clone();
-		clone.attributes = (XAttributeMap) attributes.clone();
-		clone.clear();
+		XTraceImpl clone = new XTraceImpl((XAttributeMap) attributes.clone(), size());
 		for (XEvent event : this) {
 			clone.add((XEvent) event.clone());
 		}
