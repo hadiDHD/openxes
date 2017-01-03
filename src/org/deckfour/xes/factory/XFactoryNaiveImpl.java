@@ -83,16 +83,21 @@ import com.google.common.collect.Interners;
 public class XFactoryNaiveImpl implements XFactory {
 
 	// Use String interning to save memory
-	private Interner<String> interner;
+	private final Interner<String> interner;
+	private boolean useInterner = true;
 
 	public XFactoryNaiveImpl() {
 		super();
-		// Use an weak references as this factory may stay around in the XFactoryRegistry for a long time 
+		// Use weak references as this factory may stay alive for a long time 
 		interner = Interners.newWeakInterner();
 	}
 	
 	private String intern(String s) {
-		return interner.intern(s);	
+		if (useInterner) {
+			return interner.intern(s);	
+		} else {
+			return s;
+		}
 	}
 
 	/* (non-Javadoc)
@@ -258,4 +263,13 @@ public class XFactoryNaiveImpl implements XFactory {
 	public XAttributeContainer createAttributeContainer(String key, XExtension extension) {
 		return new XAttributeContainerImpl(intern(key), extension);
 	}
+	
+	public boolean isUseInterner() {
+		return useInterner;
+	}
+
+	public void setUseInterner(boolean useInterner) {
+		this.useInterner = useInterner;
+	}
+	
 }
