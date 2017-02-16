@@ -54,11 +54,11 @@ public class XRuntimeUtils {
 	/**
 	 * Version string for the supported XES standard.
 	 */
-	public static final String XES_VERSION = "1.0";
+	public static final String XES_VERSION = "2.0";
 	/**
 	 * Version string for the OpenXES library implementation.
 	 */
-	public static final String OPENXES_VERSION = "1.0RC7";
+	public static final String OPENXES_VERSION = "2.19";
 	
 	
 	/**
