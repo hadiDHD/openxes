@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xesextension name="Concept" prefix="concept" uri="http://www.xes-standard.org/concept.xesext">
+	<!--
+		The Concept extension defines, for all levels of the XES type hierarchy, an attribute which stores the generally
+		understood name of type hierarchy elements.
+	-->
 	<log>
 		<string key="name">
+			<!--
+				Stores a generally understood name for the log. 
+				Usually the name of the process having been executed. 
+			-->
 			<alias mapping="EN" name="Name"/>
 			<alias mapping="DE" name="Name"/>
 			<alias mapping="FR" name="Appellation"/>
@@ -11,6 +19,10 @@
 	</log>
 	<trace>
 		<string key="name">
+			<!--
+				Stores a generally understood name for the trace. 
+				Usually the case ID. 
+			-->
 			<alias mapping="EN" name="Name"/>
 			<alias mapping="DE" name="Name"/>
 			<alias mapping="FR" name="Appellation"/>
@@ -20,6 +32,10 @@
 	</trace>
 	<event>
 		<string key="name">
+			<!--
+				Stores a generally understood name for an event. 
+				Usually the name of the executed activity represented by the event.
+			-->
 			<alias mapping="EN" name="Name"/>
 			<alias mapping="DE" name="Name"/>
 			<alias mapping="FR" name="Appellation"/>
@@ -27,6 +43,10 @@
 			<alias mapping="PT" name="Nome"/>
 		</string>
 		<string key="instance">
+			<!--
+				This represents an identifier of the activity instance whose execution has generated the event.
+				This way, multiple instances (occurrences) of the same activity can be told apart.
+			-->
 			<alias mapping="EN" name="Instance"/>
 			<alias mapping="DE" name="Instanz"/>
 			<alias mapping="FR" name="Entité"/>
