@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xesextension name="Micro" prefix="micro" uri="http://www.xes-standard.org/micro.xesext">
+	<event>
+		<int key="level">
+			<alias mapping="EN" name="Micro level of this event"/>
+		</int>
+		<id key="parentId">
+			<alias mapping="EN" name="Id of parent event of this event"/>
+		</id>
+		<int key="length">
+			<alias mapping="EN" name="Number of child events for this event"/>
+		</int>
+	</event>
+</xesextension>
+
