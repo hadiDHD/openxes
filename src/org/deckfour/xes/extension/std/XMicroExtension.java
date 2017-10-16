@@ -66,31 +66,66 @@ public class XMicroExtension extends XExtension {
 	 * Unique URI of this extension.
 	 */
 	public static final URI EXTENSION_URI = URI.create("http://www.xes-standard.org/micro.xesext");
-	/**
-	 * Key for the level attribute.
-	 */
-	public static final String KEY_LEVEL = "micro:level";
-	/**
-	 * Key for the parentID attribute.
-	 */
-	public static final String KEY_PID = "micro:parentId";
-	/**
-	 * Key for the length attribute.
-	 */
-	public static final String KEY_LENGTH = "micro:length";
 
 	/**
-	 * Level attribute prototype
+	 * Prefix for this extension.
 	 */
-	public static XAttributeDiscrete ATTR_LEVEL;
+	public static final String PREFIX = "micro";
+
 	/**
-	 * ParentID attribute prototype
+	 * Levels of all defined attributes.
 	 */
-	public static XAttributeID ATTR_PID;
+	private static enum Level {
+		EVENT
+	};
+
 	/**
-	 * Length attribute prototype
+	 * Types of all defined attributes.
 	 */
-	public static XAttributeDiscrete ATTR_LENGTH;
+	private static enum Type {
+		ID, INT
+	};
+
+	/**
+	 * All defined attributes.
+	 */
+	private static enum DefinedAttribute {
+		LENGTH	("length",		Level.EVENT, Type.INT, 	"Number of child events for this event"),
+		LEVEL	("level",		Level.EVENT, Type.INT, 	"Micro level of this event"), 
+		PID		("parentId",	Level.EVENT, Type.ID, 	"Id of parent event of this event");
+
+		String key;
+		String alias;
+		Level level;
+		Type type;
+		XAttribute prototype;
+
+		DefinedAttribute(String key, Level level, Type type, String alias) {
+			this.key = PREFIX + ":" + key;
+			this.level = level;
+			this.type = type;
+			this.alias = alias;
+		}
+
+		void setPrototype(XAttribute prototype) {
+			this.prototype = prototype;
+		}
+	}
+
+
+	/**
+	 * Global key place holders. Can be initialized immediately.
+	 */
+	public static final String KEY_LENGTH	 		= DefinedAttribute.LENGTH.key;
+	public static final String KEY_LEVEL		 	= DefinedAttribute.LEVEL.key;
+	public static final String KEY_PID		 		= DefinedAttribute.PID.key;
+
+	/**
+	 * Global prototype place holders. Need to be initialized by constructor.
+	 */
+	public static XAttributeDiscrete 	ATTR_LENGTH;
+	public static XAttributeDiscrete 	ATTR_LEVEL;
+	public static XAttributeID		 	ATTR_PID;
 
 	/**
 	 * Singleton instance of this extension.
@@ -114,159 +149,131 @@ public class XMicroExtension extends XExtension {
 	 * Private constructor
 	 */
 	private XMicroExtension() {
-		super("Micro", "micro", EXTENSION_URI);
+		super("Micro", PREFIX, EXTENSION_URI);
 		XFactory factory = XFactoryRegistry.instance().currentDefault();
-		ATTR_LEVEL = factory.createAttributeDiscrete(KEY_LEVEL, -1, this);
-		ATTR_PID = factory.createAttributeID(KEY_PID, new XID(), this);
-		ATTR_LENGTH = factory.createAttributeDiscrete(KEY_LENGTH, -1, this);
-		this.eventAttributes.add((XAttribute) ATTR_LEVEL.clone());
-		this.eventAttributes.add((XAttribute) ATTR_PID.clone());
-		this.eventAttributes.add((XAttribute) ATTR_LENGTH.clone());
-		// register aliases
-		XGlobalAttributeNameMap.instance().registerMapping(XGlobalAttributeNameMap.MAPPING_ENGLISH, KEY_LEVEL,
-				"Micro level of this event");
-		XGlobalAttributeNameMap.instance().registerMapping(XGlobalAttributeNameMap.MAPPING_ENGLISH, KEY_PID,
-				"Id of parent event of this event");
-		XGlobalAttributeNameMap.instance().registerMapping(XGlobalAttributeNameMap.MAPPING_ENGLISH, KEY_LENGTH,
-				"Number of child events for this event");
+		/*
+		 * Initialize all defined attributes.
+		 */
+		for (DefinedAttribute attribute : DefinedAttribute.values()) {
+			/*
+			 * Initialize the prototype of the attribute. Depends on its type.
+			 */
+			switch (attribute.type) {
+			case ID: {
+				attribute.setPrototype(factory.createAttributeID(
+						attribute.key, null, this));
+				break;
+			}
+			case INT: {
+				attribute.setPrototype(factory.createAttributeDiscrete(
+						attribute.key, -1, this));
+				break;
+			}
+			}
+			/*
+			 * Add the attribute to the proper list. Depends on the level.
+			 */
+			switch (attribute.level){
+			case EVENT: {
+				this.eventAttributes.add((XAttribute) attribute.prototype.clone());
+				break;
+			}
+			}
+			/*
+			 * Initialize the proper global prototype place holder.
+			 */
+			switch (attribute){
+			case LENGTH: {
+				ATTR_LENGTH = (XAttributeDiscrete) attribute.prototype;
+				break;
+			}
+			case LEVEL: {
+				ATTR_LEVEL = (XAttributeDiscrete) attribute.prototype;
+				break;
+			}
+			case PID: {
+				ATTR_PID = (XAttributeID) attribute.prototype;
+				break;
+			}
+			}
+			/*
+			 * Initialize the key alias.
+			 */
+			XGlobalAttributeNameMap.instance().registerMapping(
+					XGlobalAttributeNameMap.MAPPING_ENGLISH, attribute.key,
+					attribute.alias);
+		}
 	}
 
-	/**
-	 * Retrieves the level of an event, if set by this extension's level
-	 * attribute.
-	 * 
-	 * @param event
-	 *            Event to extract level from.
-	 * @return The requested event level, -1 if not set.
-	 */
+	public long extractLength(XEvent event) {
+		return extract(event, DefinedAttribute.LENGTH, -1);
+	}
+	
+	public void assignLength(XEvent event, long length) {
+		assign(event, DefinedAttribute.LENGTH, length);
+	}
+	
+	public void removeLength(XAttributable event) {
+		remove(event, DefinedAttribute.LENGTH);
+	}
+
 	public long extractLevel(XEvent event) {
-		XAttribute attribute = event.getAttributes().get(KEY_LEVEL);
-		if (attribute == null) {
-			return -1;
-		} else {
-			return ((XAttributeDiscrete) attribute).getValue();
-		}
+		return extract(event, DefinedAttribute.LEVEL, -1);
 	}
-
-	/**
-	 * Assigns any event its level, as defined by this extension's level
-	 * attribute.
-	 * 
-	 * @param event
-	 *            Event to assign level to.
-	 * @param level
-	 *            The level to be assigned. Should be a positive integer.
-	 */
-	public void assignLevel(XAttributable event, long level) {
-		if (level > 0) {
-			XAttributeDiscrete attr = (XAttributeDiscrete) ATTR_LEVEL.clone();
-			attr.setValue(level);
-			event.getAttributes().put(KEY_LEVEL, attr);
-		}
+	
+	public void assignLevel(XEvent event, long level) {
+		assign(event, DefinedAttribute.LEVEL, level);
 	}
-
-	/**
-	 * Removes the level from an event.
-	 * 
-	 * @param event
-	 *            The event to remove th elevel from.
-	 */
+	
 	public void removeLevel(XAttributable event) {
-		event.getAttributes().remove(KEY_LEVEL);
+		remove(event, DefinedAttribute.LEVEL);
 	}
 
-	/**
-	 * Retrieves the parent Id of an event, if set by this extension's parentId
-	 * attribute.
-	 * 
-	 * @param event
-	 *            Event to extract parent Id from.
-	 * @return The requested event parent Id, null if not set.
-	 */
-	public XID extractParentID(XEvent event) {
-		XAttribute attribute = event.getAttributes().get(KEY_PID);
+	public XID extractParentId(XEvent event) {
+		return extract(event, DefinedAttribute.PID, null);
+	}
+	
+	public void assignParentId(XEvent event, XID parentId) {
+		assign(event, DefinedAttribute.PID, parentId);
+	}
+	
+	public void removeParentId(XAttributable event) {
+		remove(event, DefinedAttribute.PID);
+	}
+
+	private XID extract(XAttributable element, DefinedAttribute definedAttribute, XID defaultValue) {
+		XAttribute attribute = element.getAttributes().get(definedAttribute.key);
 		if (attribute == null) {
-			return null;
+			return defaultValue;
 		} else {
 			return ((XAttributeID) attribute).getValue();
 		}
 	}
-
-	/**
-	 * Assigns any event its parent Id, as defined by this extension's parentId
-	 * attribute.
-	 * 
-	 * @param event
-	 *            Event to assign parent Id to.
-	 * @param parentId
-	 *            The parent Id to be assigned. May not be null.
-	 */
-	public void assignParentID(XAttributable event, XID parentId) {
-		if (parentId != null) {
-			XAttributeID attr = (XAttributeID) ATTR_PID.clone();
-			attr.setValue(parentId);
-			event.getAttributes().put(KEY_PID, attr);
-		} else {
-			event.getAttributes().remove(KEY_PID);
-		}
+	
+	private void assign(XAttributable element, DefinedAttribute definedAttribute, XID value) {
+		XAttributeID attr = (XAttributeID) definedAttribute.prototype.clone();
+		attr.setValue(value);
+		element.getAttributes().put(definedAttribute.key, attr);
 	}
 
-	/**
-	 * Removes the parent Id from an event.
-	 * 
-	 * @param event
-	 *            The event to remove the parent Id from.
-	 */
-	public void removeParentID(XAttributable event) {
-		event.getAttributes().remove(KEY_PID);
-	}
-
-	/**
-	 * Retrieves the stated number of children of an event, if set by this
-	 * extension's length attribute.
-	 * 
-	 * Note that this simply returns the value of the "micro:legnth" attribute,
-	 * and -1 if not present. This does not count the children, it simply
-	 * returns the number as found in the event.
-	 * 
-	 * @param event
-	 *            Event to extract stated number of children from.
-	 * @return The requested number for this event, -1 if not set.
-	 */
-	public long extractLength(XEvent event) {
-		XAttribute attribute = event.getAttributes().get(KEY_LENGTH);
+	private long extract(XAttributable element, DefinedAttribute definedAttribute, long defaultValue) {
+		XAttribute attribute = element.getAttributes().get(definedAttribute.key);
 		if (attribute == null) {
-			return -1;
+			return defaultValue;
 		} else {
 			return ((XAttributeDiscrete) attribute).getValue();
 		}
 	}
-
-	/**
-	 * Assigns any event its state number of children, as defined by this
-	 * extension's length attribute.
-	 * 
-	 * @param event
-	 *            Event to assign number of children to.
-	 * @param length
-	 *            The number to be assigned. Should be a non-negative integer.
-	 */
-	public void assignLength(XAttributable event, long length) {
-		if (length >= 0) {
-			XAttributeDiscrete attr = (XAttributeDiscrete) ATTR_LENGTH.clone();
-			attr.setValue(length);
-			event.getAttributes().put(KEY_LENGTH, attr);
-		}
+	
+	private void assign(XAttributable element, DefinedAttribute definedAttribute, long value) {
+		XAttributeDiscrete attr = (XAttributeDiscrete) definedAttribute.prototype.clone();
+		attr.setValue(value);
+		element.getAttributes().put(definedAttribute.key, attr);
 	}
 
-	/**
-	 * Removes the stated number of children from an event.
-	 * 
-	 * @param event
-	 *            The event to remove the number from.
-	 */
-	public void removeLength(XAttributable event) {
-		event.getAttributes().remove(KEY_LENGTH);
+	private void remove(XAttributable element, DefinedAttribute definedAttribute) {
+		element.getAttributes().remove(definedAttribute.key);
 	}
+	
 
 }

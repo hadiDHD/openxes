@@ -54,6 +54,7 @@ import org.deckfour.xes.extension.std.XLifecycleExtension;
 import org.deckfour.xes.extension.std.XMicroExtension;
 import org.deckfour.xes.extension.std.XOrganizationalExtension;
 import org.deckfour.xes.extension.std.XSemanticExtension;
+import org.deckfour.xes.extension.std.XSoftwareEventExtension;
 import org.deckfour.xes.extension.std.XTimeExtension;
 import org.deckfour.xes.logging.XLogging;
 import org.deckfour.xes.util.XRuntimeUtils;
@@ -248,8 +249,10 @@ public class XExtensionManager {
 		register(XLifecycleExtension.instance());
 		// FIXME: BvD: Removed this extension as it breaks ProMLite
 		// register(XMicroExtension.instance());
+		register(XMicroExtension.instance());
 		register(XOrganizationalExtension.instance());
 		register(XSemanticExtension.instance());
+		register(XSoftwareEventExtension.instance());
 		register(XTimeExtension.instance());
 	}
 
