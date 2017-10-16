@@ -161,7 +161,7 @@ public class XMicroExtension extends XExtension {
 			switch (attribute.type) {
 			case ID: {
 				attribute.setPrototype(factory.createAttributeID(
-						attribute.key, null, this));
+						attribute.key, new XID(), this));
 				break;
 			}
 			case INT: {
@@ -230,7 +230,7 @@ public class XMicroExtension extends XExtension {
 	}
 
 	public XID extractParentId(XEvent event) {
-		return extract(event, DefinedAttribute.PID, null);
+		return extract(event, DefinedAttribute.PID, (XID) null);
 	}
 	
 	public void assignParentId(XEvent event, XID parentId) {
