@@ -76,4 +76,13 @@ public class XAttributeListImpl extends XAttributeCollectionImpl implements XAtt
 		// Order attributes by appearance.
 		collection = new ArrayList<XAttribute>();
 	}
+	
+	/*
+	 * HV: When cloning the list, make sure to clone the backing collection, as otherwise all lists would be backed by the same collection.
+	 */
+	public Object clone() {
+		XAttributeListImpl clone = (XAttributeListImpl) super.clone();
+		clone.collection = new ArrayList<XAttribute>();
+		return clone;
+	}
 }
