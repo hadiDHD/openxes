@@ -263,7 +263,7 @@ public class XSoftwareEventExtension extends XExtension {
 	public static XAttributeLiteral ATTR_CALLEE_FILENAME;
 	public static XAttributeLiteral ATTR_CALLEE_INSTANCEID;
 	public static XAttributeBoolean ATTR_CALLEE_ISCONSTRUCTOR;
-	public static XAttributeLiteral ATTR_CALLEE_LINENR;
+	public static XAttributeDiscrete ATTR_CALLEE_LINENR;
 	public static XAttributeLiteral ATTR_CALLEE_METHOD;
 	public static XAttributeLiteral ATTR_CALLEE_PACKAGE;
 	public static XAttributeLiteral ATTR_CALLEE_PARAMSIG;
@@ -272,7 +272,7 @@ public class XSoftwareEventExtension extends XExtension {
 	public static XAttributeLiteral ATTR_CALLER_FILENAME;
 	public static XAttributeLiteral ATTR_CALLER_INSTANCEID;
 	public static XAttributeBoolean ATTR_CALLER_ISCONSTRUCTOR;
-	public static XAttributeLiteral ATTR_CALLER_LINENR;
+	public static XAttributeDiscrete ATTR_CALLER_LINENR;
 	public static XAttributeLiteral ATTR_CALLER_METHOD;
 	public static XAttributeLiteral ATTR_CALLER_PACKAGE;
 	public static XAttributeLiteral ATTR_CALLER_PARAMSIG;
@@ -400,7 +400,7 @@ public class XSoftwareEventExtension extends XExtension {
 				break;
 			}
 			case CALLEE_LINENR: {
-				ATTR_CALLEE_LINENR = (XAttributeLiteral) attribute.prototype;
+				ATTR_CALLEE_LINENR = (XAttributeDiscrete) attribute.prototype;
 				break;
 			}
 			case CALLEE_METHOD: {
@@ -436,7 +436,7 @@ public class XSoftwareEventExtension extends XExtension {
 				break;
 			}
 			case CALLER_LINENR: {
-				ATTR_CALLER_LINENR = (XAttributeLiteral) attribute.prototype;
+				ATTR_CALLER_LINENR = (XAttributeDiscrete) attribute.prototype;
 				break;
 			}
 			case CALLER_METHOD: {
