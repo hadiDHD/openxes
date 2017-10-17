@@ -102,7 +102,7 @@ public class XSoftwareEventExtension extends XExtension {
 		CALLEE_FILENAME			("callee-filename",			Level.EVENT, 	Type.STRING, 	"Callee - File name source code artifact"),
 		CALLEE_INSTANCEID		("callee-instanceId",	 	Level.EVENT, 	Type.STRING, 	"Callee - Instance id of class instance"),
 		CALLEE_ISCONSTRUCTOR	("callee-isConstructor", 	Level.EVENT, 	Type.BOOLEAN, 	"Callee - Is a class constructor"),
-		CALLEE_LINENR			("callee-lineNr", 			Level.EVENT, 	Type.STRING, 	"Callee - Line number in source code artifact"),
+		CALLEE_LINENR			("callee-lineNr", 			Level.EVENT, 	Type.INT, 		"Callee - Line number in source code artifact"),
 		CALLEE_METHOD			("callee-method", 			Level.EVENT, 	Type.STRING, 	"Callee - Method"),
 		CALLEE_PACKAGE			("callee-package", 			Level.EVENT, 	Type.STRING, 	"Callee - Package"),
 		CALLEE_PARAMSIG			("callee-paramSig", 		Level.EVENT, 	Type.STRING, 	"Callee - Parameter signature"),
@@ -111,7 +111,7 @@ public class XSoftwareEventExtension extends XExtension {
 		CALLER_FILENAME			("caller-filename",			Level.EVENT, 	Type.STRING, 	"Caller - File name source code artifact"),
 		CALLER_INSTANCEID		("caller-instanceId",	 	Level.EVENT, 	Type.STRING, 	"Caller - Instance id of class instance"),
 		CALLER_ISCONSTRUCTOR	("caller-isConstructor", 	Level.EVENT, 	Type.BOOLEAN, 	"Caller - Is a class constructor"),
-		CALLER_LINENR			("caller-lineNr", 			Level.EVENT, 	Type.STRING, 	"Caller - Line number in source code artifact"),
+		CALLER_LINENR			("caller-lineNr", 			Level.EVENT, 	Type.INT,	 	"Caller - Line number in source code artifact"),
 		CALLER_METHOD			("caller-method", 			Level.EVENT, 	Type.STRING, 	"Caller - Method"),
 		CALLER_PACKAGE			("caller-package", 			Level.EVENT, 	Type.STRING, 	"Caller - Package"),
 		CALLER_PARAMSIG			("caller-paramSig", 		Level.EVENT, 	Type.STRING, 	"Caller - Parameter signature"),
@@ -533,11 +533,11 @@ public class XSoftwareEventExtension extends XExtension {
 		remove(event, DefinedAttribute.CALLEE_ISCONSTRUCTOR);
 	}
 	
-	public String extractCalleeLineNr(XEvent event) {
-		return extract(event, DefinedAttribute.CALLEE_LINENR, (String) null);
+	public long extractCalleeLineNr(XEvent event) {
+		return extract(event, DefinedAttribute.CALLEE_LINENR, -1);
 	}
 	
-	public void assignCalleeLineNr(XEvent event, String calleeLineNr) {
+	public void assignCalleeLineNr(XEvent event, long calleeLineNr) {
 		assign(event, DefinedAttribute.CALLEE_LINENR, calleeLineNr);
 	}
 	
@@ -641,11 +641,11 @@ public class XSoftwareEventExtension extends XExtension {
 		remove(event, DefinedAttribute.CALLER_ISCONSTRUCTOR);
 	}
 	
-	public String extractCallerLineNr(XEvent event) {
-		return extract(event, DefinedAttribute.CALLER_LINENR, (String) null);
+	public long extractCallerLineNr(XEvent event) {
+		return extract(event, DefinedAttribute.CALLER_LINENR, -1);
 	}
 	
-	public void assignCallerLineNr(XEvent event, String callerLineNr) {
+	public void assignCallerLineNr(XEvent event, long callerLineNr) {
 		assign(event, DefinedAttribute.CALLER_LINENR, callerLineNr);
 	}
 	

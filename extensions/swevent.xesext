@@ -36,9 +36,9 @@
 		<string key="callee-filename">
 			<alias mapping="EN" name="Callee - File name source code artifact"/>
 		</string>
-		<string key="callee-lineNr">
+		<int key="callee-lineNr">
 			<alias mapping="EN" name="Callee - Line number in source code artifact"/>
-		</string>
+		</int>
 		<string key="caller-package">
 			<alias mapping="EN" name="Caller - Package"/>
 		</string>
@@ -63,9 +63,9 @@
 		<string key="caller-filename">
 			<alias mapping="EN" name="Caller - File name source code artifact"/>
 		</string>
-		<string key="caller-lineNr">
+		<int key="caller-lineNr">
 			<alias mapping="EN" name="Caller - Line number in source code artifact"/>
-		</string>
+		</int>
 		<string key="returnValue">
 			<alias mapping="EN" name="Return value for the returning method"/>
 		</string>
