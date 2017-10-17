@@ -887,11 +887,6 @@ public class XSoftwareEventExtension extends XExtension {
 				paramValue);
 	}
 
-	public XAttributeLiteral removeParamValue(XAttributeList attribute,
-			XAttributeLiteral paramValue) {
-		return (XAttributeLiteral) removeFromValues(attribute, paramValue);
-	}
-
 	public String extractReturnValue(XEvent event) {
 		return extract(event, DefinedAttribute.RETURN_VALUE, (String) null);
 	}
@@ -995,11 +990,6 @@ public class XSoftwareEventExtension extends XExtension {
 			return attr;
 		}
 		return null;
-	}
-
-	private XAttribute removeFromValues(XAttributeList list, XAttribute attr) {
-		list.removeFromCollection(attr);
-		return attr;
 	}
 
 	private long extract(XAttributable element,

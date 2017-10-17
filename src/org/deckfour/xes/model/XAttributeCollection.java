@@ -48,7 +48,5 @@ public interface XAttributeCollection extends XAttribute {
 
 	public void addToCollection(XAttribute attribute);
 	
-	public void removeFromCollection(XAttribute attribute);
-
 	public Collection<XAttribute> getCollection();
 }
