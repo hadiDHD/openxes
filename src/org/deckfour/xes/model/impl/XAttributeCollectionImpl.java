@@ -78,6 +78,12 @@ public abstract class XAttributeCollectionImpl extends XAttributeLiteralImpl imp
 		}
 	}
 	
+	public void removeFromCollection(XAttribute attribute) {
+		if (collection != null) {
+			collection.remove(attribute);
+		}
+	}
+	
 	public Collection<XAttribute> getCollection() {
 		return collection != null ? collection : getAttributes().values();
 	}
