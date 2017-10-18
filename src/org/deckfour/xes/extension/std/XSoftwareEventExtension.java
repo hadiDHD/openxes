@@ -43,7 +43,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.deckfour.xes.extension.XExtension;
-import org.deckfour.xes.extension.std.XLifecycleExtension.StandardModel;
 import org.deckfour.xes.factory.XFactory;
 import org.deckfour.xes.factory.XFactoryRegistry;
 import org.deckfour.xes.info.XGlobalAttributeNameMap;
@@ -509,6 +508,10 @@ public class XSoftwareEventExtension extends XExtension {
 		}
 	}
 
+	/*
+	 * A list of handy assign and extract methods. Most are really
+	 * straightforward.
+	 */
 	public String extractAppName(XEvent event) {
 		return extract(event, DefinedAttribute.APP_NAME, (String) null);
 	}
@@ -869,6 +872,10 @@ public class XSoftwareEventExtension extends XExtension {
 		return extract(event, DefinedAttribute.PARAMS, (List<XAttribute>) null);
 	}
 
+	/*
+	 * Initializes the list of paramValue attributes in the values element to
+	 * the empty list. Use addParamValue to add paramValue attributes to this list.
+	 */
 	public XAttributeList assignParams(XEvent event) {
 		return assign(event, DefinedAttribute.PARAMS);
 	}
@@ -877,10 +884,13 @@ public class XSoftwareEventExtension extends XExtension {
 		return (XAttributeList) remove(event, DefinedAttribute.PARAMS);
 	}
 
-	public String extractParamValue(XAttribute attribute) {
-		return extract(attribute, DefinedAttribute.PARAM_VALUE, (String) null);
-	}
-
+	/*
+	 * The exception to the rule. As paramValue is a direct child attribute of
+	 * the values element, there is not parent attribute to have an assign or
+	 * extract on. The parameter values need to be extracted by calling
+	 * extractParams on the event, which returns the list of all paramValue
+	 * attributes as contained in the values element.
+	 */
 	public XAttributeLiteral addParamValue(XAttributeList attribute,
 			String paramValue) {
 		return assignToValues(attribute, DefinedAttribute.PARAM_VALUE,
