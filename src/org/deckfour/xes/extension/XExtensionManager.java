@@ -54,7 +54,9 @@ import org.deckfour.xes.extension.std.XLifecycleExtension;
 import org.deckfour.xes.extension.std.XMicroExtension;
 import org.deckfour.xes.extension.std.XOrganizationalExtension;
 import org.deckfour.xes.extension.std.XSemanticExtension;
+import org.deckfour.xes.extension.std.XSoftwareCommunicationExtension;
 import org.deckfour.xes.extension.std.XSoftwareEventExtension;
+import org.deckfour.xes.extension.std.XSoftwareTelemetryExtension;
 import org.deckfour.xes.extension.std.XTimeExtension;
 import org.deckfour.xes.logging.XLogging;
 import org.deckfour.xes.util.XRuntimeUtils;
@@ -252,7 +254,9 @@ public class XExtensionManager {
 		register(XMicroExtension.instance());
 		register(XOrganizationalExtension.instance());
 		register(XSemanticExtension.instance());
+		register(XSoftwareCommunicationExtension.instance());
 		register(XSoftwareEventExtension.instance());
+		register(XSoftwareTelemetryExtension.instance());
 		register(XTimeExtension.instance());
 	}
 
