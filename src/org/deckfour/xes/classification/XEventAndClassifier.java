@@ -38,6 +38,7 @@
  */
 package org.deckfour.xes.classification;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.TreeSet;
@@ -66,9 +67,10 @@ public class XEventAndClassifier extends XEventAttributeClassifier {
 	public XEventAndClassifier(XEventClassifier... comparators) {
 		super("");
 
-		Collection<String> keys = new TreeSet<String>();
+//		Collection<String> keys = new TreeSet<String>();
+		Collection<String> keys = new ArrayList<String>();
 
-		Arrays.sort(comparators);
+//		Arrays.sort(comparators);
 		StringBuilder sb = new StringBuilder();
 		sb.append("(");
 		sb.append(comparators[0].name());
