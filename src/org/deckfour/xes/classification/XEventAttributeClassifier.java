@@ -87,7 +87,7 @@ public class XEventAttributeClassifier implements XEventClassifier,
 	public XEventAttributeClassifier(String name, String... keys) {
 		this.name = name;
 		this.keys = keys;
-		Arrays.sort(keys);
+//		Arrays.sort(keys);
 	}
 
 	/*
