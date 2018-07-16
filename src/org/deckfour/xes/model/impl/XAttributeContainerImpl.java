@@ -43,39 +43,40 @@ import org.deckfour.xes.model.XAttributeContainer;
 
 /**
  * @author Eric Verbeek (h.m.w.verbeek@tue.nl)
- *
+ * 
  */
-public class XAttributeContainerImpl extends XAttributeCollectionImpl implements XAttributeContainer {
+public class XAttributeContainerImpl extends XAttributeCollectionImpl implements
+		XAttributeContainer {
 
-    /*
-     * For backwards compatibility, Container extends from Literal. As a result,
-     * software that is unaware of the Container may consider it to be a
-     * Literal.
-     */
+	/*
+	 * For backwards compatibility, Container extends from Literal. As a result,
+	 * software that is unaware of the Container may consider it to be a
+	 * Literal.
+	 */
 
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = -2171609637065248221L;
+	private static final long serialVersionUID = -2171609637065248221L;
 
-    /**
-     * @param key
-     */
-    public XAttributeContainerImpl(String key) {
-	super(key, null);
-    }
+	/**
+	 * @param key
+	 */
+	public XAttributeContainerImpl(String key) {
+		super(key, null);
+	}
 
-    public XAttributeContainerImpl(String key, XExtension extension) {
-	// Dummy (but unique) key, dummy value, no extension.
-	super(key, extension);
-	// No separate collection required, existing map will do fine.
-	collection = null;
-    }
+	public XAttributeContainerImpl(String key, XExtension extension) {
+		// Dummy (but unique) key, dummy value, no extension.
+		super(key, extension);
+		// No separate collection required, existing map will do fine.
+		collection = null;
+	}
 
-    @Override
-    public Object clone() {
-	XAttributeContainerImpl clone = (XAttributeContainerImpl) super.clone();
-	clone.collection = null;
-	return clone;
-    }
+	@Override
+	public Object clone() {
+		XAttributeContainerImpl clone = (XAttributeContainerImpl) super.clone();
+		clone.collection = null;
+		return clone;
+	}
 }
