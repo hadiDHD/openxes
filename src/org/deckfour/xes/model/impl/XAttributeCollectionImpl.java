@@ -50,58 +50,66 @@ import org.deckfour.xes.model.XAttributeCollection;
  */
 public abstract class XAttributeCollectionImpl extends XAttributeLiteralImpl implements XAttributeCollection {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4322597532345796274L;
-	
-	protected Collection<XAttribute> collection;
-	
-	/**
-	 * @param key
-	 */
-	public XAttributeCollectionImpl(String key) {
-		super(key, "", null);
-	}
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 4322597532345796274L;
 
-	/**
-	 * @param key
-	 * @param extension
-	 */
-	public XAttributeCollectionImpl(String key, XExtension extension) {
-		super(key, "", extension);
-	}
+    protected Collection<XAttribute> collection;
 
-	public void addToCollection(XAttribute attribute) {
-		if (collection != null) {
-			collection.add(attribute);
-		}
+    /**
+     * @param key
+     */
+    public XAttributeCollectionImpl(String key) {
+	super(key, "", null);
+    }
+
+    /**
+     * @param key
+     * @param extension
+     */
+    public XAttributeCollectionImpl(String key, XExtension extension) {
+	super(key, "", extension);
+    }
+
+    public void addToCollection(XAttribute attribute) {
+	if (collection != null) {
+	    collection.add(attribute);
 	}
-	
-	public void removeFromCollection(XAttribute attribute) {
-		if (collection != null) {
-			collection.remove(attribute);
-		}
+    }
+
+    public void removeFromCollection(XAttribute attribute) {
+	if (collection != null) {
+	    collection.remove(attribute);
 	}
-	
-	public Collection<XAttribute> getCollection() {
-		return collection != null ? collection : getAttributes().values();
+    }
+
+    public Collection<XAttribute> getCollection() {
+	return collection != null ? collection : getAttributes().values();
+    }
+
+    public String toString() {
+	StringBuffer buf = new StringBuffer();
+	String sep = "[";
+	for (XAttribute attribute : getCollection()) {
+	    buf.append(sep);
+	    sep = ",";
+	    buf.append(attribute.getKey());
+	    buf.append(":");
+	    buf.append(attribute.toString());
 	}
-	
-	public String toString() {
-		StringBuffer buf = new StringBuffer();
-		String sep = "[";
-		for (XAttribute attribute: getCollection()) {
-			buf.append(sep);
-			sep = ",";
-			buf.append(attribute.getKey());
-			buf.append(":");
-			buf.append(attribute.toString());
-		}
-		if (buf.length() == 0) {
-			buf.append("[");
-		}
-		buf.append("]");
-		return buf.toString();
+	if (buf.length() == 0) {
+	    buf.append("[");
 	}
+	buf.append("]");
+	return buf.toString();
+    }
+
+    @Override
+    public Object clone() {
+	XAttributeCollectionImpl clone = (XAttributeCollectionImpl) super.clone();
+	// The collection is cloned in the child class (XAttributeListImpl and
+	// XAttributeContainerImpl)
+	return clone;
+    }
 }

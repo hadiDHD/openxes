@@ -50,39 +50,41 @@ import org.deckfour.xes.model.XAttributeList;
  */
 public class XAttributeListImpl extends XAttributeCollectionImpl implements XAttributeList {
 
-	/*
-	 * For backwards compatibility, List extends from Literal. As a result, software
-	 * that is unaware of the List may consider it to be a Literal. 
-	 */
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5584421551344100844L;
+    /*
+     * For backwards compatibility, List extends from Literal. As a result,
+     * software that is unaware of the List may consider it to be a Literal.
+     */
 
-	/**
-	 * @param key
-	 */
-	public XAttributeListImpl(String key) {
-		super(key, null);
-	}
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 5584421551344100844L;
 
-	/**
-	 * @param key
-	 * @param extension
-	 */
-	public XAttributeListImpl(String key, XExtension extension) {
-		super(key, extension);
-		// Order attributes by appearance.
-		collection = new ArrayList<XAttribute>();
-	}
-	
-	/*
-	 * HV: When cloning the list, make sure to clone the backing collection, as otherwise all lists would be backed by the same collection.
-	 */
-	public Object clone() {
-		XAttributeListImpl clone = (XAttributeListImpl) super.clone();
-		clone.collection = new ArrayList<XAttribute>();
-		return clone;
-	}
+    /**
+     * @param key
+     */
+    public XAttributeListImpl(String key) {
+	super(key, null);
+    }
+
+    /**
+     * @param key
+     * @param extension
+     */
+    public XAttributeListImpl(String key, XExtension extension) {
+	super(key, extension);
+	// Order attributes by appearance.
+	collection = new ArrayList<XAttribute>();
+    }
+
+    /*
+     * HV: When cloning the list, make sure to clone the backing collection, as
+     * otherwise all lists would be backed by the same collection.
+     */
+    @Override
+    public Object clone() {
+	XAttributeListImpl clone = (XAttributeListImpl) super.clone();
+	clone.collection = new ArrayList<XAttribute>(collection);
+	return clone;
+    }
 }

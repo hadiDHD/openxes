@@ -50,52 +50,54 @@ import org.deckfour.xes.model.XAttributeMap;
  * @author Christian W. Guenther (christian@deckfour.org)
  *
  */
-public class XAttributeMapImpl extends HashMap<String, XAttribute> implements
-		XAttributeMap {
+public class XAttributeMapImpl extends HashMap<String, XAttribute> implements XAttributeMap {
 
-	/**
-	 * serial version UID.
-	 */
-	private static final long serialVersionUID = 2701256420845748051L;
-	
-	/**
-	 * Creates a new attribute map.
-	 */
-	public XAttributeMapImpl() {
-		this(0);
+    /**
+     * serial version UID.
+     */
+    private static final long serialVersionUID = 2701256420845748051L;
+
+    /**
+     * Creates a new attribute map.
+     */
+    public XAttributeMapImpl() {
+	this(0);
+    }
+
+    /**
+     * Creates a new attribute map.
+     * 
+     * @param size
+     *            Initial size of the map.
+     */
+    public XAttributeMapImpl(int size) {
+	super(size);
+    }
+
+    /**
+     * Creates a new attribute map.
+     * 
+     * @param template
+     *            Copy the contents of this attribute map to the new attrribute
+     *            map.
+     */
+    public XAttributeMapImpl(Map<String, XAttribute> template) {
+	super(template.size());
+	for (String key : template.keySet()) {
+	    put(key, template.get(key));
 	}
-	
-	/**
-	 * Creates a new attribute map.
-	 * 
-	 * @param size Initial size of the map.
-	 */
-	public XAttributeMapImpl(int size) {
-		super(size);
+    }
+
+    /**
+     * Creates a clone, i.e. deep copy, of this attribute map.
+     */
+    @Override
+    public Object clone() {
+	XAttributeMapImpl clone = new XAttributeMapImpl(size());
+	for (XAttribute value : values()) {
+	    clone.put(value.getKey(), (XAttribute) value.clone());
 	}
-	
-	/**
-	 * Creates a new attribute map.
-	 * 
-	 * @param template Copy the contents of this attribute
-	 * map to the new attrribute map.
-	 */
-	public XAttributeMapImpl(Map<String,XAttribute> template) {
-		super(template.size());
-		for(String key : template.keySet()) {
-			put(key, template.get(key));
-		}
-	}
-	
-	/**
-	 * Creates a clone, i.e. deep copy, of this attribute map.
-	 */
-	public Object clone() {
-		XAttributeMapImpl clone = new XAttributeMapImpl(size());
-		for(XAttribute value: values()) {
-			clone.put(value.getKey(), (XAttribute)value.clone());
-		}
-		return clone;
-	}
+	return clone;
+    }
 
 }
