@@ -66,6 +66,7 @@ public class XAttributeListImpl extends XAttributeCollectionImpl implements
 	 */
 	public XAttributeListImpl(String key) {
 		super(key, null);
+		collection = new ArrayList<XAttribute>();
 	}
 
 	/**

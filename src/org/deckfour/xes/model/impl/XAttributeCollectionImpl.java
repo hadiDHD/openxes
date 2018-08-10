@@ -73,9 +73,13 @@ public abstract class XAttributeCollectionImpl extends XAttributeLiteralImpl
 		super(key, "", extension);
 	}
 
+
+
 	public void addToCollection(XAttribute attribute) {
 		if (collection != null) {
 			collection.add(attribute);
+		} else {
+			throw new NullPointerException("Cannot add attribute to collection that is null");
 		}
 	}
 
@@ -88,7 +92,7 @@ public abstract class XAttributeCollectionImpl extends XAttributeLiteralImpl
 	public Collection<XAttribute> getCollection() {
 		return collection != null ? collection : getAttributes().values();
 	}
-
+	
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
 		String sep = "[";
