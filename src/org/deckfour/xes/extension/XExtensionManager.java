@@ -47,6 +47,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.deckfour.xes.extension.std.XArtifactLifecycleExtension;
 import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.extension.std.XCostExtension;
 import org.deckfour.xes.extension.std.XIdentityExtension;
@@ -258,6 +259,7 @@ public class XExtensionManager {
 		register(XSoftwareEventExtension.instance());
 		register(XSoftwareTelemetryExtension.instance());
 		register(XTimeExtension.instance());
+		register(XArtifactLifecycleExtension.instance());
 	}
 
 	/**
