@@ -53,6 +53,7 @@ import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.out.XSerializer;
 import org.deckfour.xes.out.XSerializerRegistry;
 import org.deckfour.xes.util.XTimer;
+import org.junit.jupiter.api.Test;
 
 
 /**
@@ -65,7 +66,8 @@ public class ConversionTest {
 	 * @param args
 	 * @throws Exception 
 	 */
-	public static void main(String[] args) throws Exception {
+	
+	public void test() throws Exception {
 		JFileChooser openChooser = new JFileChooser();
 		openChooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		openChooser.showOpenDialog(null);

@@ -4,6 +4,7 @@ import org.deckfour.xes.factory.XFactoryBufferedImpl;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
+import org.junit.jupiter.api.Test;
 
 /*
  * OpenXES
@@ -53,7 +54,8 @@ public class CloneAndRemoveTest {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	@Test
+	public void test() {
 		XFactoryBufferedImpl factory = new XFactoryBufferedImpl();
 
 		XLog log = factory.createLog();

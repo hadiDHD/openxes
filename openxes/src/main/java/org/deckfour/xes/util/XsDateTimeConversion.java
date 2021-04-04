@@ -47,7 +47,7 @@ import java.util.TimeZone;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-import javax.xml.bind.DatatypeConverter;
+import jakarta.xml.bind.DatatypeConverter;
 
 /**
  * This class serves as a provider for static xs:dateTime-related manipulation
@@ -58,8 +58,7 @@ import javax.xml.bind.DatatypeConverter;
 public class XsDateTimeConversion {
 
 	/**
-	 * Date/Time parsing format including milliseconds and time zone
-	 * information.
+	 * Date/Time parsing format including milliseconds and time zone information.
 	 */
 	protected static final String XSDATETIME_FORMAT_STRING_MILLIS_TZONE = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 	/**
@@ -81,13 +80,12 @@ public class XsDateTimeConversion {
 
 	/**
 	 * Expects an XML xs:dateTime lexical format string, as in
-	 * <code>2005-10-24T11:57:31.000+01:00</code>. Some bad MXML files miss
-	 * timezone or milliseconds information, thus a certain amount of tolerance
-	 * is applied towards malformed timestamp string representations. If
-	 * unparseable, this method will return <code>null</code>.
+	 * <code>2005-10-24T11:57:31.000+01:00</code>. Some bad MXML files miss timezone
+	 * or milliseconds information, thus a certain amount of tolerance is applied
+	 * towards malformed timestamp string representations. If unparseable, this
+	 * method will return <code>null</code>.
 	 * 
-	 * @param xsDateTime
-	 *            Timestamp string in the XML xs:dateTime format.
+	 * @param xsDateTime Timestamp string in the XML xs:dateTime format.
 	 * @return Parsed Date object.
 	 */
 	public Date parseXsDateTime(String xsDateTime) {
@@ -97,8 +95,8 @@ public class XsDateTimeConversion {
 			return cal.getTime();
 		} catch (IllegalArgumentException e) {
 			/*
-			 * Standard techniques do not get us a timestamp. For sake of
-			 * leniency, try the former pattern-based approach.
+			 * Standard techniques do not get us a timestamp. For sake of leniency, try the
+			 * former pattern-based approach.
 			 */
 			return parseXsDateTimeUsingPattern(xsDateTime);
 		}
@@ -107,8 +105,7 @@ public class XsDateTimeConversion {
 	private Date parseXsDateTimeUsingPattern(String xsDateTime) {
 		// try to parse with date format hack: Replace time zones like +01:00 to
 		// +0100.
-		if (xsDateTime.length() >= 6
-				&& xsDateTime.charAt(xsDateTime.length() - 6) == '+'
+		if (xsDateTime.length() >= 6 && xsDateTime.charAt(xsDateTime.length() - 6) == '+'
 				&& xsDateTime.charAt(xsDateTime.length() - 3) == ':') {
 			String modified = xsDateTime.substring(0, xsDateTime.length() - 3)
 					+ xsDateTime.substring(xsDateTime.length() - 2);
@@ -155,8 +152,7 @@ public class XsDateTimeConversion {
 	/**
 	 * Formats a given date to the xs:dateTime format of XML.
 	 * 
-	 * @param date
-	 *            Date to be formatted.
+	 * @param date Date to be formatted.
 	 * @return String formatting the given date.
 	 */
 	public String format(Date date) {

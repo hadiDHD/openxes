@@ -18,6 +18,7 @@ import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.deckfour.xes.util.XTimer;
 import org.deckfour.xes.xstream.XesXStreamPersistency;
+import org.junit.jupiter.api.Test;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -259,7 +260,8 @@ public class StressTest {
 		testRunner.start();
 	}
 	
-	public static void main(String[] args) {
+	
+	public void test() {
 		runTest();
 	}
 
